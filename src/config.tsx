@@ -1,0 +1,7 @@
+export const SCROLL_FACTOR = 12000;
+
+export const VIEWPORT_HEIGHT_IN_HOURS = 12;
+
+export const VIEWPORT_HEIGHT_IN_MS = VIEWPORT_HEIGHT_IN_HOURS * 3600 * 1000;
+
+export const DAY_IN_MS = 24 * 3600 * 1000;
