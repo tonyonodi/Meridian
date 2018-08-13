@@ -1,8 +1,10 @@
 // tslint:disable:no-console
-import { DateTime } from "luxon";
+import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
 import Day from "./Day";
+
+const { DateTime } = luxon;
 
 const timeLineWidth = 100;
 
@@ -14,6 +16,7 @@ const ParentView = styled.div`
 
 const Cursor = styled.h1`
   position: fixed;
+  color: darkorange;
   top: 50%;
   transform: translateY(-50%);
   width: ${timeLineWidth}px;
@@ -23,9 +26,9 @@ const Cursor = styled.h1`
   font-weight: 200;
   &:before {
     content: "";
-    top: -30px;
+    top: -50px;
     background: linear-gradient(rgba(255, 255, 255, 0), white);
-    height: 30px;
+    height: 50px;
     width: 100%;
     display: block;
     position: absolute;
@@ -33,7 +36,7 @@ const Cursor = styled.h1`
   &:after {
     content: "";
     background: linear-gradient(white, rgba(255, 255, 255, 0));
-    height: 30px;
+    height: 50px;
     width: 100%;
     display: block;
     position: absolute;
@@ -41,11 +44,13 @@ const Cursor = styled.h1`
 `;
 
 const Title = styled.h1`
-  position: absolute;
+  position: fixed;
+  top: -50px;
   transform: rotate(90deg);
-  transform-origin: left top 0;
-  left: 131px;
+  transform-origin: left bottom 0;
   width: 100vh;
+  margin-left: 102px;
+  font-size: 1.8em;
 `;
 
 const getStartOfDay = (time: number, offset: number, timezone: string) => {
