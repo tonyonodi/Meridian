@@ -1,6 +1,7 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
+import AddTimeZoneButton from "./AddTimeZoneButton";
 import { PALETTE, WINDOW_HEIGHT_IN_DAYS, WINDOW_HEIGHT_IN_MS } from "./config";
 import TimeLine from "./TimeLine";
 
@@ -21,7 +22,12 @@ class App extends React.Component<{}, IAppState> {
   public state: IAppState = {
     t_0: new Date().getTime(),
     timeCursor: new Date().getTime(),
-    timezones: ["Europe/London", "America/New_York", "Europe/Paris"],
+    timezones: [
+      "Europe/London",
+      "America/New_York",
+      "Europe/Paris",
+      "Asia/Tokyo",
+    ],
   };
 
   private containerElement: HTMLDivElement;
@@ -67,6 +73,7 @@ class App extends React.Component<{}, IAppState> {
               />
             );
           })}
+          <AddTimeZoneButton />
         </ContainerView>
       </div>
     );

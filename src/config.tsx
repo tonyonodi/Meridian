@@ -10,9 +10,9 @@ export const WINDOW_HEIGHT_IN_DAYS = 100;
 
 export const WINDOW_HEIGHT_IN_MS = WINDOW_HEIGHT_IN_DAYS * DAY_IN_MS;
 
-export const LOCATION_NAME_WIDTH = 23;
+export const LOCATION_NAME_WIDTH = 21;
 
-export const TIMELINE_WIDTH = 80;
+export const TIMELINE_WIDTH = 75;
 
 export const PARENT_VIEW_WIDTH = TIMELINE_WIDTH + LOCATION_NAME_WIDTH;
 

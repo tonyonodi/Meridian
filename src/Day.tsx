@@ -26,7 +26,10 @@ const Header = styled.div`
   font-weight: 200;
   &:after {
     content: "";
-    background: linear-gradient(${({ color }) => color}, rgba(255, 255, 255, 0));
+    background: linear-gradient(
+      ${({ color }) => color},
+      rgba(255, 255, 255, 0)
+    );
     height: 30px;
     width: 100%;
     display: block;
@@ -38,7 +41,10 @@ const Date = styled.div`
   font-size: 2em;
 `;
 
-const Month = styled.div``;
+const Month = styled.div`
+  text-transform: uppercase;
+  font-weight: bold;
+`;
 
 const Markers = styled.ul`
   height: 100%;

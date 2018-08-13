@@ -56,6 +56,7 @@ const Title = styled.h1`
   width: 100vh;
   margin-left: ${TIMELINE_WIDTH - 7}px;
   font-size: 1.8em;
+  text-transform: uppercase;
 `;
 
 const getStartOfDay = (time: number, offset: number, timezone: string) => {
