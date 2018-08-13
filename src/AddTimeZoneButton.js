@@ -10,6 +10,7 @@ import {
 const AddTimeZone = styled.div`
   width: ${PARENT_VIEW_WIDTH}px;
   background: rgba(255, 255, 255, 0.2);
+  cursor: default;
 `;
 
 const Inner = styled.div`
