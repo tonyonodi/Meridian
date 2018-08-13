@@ -9,7 +9,6 @@ const ContainerView = styled.div`
   display: flex;
   flex-direction: row;
   height: calc(200vh * ${WINDOW_HEIGHT_IN_DAYS});
-  overflow-y: hidden;
 `;
 
 interface IAppState {

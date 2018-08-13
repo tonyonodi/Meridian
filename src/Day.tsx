@@ -62,7 +62,6 @@ interface IDayProps {
 }
 
 export default ({ t_0, midnight, date, month }: IDayProps) => {
-
   const windowBottomMS = t_0 - WINDOW_HEIGHT_IN_MS / 2;
 
   const midnightBottomOffset = midnight - windowBottomMS;
