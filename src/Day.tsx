@@ -23,6 +23,7 @@ const Header = styled.div`
   text-align: center;
   font-weight: bold;
   width: 100%;
+  font-weight: 200;
   &:after {
     content: "";
     background: linear-gradient(white, rgba(255, 255, 255, 0));
