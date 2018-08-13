@@ -2,10 +2,12 @@
 import * as React from "react";
 import styled from "styled-components";
 import { SCROLL_FACTOR } from "./config";
-import TimeZone from "./TimeZone";
+import TimeLine from "./TimeLine";
 
 const Inner = styled.div`
   position: relative;
+  display: flex;
+  flex-direction: row;
 `;
 
 interface IAppState {
@@ -25,6 +27,10 @@ class App extends React.Component {
         return { timeCursor: timeCursor + deltaY * SCROLL_FACTOR };
       });
     });
+
+    window.addEventListener("touchmove", (event: any) => {
+      console.log(event);
+    });
   }
 
   public render() {
@@ -33,7 +39,8 @@ class App extends React.Component {
     return (
       <div className="App">
         <Inner>
-          <TimeZone timeCursor={timeCursor} />
+          <TimeLine timeCursor={timeCursor} timezone="Europe/London" />
+          <TimeLine timeCursor={timeCursor} timezone="America/New_York" />
         </Inner>
       </div>
     );

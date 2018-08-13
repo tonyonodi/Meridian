@@ -6,14 +6,10 @@ import { DAY_IN_MS, VIEWPORT_HEIGHT_IN_HOURS } from "./config";
 
 const DAY_HEIGHT = (100 * 24) / VIEWPORT_HEIGHT_IN_HOURS;
 
-const timeLineWidth = 100;
-
 const ParentView = styled.div`
   height: ${DAY_HEIGHT}vh;
   position: absolute;
-  border-left: solid 1px;
-  border-right: solid 1px;
-  width: ${timeLineWidth}px;
+  width: 100%;
 `;
 
 const Header = styled.div`
@@ -57,44 +53,17 @@ const Marker = styled.li`
   }
 `;
 
-const Cursor = styled.h1`
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${timeLineWidth}px;
-  text-align: center;
-  margin: 0;
-  background: white;
-  font-weight: 200;
-  &:before {
-    content: "";
-    top: -30px;
-    background: linear-gradient(rgba(255, 255, 255, 0), white);
-    height: 30px;
-    width: 100%;
-    display: block;
-    position: absolute;
-  }
-  &:after {
-    content: "";
-    background: linear-gradient(white, rgba(255, 255, 255, 0));
-    height: 30px;
-    width: 100%;
-    display: block;
-    position: absolute;
-  }
-`;
-
 interface IDayProps {
   time: number;
   t_0: number;
-  date: string;
-  month: string;
+  timezone: string;
 }
 
-export default ({ time, t_0, date, month }: IDayProps) => {
+export default ({ time, t_0 }: IDayProps) => {
   const dayFraction = (time - t_0) / DAY_IN_MS;
   const offsetTop = 50 - 200 * dayFraction;
+  const date = format(t_0, "DD");
+  const month = format(t_0, "MMM");
 
   return (
     <ParentView style={{ top: `${offsetTop}vh` }}>
@@ -113,7 +82,6 @@ export default ({ time, t_0, date, month }: IDayProps) => {
         <Date>{date}</Date>
         <Month>{month}</Month>
       </Header>
-      <Cursor>{format(time, "HH:mm")}</Cursor>
     </ParentView>
   );
 };
