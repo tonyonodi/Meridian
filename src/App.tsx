@@ -2,7 +2,12 @@
 import * as React from "react";
 import styled from "styled-components";
 import AddTimeZoneButton from "./AddTimeZoneButton";
-import { PALETTE, WINDOW_HEIGHT_IN_DAYS, WINDOW_HEIGHT_IN_MS } from "./config";
+import {
+  PALETTE,
+  PARENT_VIEW_WIDTH,
+  WINDOW_HEIGHT_IN_DAYS,
+  WINDOW_HEIGHT_IN_MS,
+} from "./config";
 import TimeLine from "./TimeLine";
 
 const ContainerView = styled.div`
@@ -57,10 +62,13 @@ class App extends React.Component<{}, IAppState> {
   public containerViewRef = (el: any) => (this.containerElement = el);
 
   public render() {
-    const { timeCursor, t_0 } = this.state;
+    const { timeCursor, t_0, timezones } = this.state;
 
     return (
-      <div className="App">
+      <div
+        className="App"
+        style={{ minWidth: `${(timezones.length + 1) * PARENT_VIEW_WIDTH}px` }}
+      >
         <ContainerView innerRef={this.containerViewRef}>
           {this.state.timezones.map((timezone, i) => {
             return (
