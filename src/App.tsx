@@ -12,11 +12,13 @@ const Inner = styled.div`
 
 interface IAppState {
   timeCursor: number;
+  timezones: string[];
 }
 
 class App extends React.Component {
   public state: IAppState = {
     timeCursor: new Date().getTime(),
+    timezones: ["Europe/London", "America/New_York", "Europe/Paris"],
   };
 
   public componentDidMount() {
@@ -39,8 +41,9 @@ class App extends React.Component {
     return (
       <div className="App">
         <Inner>
-          <TimeLine timeCursor={timeCursor} timezone="Europe/London" />
-          <TimeLine timeCursor={timeCursor} timezone="America/New_York" />
+          {this.state.timezones.map(timezone => {
+            return <TimeLine key={timezone} timeCursor={timeCursor} timezone={timezone} />;
+          })}
         </Inner>
       </div>
     );
