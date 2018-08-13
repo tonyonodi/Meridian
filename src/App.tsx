@@ -1,7 +1,7 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
-import { WINDOW_HEIGHT_IN_DAYS, WINDOW_HEIGHT_IN_MS } from "./config";
+import { PALETTE, WINDOW_HEIGHT_IN_DAYS, WINDOW_HEIGHT_IN_MS } from "./config";
 import TimeLine from "./TimeLine";
 
 const ContainerView = styled.div`
@@ -21,11 +21,7 @@ class App extends React.Component<{}, IAppState> {
   public state: IAppState = {
     t_0: new Date().getTime(),
     timeCursor: new Date().getTime(),
-    timezones: [
-      "Europe/London",
-      "America/New_York",
-      "Europe/Paris",
-    ],
+    timezones: ["Europe/London", "America/New_York", "Europe/Paris"],
   };
 
   private containerElement: HTMLDivElement;
@@ -60,13 +56,14 @@ class App extends React.Component<{}, IAppState> {
     return (
       <div className="App">
         <ContainerView innerRef={this.containerViewRef}>
-          {this.state.timezones.map(timezone => {
+          {this.state.timezones.map((timezone, i) => {
             return (
               <TimeLine
                 key={timezone}
                 timeCursor={timeCursor}
                 t_0={t_0}
                 timezone={timezone}
+                color={PALETTE[i]}
               />
             );
           })}

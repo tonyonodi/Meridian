@@ -2,32 +2,34 @@
 import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
+import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
 
 const { DateTime } = luxon;
 
-const timeLineWidth = 100;
-
 const ParentView = styled.div`
-  width: ${timeLineWidth}px;
-  margin-right: 30px;
+  color: white;
+  width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
+  background: ${({ color }) => color};
 `;
 
 const Cursor = styled.h1`
   position: fixed;
-  color: darkorange;
   top: 50%;
   transform: translateY(-50%);
-  width: ${timeLineWidth}px;
+  width: ${PARENT_VIEW_WIDTH}px;
   text-align: center;
   margin: 0;
-  background: white;
+  background: ${({ color }) => color};
   font-weight: 200;
   &:before {
     content: "";
     top: -50px;
-    background: linear-gradient(rgba(255, 255, 255, 0), white);
+    background: linear-gradient(
+      rgba(255, 255, 255, 0),
+      ${({ color }) => color}
+    );
     height: 50px;
     width: 100%;
     display: block;
@@ -35,7 +37,10 @@ const Cursor = styled.h1`
   }
   &:after {
     content: "";
-    background: linear-gradient(white, rgba(255, 255, 255, 0));
+    background: linear-gradient(
+      ${({ color }) => color},
+      rgba(255, 255, 255, 0)
+    );
     height: 50px;
     width: 100%;
     display: block;
@@ -49,7 +54,7 @@ const Title = styled.h1`
   transform: rotate(90deg);
   transform-origin: left bottom 0;
   width: 100vh;
-  margin-left: 102px;
+  margin-left: ${TIMELINE_WIDTH - 7}px;
   font-size: 1.8em;
 `;
 
@@ -64,11 +69,12 @@ interface ITimeLineProps {
   t_0: number;
   timeCursor: number;
   timezone: string;
+  color: string;
 }
 
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
-    const { t_0, timeCursor, timezone } = this.props;
+    const { t_0, timeCursor, timezone, color } = this.props;
     const titleText = timezone.split("/")[1].replace(/_/g, " ");
 
     const startOfYesterday = getStartOfDay(timeCursor, -1, timezone);
@@ -76,9 +82,10 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
     const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone);
 
     return (
-      <ParentView>
+      <ParentView color={color}>
         <Title>{titleText}</Title>
         <Day
+          color={color}
           time={timeCursor}
           t_0={t_0}
           midnight={startOfYesterday.toMillis()}
@@ -86,6 +93,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           month={startOfYesterday.toFormat("MMM")}
         />
         <Day
+          color={color}
           time={timeCursor}
           t_0={t_0}
           midnight={startOfToday.toMillis()}
@@ -93,13 +101,14 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           month={startOfToday.toFormat("MMM")}
         />
         <Day
+          color={color}
           time={timeCursor}
           t_0={t_0}
           midnight={startOfTomorrow.toMillis()}
           date={startOfTomorrow.toFormat("dd")}
           month={startOfTomorrow.toFormat("MMM")}
         />
-        <Cursor>
+        <Cursor color={color}>
           {DateTime.fromMillis(timeCursor, { zone: timezone }).toFormat(
             "HH:mm"
           )}

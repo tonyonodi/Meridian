@@ -2,7 +2,11 @@
 import * as _ from "lodash";
 import * as React from "react";
 import styled from "styled-components";
-import { VIEWPORT_HEIGHT_IN_HOURS, WINDOW_HEIGHT_IN_MS } from "./config";
+import {
+  TIMELINE_WIDTH,
+  VIEWPORT_HEIGHT_IN_HOURS,
+  WINDOW_HEIGHT_IN_MS,
+} from "./config";
 
 const DAY_HEIGHT = (100 * 24) / VIEWPORT_HEIGHT_IN_HOURS;
 
@@ -14,15 +18,15 @@ const ParentView = styled.div`
 
 const Header = styled.div`
   position: sticky;
-  top: 0;
-  background: white;
+  top: -1px;
+  background: ${({ color }) => color};
   text-align: center;
   font-weight: bold;
-  width: 100%;
+  width: ${TIMELINE_WIDTH}px;
   font-weight: 200;
   &:after {
     content: "";
-    background: linear-gradient(white, rgba(255, 255, 255, 0));
+    background: linear-gradient(${({ color }) => color}, rgba(255, 255, 255, 0));
     height: 30px;
     width: 100%;
     display: block;
@@ -38,7 +42,7 @@ const Month = styled.div``;
 
 const Markers = styled.ul`
   height: 100%;
-  width: 100%;
+  width: ${TIMELINE_WIDTH}px;
   text-align: center;
   list-style: none;
   margin-top: 0;
@@ -59,9 +63,10 @@ interface IDayProps {
   midnight: number;
   date: string;
   month: string;
+  color: string;
 }
 
-export default ({ t_0, midnight, date, month }: IDayProps) => {
+export default ({ t_0, midnight, date, month, color }: IDayProps) => {
   const windowBottomMS = t_0 - WINDOW_HEIGHT_IN_MS / 2;
 
   const midnightBottomOffset = midnight - windowBottomMS;
@@ -80,7 +85,7 @@ export default ({ t_0, midnight, date, month }: IDayProps) => {
           );
         })}
       </Markers>
-      <Header>
+      <Header color={color}>
         <Date>{date}</Date>
         <Month>{month}</Month>
       </Header>
