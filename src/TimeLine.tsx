@@ -48,36 +48,58 @@ const Title = styled.h1`
   width: 100vh;
 `;
 
+const getStartOfDay = (time: number, offset: number, timezone: string) => {
+  return DateTime.fromMillis(time)
+    .setZone(timezone)
+    .plus({ days: offset })
+    .startOf("day");
+};
+
 interface ITimeLineProps {
+  t_0: number;
   timeCursor: number;
   timezone: string;
 }
 
-const getMidnight = (time: number, offset: number, timezone: string) => {
-  return DateTime.fromMillis(time)
-    .setZone(timezone)
-    .plus({ days: offset })
-    .startOf("day")
-    .toMillis();
-};
-
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
-    const { timeCursor, timezone } = this.props;
-    const yesterday = getMidnight(timeCursor, -1, timezone);
-    const today = getMidnight(timeCursor, 0, timezone);
-    const tomorrow = getMidnight(timeCursor, 1, timezone);
+    const { t_0, timeCursor, timezone } = this.props;
+    const titleText = timezone.split("/")[1].replace(/_/g, " ");
 
-    return <ParentView>
-        <Title>{timezone.split("/")[1].replace(/_/g, " ")}</Title>
-        <Day time={timeCursor} t_0={yesterday} timezone={timezone} />
-        <Day time={timeCursor} t_0={today} timezone={timezone} />
-        <Day time={timeCursor} t_0={tomorrow} timezone={timezone} />
+    const startOfYesterday = getStartOfDay(timeCursor, -1, timezone);
+    const startOfToday = getStartOfDay(timeCursor, 0, timezone);
+    const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone);
+
+    return (
+      <ParentView>
+        <Title>{titleText}</Title>
+        <Day
+          time={timeCursor}
+          t_0={t_0}
+          midnight={startOfYesterday.toMillis()}
+          date={startOfYesterday.toFormat("dd")}
+          month={startOfYesterday.toFormat("MMM")}
+        />
+        <Day
+          time={timeCursor}
+          t_0={t_0}
+          midnight={startOfToday.toMillis()}
+          date={startOfToday.toFormat("dd")}
+          month={startOfToday.toFormat("MMM")}
+        />
+        <Day
+          time={timeCursor}
+          t_0={t_0}
+          midnight={startOfTomorrow.toMillis()}
+          date={startOfTomorrow.toFormat("dd")}
+          month={startOfTomorrow.toFormat("MMM")}
+        />
         <Cursor>
           {DateTime.fromMillis(timeCursor, { zone: timezone }).toFormat(
             "HH:mm"
           )}
         </Cursor>
-      </ParentView>;
+      </ParentView>
+    );
   }
 }

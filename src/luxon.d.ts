@@ -407,6 +407,4 @@ declare module 'luxon' {
       constructor(ianaString: string);
     }
   }
-
-  export = luxon;
 }

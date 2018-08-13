@@ -1,8 +1,8 @@
-import * as format from "date-fns/format";
+// tslint:disable:no-console
 import * as _ from "lodash";
 import * as React from "react";
 import styled from "styled-components";
-import { DAY_IN_MS, VIEWPORT_HEIGHT_IN_HOURS } from "./config";
+import { VIEWPORT_HEIGHT_IN_HOURS, WINDOW_HEIGHT_IN_MS } from "./config";
 
 const DAY_HEIGHT = (100 * 24) / VIEWPORT_HEIGHT_IN_HOURS;
 
@@ -54,19 +54,22 @@ const Marker = styled.li`
 `;
 
 interface IDayProps {
-  time: number;
   t_0: number;
-  timezone: string;
+  time: number;
+  midnight: number;
+  date: string;
+  month: string;
 }
 
-export default ({ time, t_0 }: IDayProps) => {
-  const dayFraction = (time - t_0) / DAY_IN_MS;
-  const offsetTop = 50 - 200 * dayFraction;
-  const date = format(t_0, "DD");
-  const month = format(t_0, "MMM");
+export default ({ t_0, midnight, date, month }: IDayProps) => {
+
+  const windowBottomMS = t_0 - WINDOW_HEIGHT_IN_MS / 2;
+
+  const midnightBottomOffset = midnight - windowBottomMS;
+  const fractionOffset = midnightBottomOffset / WINDOW_HEIGHT_IN_MS;
 
   return (
-    <ParentView style={{ top: `${offsetTop}vh` }}>
+    <ParentView style={{ top: `${100 * fractionOffset}%` }}>
       <Markers>
         {_.range(0, 24).map(i => {
           const markerTime = i;
