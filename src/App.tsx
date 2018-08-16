@@ -34,9 +34,7 @@ class App extends React.Component<{}, IAppState> {
     },
     t_0: new Date().getTime(),
     timeCursor: new Date().getTime(),
-    timezones: [
-      "Europe/London",
-    ],
+    timezones: ["Europe/London"],
   };
 
   private containerElement: HTMLDivElement;
@@ -63,6 +61,24 @@ class App extends React.Component<{}, IAppState> {
 
   public componentDidMount() {
     window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
+
+    window.addEventListener("keypress", (event: any) => {
+      switch (event.key) {
+        case "n":
+          event.preventDefault();
+          this.setState({
+            modal: {
+              addTimezone: this.addTimezone,
+              kind: "addTimeZone",
+              timezones: timezoneData,
+            },
+          });
+          break;
+
+        default:
+          break;
+      }
+    });
 
     window.addEventListener("scroll", (event: any) => {
       const { innerHeight } = window;
