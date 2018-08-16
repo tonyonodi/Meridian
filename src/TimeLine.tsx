@@ -50,7 +50,6 @@ const Cursor = styled.h1`
 
 const Title = styled.h1`
   position: fixed;
-  top: -50px;
   transform: rotate(90deg);
   transform-origin: left bottom 0;
   width: 100vh;

@@ -24,8 +24,8 @@ const Inner = styled.div`
   font-size: 1.2em;
 `;
 
-export default () => (
-  <AddTimeZone>
+export default ({ handleClick }) => (
+  <AddTimeZone onClick={handleClick}>
     <Inner>Add Timezone</Inner>
   </AddTimeZone>
 );

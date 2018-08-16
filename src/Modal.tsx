@@ -1,0 +1,49 @@
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import styled from "styled-components";
+import AddTimeZone from "./AddTimeZone";
+import ModalData from "./ModalTypes";
+
+const modalRoot = document.getElementById("modal-root");
+
+const ModalView = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+`;
+
+export default class Modal extends React.Component<ModalData> {
+  public el = document.createElement("div");
+
+  public componentDidMount() {
+    if (!modalRoot) {
+      throw new Error("Modal root element not found.");
+    }
+    modalRoot.appendChild(this.el);
+  }
+
+  public componentWillUnmount() {
+    if (!modalRoot) {
+      throw new Error("Modal root element not found.");
+    }
+    modalRoot.removeChild(this.el);
+  }
+
+  public render() {
+    switch (this.props.kind) {
+      case "addTimeZone":
+        return ReactDOM.createPortal(
+          <ModalView>
+            <AddTimeZone close={this.props.closeModal}/>
+          </ModalView>,
+          this.el
+        );
+
+      case "none":
+        return null;
+    }
+  }
+}

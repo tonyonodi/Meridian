@@ -8,6 +8,8 @@ import {
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
+import Modal from "./Modal";
+import ModalData from "./ModalTypes";
 import TimeLine from "./TimeLine";
 
 const ContainerView = styled.div`
@@ -21,10 +23,15 @@ interface IAppState {
   t_0: number;
   timeCursor: number;
   timezones: string[];
+  modal: ModalData;
 }
 
 class App extends React.Component<{}, IAppState> {
   public state: IAppState = {
+    modal: {
+      closeModal: null,
+      kind: "none",
+    },
     t_0: new Date().getTime(),
     timeCursor: new Date().getTime(),
     timezones: [
@@ -36,6 +43,19 @@ class App extends React.Component<{}, IAppState> {
   };
 
   private containerElement: HTMLDivElement;
+
+  public closeModal = () => {
+    this.setState({
+      modal: {
+        closeModal: null,
+        kind: "none",
+      },
+    });
+  };
+
+  public updateModal = (modal: ModalData) => () => {
+    this.setState({ modal });
+  };
 
   public componentDidMount() {
     window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
@@ -63,12 +83,12 @@ class App extends React.Component<{}, IAppState> {
 
   public render() {
     const { timeCursor, t_0, timezones } = this.state;
-
     return (
       <div
         className="App"
         style={{ minWidth: `${(timezones.length + 1) * PARENT_VIEW_WIDTH}px` }}
       >
+        <Modal {...this.state.modal} />
         <ContainerView innerRef={this.containerViewRef}>
           {this.state.timezones.map((timezone, i) => {
             return (
@@ -81,7 +101,12 @@ class App extends React.Component<{}, IAppState> {
               />
             );
           })}
-          <AddTimeZoneButton />
+          <AddTimeZoneButton
+            handleClick={this.updateModal({
+              closeModal: this.closeModal,
+              kind: "addTimeZone",
+            })}
+          />
         </ContainerView>
       </div>
     );
