@@ -104,6 +104,7 @@ class App extends React.Component<{}, IAppState> {
                 t_0={t_0}
                 timezone={timezone}
                 color={PALETTE[i]}
+                index={i}
               />
             );
           })}

@@ -7,11 +7,17 @@ import Day from "./Day";
 
 const { DateTime } = luxon;
 
-const ParentView = styled.div`
+interface IParentView {
+  bgColor: string;
+  index: number;
+}
+const ParentView = styled.div<IParentView>`
   color: white;
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
-  background: ${({ color }) => color};
+  background: ${({ bgColor }) => bgColor};
+  z-index: ${({ index }) => -index};
+  box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
 `;
 
 const Cursor = styled.h1`
@@ -66,6 +72,7 @@ const getStartOfDay = (time: number, offset: number, timezone: string) => {
 };
 
 interface ITimeLineProps {
+  index: number;
   t_0: number;
   timeCursor: number;
   timezone: string;
@@ -74,7 +81,7 @@ interface ITimeLineProps {
 
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
-    const { t_0, timeCursor, timezone, color } = this.props;
+    const { t_0, timeCursor, timezone, color, index } = this.props;
     const titleText = timezone.split("/")[1].replace(/_/g, " ");
 
     const startOfYesterday = getStartOfDay(timeCursor, -1, timezone);
@@ -82,7 +89,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
     const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone);
 
     return (
-      <ParentView color={color}>
+      <ParentView bgColor={color} index={index}>
         <Title>{titleText}</Title>
         <Day
           color={color}
