@@ -1,11 +1,10 @@
 interface IAddTimeZone {
+  addTimezone: (timezone: string) => void;
   kind: "addTimeZone";
-  closeModal: any;
 }
 
 interface INone {
   kind: "none";
-  closeModal: any;
 }
 
 type ModalData = IAddTimeZone | INone;

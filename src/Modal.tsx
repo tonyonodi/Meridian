@@ -1,8 +1,9 @@
+// tslint:disable:no-console
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import styled from "styled-components";
 import AddTimeZone from "./AddTimeZone";
-import ModalData from "./ModalTypes";
+import ModalData from "./ModalData";
 
 const modalRoot = document.getElementById("modal-root");
 
@@ -15,7 +16,12 @@ const ModalView = styled.div`
   background: rgba(255, 255, 255, 0.9);
 `;
 
-export default class Modal extends React.Component<ModalData> {
+interface IModal {
+  modalData: ModalData;
+  closeModal: any;
+}
+
+export default class Modal extends React.Component<IModal> {
   public el = document.createElement("div");
 
   public componentDidMount() {
@@ -33,11 +39,16 @@ export default class Modal extends React.Component<ModalData> {
   }
 
   public render() {
-    switch (this.props.kind) {
+    const { modalData } = this.props;
+
+    switch (modalData.kind) {
       case "addTimeZone":
         return ReactDOM.createPortal(
           <ModalView>
-            <AddTimeZone close={this.props.closeModal}/>
+            <AddTimeZone
+              addTimezone={modalData.addTimezone}
+              close={this.props.closeModal}
+            />
           </ModalView>,
           this.el
         );
