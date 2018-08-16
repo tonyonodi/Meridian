@@ -11,12 +11,14 @@ const ParentView = styled.div`
 `;
 
 const SearchForm = styled.form`
+  max-width: 90%;
   height: 80%;
 `;
 
 const SearchInput = styled.input`
   background: none;
   border: none;
+  width: 100%;
   border-bottom: solid 2px black;
   font-size: 2rem;
   &:focus {
