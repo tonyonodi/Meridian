@@ -38,9 +38,20 @@ const CloseButton = styled.button`
   }
 `;
 
+const SearchResults = styled.ul`
+  padding-left: 0;
+  list-style: none;
+  margin: 0;
+`;
+
+const SearchResult = styled.li`
+  padding: 5px;
+`
+
 interface IAddTimeZoneProps {
   addTimezone: (timezone: string) => void;
   close: () => void;
+  timezones: string[];
 }
 
 interface IAddTimeZoneState {
@@ -63,17 +74,44 @@ export default class AddTimeZone extends React.Component<
 
   public handleSubmit = (event: any) => {
     event.preventDefault();
-    this.props.addTimezone(this.state.searchValue);
+    const timezone = this.filterTimezones(
+      this.props.timezones,
+      this.state.searchValue
+    );
+
+    if (timezone) {
+      this.props.addTimezone(timezone[0]);
+    }
     this.props.close();
   };
 
   public searchInputRef = (el: any) => (this.searchInput = el);
 
   public componentDidMount() {
-    this.searchInput.focus()
+    this.searchInput.focus();
   }
 
+  public filterTimezones = (timezones: string[], searchValue: string) => {
+    if (!/\S/.test(searchValue)) {
+      return null;
+    }
+    return timezones.filter(timezone => {
+      return timezone
+        .toLocaleLowerCase()
+        .includes(searchValue.toLocaleLowerCase());
+    });
+  };
+
+  public searchResult = (timezone: string) => {
+    return <SearchResult>{timezone}</SearchResult>;
+  };
+
   public render() {
+    const searchResults = this.filterTimezones(
+      this.props.timezones,
+      this.state.searchValue
+    );
+
     return (
       <ParentView>
         <SearchForm onSubmit={this.handleSubmit}>
@@ -83,6 +121,11 @@ export default class AddTimeZone extends React.Component<
             value={this.state.searchValue}
             innerRef={this.searchInputRef}
           />
+          {searchResults ? (
+            <SearchResults>
+              {searchResults.map(this.searchResult)}
+            </SearchResults>
+          ) : null}
         </SearchForm>
         <CloseButton onClick={this.props.close}>
           <Icon type="times" />

@@ -11,6 +11,7 @@ import {
 import Modal from "./Modal";
 import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
+import timezoneData from "./timezonedata";
 
 const ContainerView = styled.div`
   position: relative;
@@ -35,9 +36,6 @@ class App extends React.Component<{}, IAppState> {
     timeCursor: new Date().getTime(),
     timezones: [
       "Europe/London",
-      "America/New_York",
-      "Europe/Paris",
-      "Asia/Tokyo",
     ],
   };
 
@@ -112,6 +110,7 @@ class App extends React.Component<{}, IAppState> {
             handleClick={this.updateModal({
               addTimezone: this.addTimezone,
               kind: "addTimeZone",
+              timezones: timezoneData,
             })}
           />
         </ContainerView>

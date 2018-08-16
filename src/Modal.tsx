@@ -48,6 +48,7 @@ export default class Modal extends React.Component<IModal> {
             <AddTimeZone
               addTimezone={modalData.addTimezone}
               close={this.props.closeModal}
+              timezones={modalData.timezones}
             />
           </ModalView>,
           this.el
