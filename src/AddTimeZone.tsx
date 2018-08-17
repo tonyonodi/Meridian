@@ -46,9 +46,15 @@ const SearchResults = styled.ul`
   margin: 0;
 `;
 
-const SearchResult = styled.li`
+interface ISearchResult {
+  active: boolean;
+  children: string;
+}
+
+const SearchResult = styled.li<ISearchResult>`
   padding: 5px;
-`
+  background: ${({ active }) => (active ? "red" : "none")};
+`;
 
 interface IAddTimeZoneProps {
   addTimezone: (timezone: string) => void;
@@ -58,6 +64,7 @@ interface IAddTimeZoneProps {
 
 interface IAddTimeZoneState {
   searchValue: string;
+  cursor: number;
 }
 
 export default class AddTimeZone extends React.Component<
@@ -66,7 +73,7 @@ export default class AddTimeZone extends React.Component<
 > {
   public searchInput: any;
 
-  public state = { searchValue: "" };
+  public state = { searchValue: "", cursor: 0 };
 
   public handleChange = (event: any) => {
     this.setState({
@@ -82,7 +89,7 @@ export default class AddTimeZone extends React.Component<
     );
 
     if (timezone) {
-      this.props.addTimezone(timezone[0]);
+      this.props.addTimezone(timezone[this.state.cursor]);
     }
     this.props.close();
   };
@@ -91,6 +98,11 @@ export default class AddTimeZone extends React.Component<
 
   public componentDidMount() {
     this.searchInput.focus();
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener("keydown", this.handleKeyDown);
   }
 
   public filterTimezones = (timezones: string[], searchValue: string) => {
@@ -104,8 +116,30 @@ export default class AddTimeZone extends React.Component<
     });
   };
 
-  public searchResult = (timezone: string) => {
-    return <SearchResult>{timezone}</SearchResult>;
+  public handleKeyDown = (event: any) => {
+    const { key } = event;
+    switch (key) {
+      case "ArrowDown":
+        event.preventDefault();
+        this.setState(({ cursor }) => {
+          return { cursor: cursor + 1 };
+        });
+        break;
+      case "ArrowUp":
+        event.preventDefault();
+        this.setState(({ cursor }) => {
+          return { cursor: cursor <= 0 ? 0 : cursor - 1 };
+        });
+        break;
+    }
+  };
+
+  public searchResult = (timezone: string, index: number) => {
+    return (
+      <SearchResult active={index === this.state.cursor}>
+        {timezone}
+      </SearchResult>
+    );
   };
 
   public render() {

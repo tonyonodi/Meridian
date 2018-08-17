@@ -63,6 +63,10 @@ class App extends React.Component<{}, IAppState> {
     window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
 
     window.addEventListener("keypress", (event: any) => {
+      if (document.activeElement !== window.document.body) {
+        return;
+      }
+
       switch (event.key) {
         case "n":
           event.preventDefault();
@@ -72,6 +76,20 @@ class App extends React.Component<{}, IAppState> {
               kind: "addTimeZone",
               timezones: timezoneData,
             },
+          });
+          break;
+
+        case "j":
+          event.preventDefault();
+          this.setState(({ timeCursor }) => {
+            return { timeCursor: timeCursor + 60 * 1000 };
+          });
+          break;
+
+        case "k":
+          event.preventDefault();
+          this.setState(({ timeCursor }) => {
+            return { timeCursor: timeCursor - 60 * 1000 };
           });
           break;
 
