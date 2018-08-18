@@ -65,6 +65,7 @@ interface IAddTimeZoneProps {
 interface IAddTimeZoneState {
   searchValue: string;
   cursor: number;
+  searchResults: string[];
 }
 
 export default class AddTimeZone extends React.Component<
@@ -73,7 +74,7 @@ export default class AddTimeZone extends React.Component<
 > {
   public searchInput: any;
 
-  public state = { searchValue: "", cursor: 0 };
+  public state = { searchValue: "", cursor: 0, searchResults: [] };
 
   public handleChange = (event: any) => {
     this.setState({
@@ -83,13 +84,10 @@ export default class AddTimeZone extends React.Component<
 
   public handleSubmit = (event: any) => {
     event.preventDefault();
-    const timezone = this.filterTimezones(
-      this.props.timezones,
-      this.state.searchValue
-    );
+    const {searchResults} = this.state
 
-    if (timezone) {
-      this.props.addTimezone(timezone[this.state.cursor]);
+    if (searchResults.length > 0) {
+      this.props.addTimezone(searchResults[this.state.cursor]);
     }
     this.props.close();
   };
@@ -101,14 +99,22 @@ export default class AddTimeZone extends React.Component<
     window.addEventListener("keydown", this.handleKeyDown);
   }
 
+  public componentDidUpdate(prevProps: any, prevState: any) {
+    if (prevState.searchValue === this.state.searchValue) {
+      return;
+    }
+    const searchResults = this.filterTimezones(
+      this.props.timezones,
+      this.state.searchValue
+    );
+    this.setState({ searchResults });
+  }
+
   public componentWillUnmount() {
     window.removeEventListener("keydown", this.handleKeyDown);
   }
 
   public filterTimezones = (timezones: string[], searchValue: string) => {
-    if (!/\S/.test(searchValue)) {
-      return null;
-    }
     return timezones.filter(timezone => {
       return timezone
         .toLocaleLowerCase()
@@ -136,17 +142,14 @@ export default class AddTimeZone extends React.Component<
 
   public searchResult = (timezone: string, index: number) => {
     return (
-      <SearchResult active={index === this.state.cursor}>
+      <SearchResult key={timezone} active={index === this.state.cursor}>
         {timezone}
       </SearchResult>
     );
   };
 
   public render() {
-    const searchResults = this.filterTimezones(
-      this.props.timezones,
-      this.state.searchValue
-    );
+    const { searchResults, searchValue } = this.state;
 
     return (
       <ParentView>
@@ -157,7 +160,7 @@ export default class AddTimeZone extends React.Component<
             value={this.state.searchValue}
             innerRef={this.searchInputRef}
           />
-          {searchResults ? (
+          {searchResults.length > 0 && searchValue ? (
             <SearchResults>
               {searchResults.map(this.searchResult)}
             </SearchResults>
