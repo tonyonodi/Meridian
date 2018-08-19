@@ -2,7 +2,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import Icon from "./Icon";
-import ITimezone from "./TimezoneDataType";
+import ITimezone from "./ITimezone";
 
 const ParentView = styled.div`
   height: 100%;
@@ -117,7 +117,10 @@ export default class AddTimeZone extends React.Component<
 
   public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
     return timezones.filter(timezone => {
-      return timezone.niceName
+      const niceName = timezone.country
+        ? `${timezone.city}, ${timezone.country}`
+        : timezone.city;
+      return niceName
         .toLocaleLowerCase()
         .includes(searchValue.toLocaleLowerCase());
     });
@@ -149,10 +152,12 @@ export default class AddTimeZone extends React.Component<
   public searchResult = (timezone: ITimezone, index: number) => {
     return (
       <SearchResult
-        key={timezone.fullName}
+        key={timezone.timezone}
         active={index === this.state.cursor}
       >
-        {timezone.niceName}
+        {timezone.country
+          ? `${timezone.city}, ${timezone.country}`
+          : timezone.city}
       </SearchResult>
     );
   };

@@ -8,11 +8,11 @@ import {
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
+import ITimezone from "./ITimezone";
 import Modal from "./Modal";
 import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
 import timezoneData from "./timezonedata";
-import ITimezone from "./TimezoneDataType";
 
 const ContainerView = styled.div`
   position: relative;
@@ -37,8 +37,9 @@ class App extends React.Component<{}, IAppState> {
     timeCursor: new Date().getTime(),
     timezones: [
       {
-        fullName: "Europe/London",
-        niceName: "London, United Kingdom",
+        city: "London",
+        country: "United Kingdom",
+        timezone: "Europe/London",
       },
     ],
   };
@@ -137,7 +138,7 @@ class App extends React.Component<{}, IAppState> {
           {this.state.timezones.map((timezone, i) => {
             return (
               <TimeLine
-                key={timezone.fullName}
+                key={timezone.timezone}
                 timeCursor={timeCursor}
                 t_0={t_0}
                 timezone={timezone}

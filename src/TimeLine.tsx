@@ -4,7 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
-import ITimezone from "./TimezoneDataType";
+import ITimezone from "./ITimezone";
 
 const { DateTime } = luxon;
 
@@ -83,11 +83,11 @@ interface ITimeLineProps {
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
     const { t_0, timeCursor, timezone, color, index } = this.props;
-    const titleText = timezone.niceName;
+    const titleText = timezone.city;
 
-    const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.fullName);
-    const startOfToday = getStartOfDay(timeCursor, 0, timezone.fullName);
-    const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone.fullName);
+    const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.timezone);
+    const startOfToday = getStartOfDay(timeCursor, 0, timezone.timezone);
+    const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone.timezone);
 
     return (
       <ParentView bgColor={color} index={index}>
@@ -118,7 +118,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
         />
         <Cursor color={color}>
           {DateTime.fromMillis(timeCursor, {
-            zone: timezone.fullName,
+            zone: timezone.timezone,
           }).toFormat("HH:mm")}
         </Cursor>
       </ParentView>

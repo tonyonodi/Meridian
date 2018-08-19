@@ -1,4 +1,4 @@
-import ITimezone from "./TimezoneDataType";
+import ITimezone from "./ITimezone";
 
 interface IAddTimeZone {
   addTimezone: (timezone: ITimezone) => void;
