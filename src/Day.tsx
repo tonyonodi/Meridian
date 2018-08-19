@@ -58,8 +58,23 @@ const Markers = styled.ul`
 
 const Marker = styled.li`
   height: calc(100% / 24);
+  position: relative;
   &:first-child {
     visibility: hidden;
+  }
+`;
+
+const MarkerTime = styled.div`
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  &:after {
+    content: "";
+    border-top: solid 2px white;
+    width: 10px;
+    display: block;
+    margin-left: -15px;
+    margin-top: -11px;
   }
 `;
 
@@ -85,8 +100,10 @@ export default ({ t_0, midnight, date, month, color }: IDayProps) => {
           const markerTime = i;
           return (
             <Marker key={markerTime}>
-              {markerTime}
-              :00
+              <MarkerTime>
+                {markerTime}
+                :00
+              </MarkerTime>
             </Marker>
           );
         })}
