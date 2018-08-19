@@ -41,6 +41,11 @@ class App extends React.Component<{}, IAppState> {
         country: "United Kingdom",
         timezone: "Europe/London",
       },
+      {
+        city: "Bangkok",
+        country: "Thailand",
+        timezone: "Asia/Bangkok",
+      },
     ],
   };
 
@@ -126,6 +131,17 @@ class App extends React.Component<{}, IAppState> {
 
   public containerViewRef = (el: any) => (this.containerElement = el);
 
+  public removeTimeline = (timezoneToRemove: string) => () => {
+    console.log(`removing ${timezoneToRemove}`);
+    this.setState(({ timezones }) => {
+      return {
+        timezones: timezones.filter(
+          ({ timezone }) => timezone !== timezoneToRemove
+        ),
+      };
+    });
+  };
+
   public render() {
     const { timeCursor, t_0, timezones } = this.state;
     return (
@@ -143,7 +159,8 @@ class App extends React.Component<{}, IAppState> {
                 t_0={t_0}
                 timezone={timezone}
                 color={PALETTE[i]}
-                index={i}
+                index={timezones.length - i}
+                remove={this.removeTimeline(timezone.timezone)}
               />
             );
           })}

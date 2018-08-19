@@ -1,22 +1,23 @@
 import * as React from "react";
 
-export default ({ type }: { type: string }) => {
+export default ({ type, style }: { type: string; style?: any }) => {
   switch (type) {
     case "times":
-      return times;
+      return times(style);
 
     default:
       return null;
   }
 };
 
-const times = (
+const times = (style: any) => (
   <svg
     aria-hidden="true"
     data-prefix="fas"
     data-icon="times"
     className="svg-inline--fa fa-times fa-w-11"
     role="img"
+    style={style}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 352 512"
   >

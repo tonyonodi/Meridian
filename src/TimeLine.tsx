@@ -4,6 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
+import Icon from "./Icon";
 import ITimezone from "./ITimezone";
 
 const { DateTime } = luxon;
@@ -17,7 +18,7 @@ const ParentView = styled.div<IParentView>`
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
   background: ${({ bgColor }) => bgColor};
-  z-index: ${({ index }) => -index};
+  z-index: ${({ index }) => index};
   box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
 `;
 
@@ -63,6 +64,14 @@ const Title = styled.h1`
   margin-left: ${TIMELINE_WIDTH - 7}px;
   font-size: 1.8em;
   text-transform: uppercase;
+  z-index: 100;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  color: white;
+  padding: 0;
 `;
 
 const getStartOfDay = (time: number, offset: number, timezone: string) => {
@@ -78,11 +87,11 @@ interface ITimeLineProps {
   timeCursor: number;
   timezone: ITimezone;
   color: string;
+  remove: () => void;
 }
-
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
-    const { t_0, timeCursor, timezone, color, index } = this.props;
+    const { t_0, timeCursor, timezone, color, index, remove } = this.props;
     const titleText = timezone.city;
 
     const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.timezone);
@@ -91,7 +100,21 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
 
     return (
       <ParentView bgColor={color} index={index}>
-        <Title>{titleText}</Title>
+        <div>
+          <Title>
+            {titleText}
+            <CloseButton onClick={remove}>
+              <Icon
+                style={{
+                  height: "27px",
+                  marginBottom: "-2px",
+                  marginLeft: "10px",
+                }}
+                type="times"
+              />
+            </CloseButton>
+          </Title>
+        </div>
         <Day
           color={color}
           time={timeCursor}
