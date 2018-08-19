@@ -1,7 +1,9 @@
+import ITimezone from "./TimezoneDataType";
+
 interface IAddTimeZone {
-  addTimezone: (timezone: string) => void;
+  addTimezone: (timezone: ITimezone) => void;
   kind: "addTimeZone";
-  timezones: string[];
+  timezones: ITimezone[];
 }
 
 interface INone {

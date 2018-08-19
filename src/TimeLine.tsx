@@ -4,6 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
+import ITimezone from "./TimezoneDataType";
 
 const { DateTime } = luxon;
 
@@ -75,18 +76,18 @@ interface ITimeLineProps {
   index: number;
   t_0: number;
   timeCursor: number;
-  timezone: string;
+  timezone: ITimezone;
   color: string;
 }
 
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
     const { t_0, timeCursor, timezone, color, index } = this.props;
-    const titleText = timezone.split("/")[1].replace(/_/g, " ");
+    const titleText = timezone.niceName;
 
-    const startOfYesterday = getStartOfDay(timeCursor, -1, timezone);
-    const startOfToday = getStartOfDay(timeCursor, 0, timezone);
-    const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone);
+    const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.fullName);
+    const startOfToday = getStartOfDay(timeCursor, 0, timezone.fullName);
+    const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone.fullName);
 
     return (
       <ParentView bgColor={color} index={index}>
@@ -116,9 +117,9 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           month={startOfTomorrow.toFormat("MMM")}
         />
         <Cursor color={color}>
-          {DateTime.fromMillis(timeCursor, { zone: timezone }).toFormat(
-            "HH:mm"
-          )}
+          {DateTime.fromMillis(timeCursor, {
+            zone: timezone.fullName,
+          }).toFormat("HH:mm")}
         </Cursor>
       </ParentView>
     );

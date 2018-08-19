@@ -12,6 +12,7 @@ import Modal from "./Modal";
 import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
 import timezoneData from "./timezonedata";
+import ITimezone from "./TimezoneDataType";
 
 const ContainerView = styled.div`
   position: relative;
@@ -23,7 +24,7 @@ const ContainerView = styled.div`
 interface IAppState {
   t_0: number;
   timeCursor: number;
-  timezones: string[];
+  timezones: ITimezone[];
   modal: ModalData;
 }
 
@@ -34,12 +35,17 @@ class App extends React.Component<{}, IAppState> {
     },
     t_0: new Date().getTime(),
     timeCursor: new Date().getTime(),
-    timezones: ["Europe/London"],
+    timezones: [
+      {
+        fullName: "Europe/London",
+        niceName: "London, United Kingdom",
+      },
+    ],
   };
 
   private containerElement: HTMLDivElement;
 
-  public addTimezone = (timezone: string) => {
+  public addTimezone = (timezone: ITimezone) => {
     this.setState(({ timezones }) => {
       return {
         timezones: [...timezones, timezone],
@@ -131,7 +137,7 @@ class App extends React.Component<{}, IAppState> {
           {this.state.timezones.map((timezone, i) => {
             return (
               <TimeLine
-                key={timezone}
+                key={timezone.fullName}
                 timeCursor={timeCursor}
                 t_0={t_0}
                 timezone={timezone}

@@ -2,6 +2,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import Icon from "./Icon";
+import ITimezone from "./TimezoneDataType";
 
 const ParentView = styled.div`
   height: 100%;
@@ -57,15 +58,15 @@ const SearchResult = styled.li<ISearchResult>`
 `;
 
 interface IAddTimeZoneProps {
-  addTimezone: (timezone: string) => void;
+  addTimezone: (timezone: ITimezone) => void;
   close: () => void;
-  timezones: string[];
+  timezones: ITimezone[];
 }
 
 interface IAddTimeZoneState {
   searchValue: string;
   cursor: number;
-  searchResults: string[];
+  searchResults: ITimezone[];
 }
 
 export default class AddTimeZone extends React.Component<
@@ -84,7 +85,7 @@ export default class AddTimeZone extends React.Component<
 
   public handleSubmit = (event: any) => {
     event.preventDefault();
-    const {searchResults} = this.state
+    const { searchResults } = this.state;
 
     if (searchResults.length > 0) {
       this.props.addTimezone(searchResults[this.state.cursor]);
@@ -114,9 +115,9 @@ export default class AddTimeZone extends React.Component<
     window.removeEventListener("keydown", this.handleKeyDown);
   }
 
-  public filterTimezones = (timezones: string[], searchValue: string) => {
+  public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
     return timezones.filter(timezone => {
-      return timezone
+      return timezone.niceName
         .toLocaleLowerCase()
         .includes(searchValue.toLocaleLowerCase());
     });
@@ -125,10 +126,15 @@ export default class AddTimeZone extends React.Component<
   public handleKeyDown = (event: any) => {
     const { key } = event;
     switch (key) {
+      case "Escape":
+        this.props.close();
+        break;
       case "ArrowDown":
         event.preventDefault();
-        this.setState(({ cursor }) => {
-          return { cursor: cursor + 1 };
+        this.setState(({ cursor, searchResults }) => {
+          return {
+            cursor: cursor >= searchResults.length - 1 ? cursor : cursor + 1,
+          };
         });
         break;
       case "ArrowUp":
@@ -140,10 +146,13 @@ export default class AddTimeZone extends React.Component<
     }
   };
 
-  public searchResult = (timezone: string, index: number) => {
+  public searchResult = (timezone: ITimezone, index: number) => {
     return (
-      <SearchResult key={timezone} active={index === this.state.cursor}>
-        {timezone}
+      <SearchResult
+        key={timezone.fullName}
+        active={index === this.state.cursor}
+      >
+        {timezone.niceName}
       </SearchResult>
     );
   };
