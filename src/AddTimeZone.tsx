@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+import * as fuzzysort from "fuzzysort";
 import * as React from "react";
 import styled from "styled-components";
 import Icon from "./Icon";
@@ -77,6 +78,18 @@ export default class AddTimeZone extends React.Component<
 
   public state = { searchValue: "", cursor: 0, searchResults: [] };
 
+  public timezones: ITimezone[];
+
+  public constructor(props: IAddTimeZoneProps) {
+    super(props);
+
+    this.timezones = props.timezones.map(timezone => {
+      const { city, country } = timezone;
+      return { ...timezone, niceName: `${city}, ${country}` };
+    });
+    console.log(JSON.stringify(this.timezones.map(({niceName}) => niceName)))
+  }
+
   public handleChange = (event: any) => {
     this.setState({
       searchValue: event.target.value,
@@ -105,7 +118,7 @@ export default class AddTimeZone extends React.Component<
       return;
     }
     const searchResults = this.filterTimezones(
-      this.props.timezones,
+      this.timezones,
       this.state.searchValue
     );
     this.setState({ searchResults });
@@ -116,14 +129,24 @@ export default class AddTimeZone extends React.Component<
   }
 
   public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
-    return timezones.filter(timezone => {
-      const niceName = timezone.country
-        ? `${timezone.city}, ${timezone.country}`
-        : timezone.city;
-      return niceName
-        .toLocaleLowerCase()
-        .includes(searchValue.toLocaleLowerCase());
+    const fuzzysortResults = fuzzysort.go(searchValue, timezones, {
+      key: "niceName",
+      threshold: -100,
     });
+
+    // Using reduce to convince type checker no results will be undefined
+    const timezoneResults = fuzzysortResults.reduce((acc, { target }) => {
+      const timezone = timezones.find(({ niceName }) => {
+        return niceName === target;
+      });
+      if (timezone) {
+        return [...acc, timezone];
+      } else {
+        return acc;
+      }
+    }, []) 
+
+    return timezoneResults;
   };
 
   public handleKeyDown = (event: any) => {
