@@ -166,6 +166,7 @@ class App extends React.Component<{}, IAppState> {
           })}
           <AddTimeZoneButton
             addTimezone={this.addTimezone}
+            color={PALETTE[timezones.length]}
             timezones={timezoneData}
           />
         </ContainerView>

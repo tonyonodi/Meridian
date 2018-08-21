@@ -2,41 +2,21 @@
 import * as fuzzysort from "fuzzysort";
 import * as React from "react";
 import styled from "styled-components";
-import Icon from "./Icon";
 import ITimezone from "./ITimezone";
 
-const ParentView = styled.div`
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const SearchForm = styled.form`
-  max-width: 90%;
-  height: 80%;
+  width: 90%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
 `;
 
 const SearchInput = styled.input`
   background: none;
   border: none;
   width: 100%;
-  border-bottom: solid 2px black;
+  border-bottom: solid 2px rgba(0, 0, 0, 0.25);
   font-size: 2rem;
-  &:focus {
-    outline: none;
-  }
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  background: none;
-  border: none;
-  top: 20px;
-  right: 20px;
-  & svg {
-    height: 2rem;
-  }
   &:focus {
     outline: none;
   }
@@ -46,6 +26,8 @@ const SearchResults = styled.ul`
   padding-left: 0;
   list-style: none;
   margin: 0;
+  overflow: auto;
+  text-align: left;
 `;
 
 interface ISearchResult {
@@ -55,7 +37,7 @@ interface ISearchResult {
 
 const SearchResult = styled.li<ISearchResult>`
   padding: 5px;
-  background: ${({ active }) => (active ? "red" : "none")};
+  background: ${({ active }) => (active ? "rgba(255, 255, 255, 0.3)" : "none")};
 `;
 
 interface IAddTimeZoneProps {
@@ -143,7 +125,7 @@ export default class AddTimeZone extends React.Component<
       } else {
         return acc;
       }
-    }, []) 
+    }, []);
 
     return timezoneResults;
   };
@@ -188,24 +170,18 @@ export default class AddTimeZone extends React.Component<
     const { searchResults, searchValue } = this.state;
 
     return (
-      <ParentView>
-        <SearchForm onSubmit={this.handleSubmit}>
-          <SearchInput
-            type="text"
-            onChange={this.handleChange}
-            value={this.state.searchValue}
-            innerRef={this.searchInputRef}
-          />
-          {searchResults.length > 0 && searchValue ? (
-            <SearchResults>
-              {searchResults.map(this.searchResult)}
-            </SearchResults>
-          ) : null}
-        </SearchForm>
-        <CloseButton onClick={this.props.close}>
-          <Icon type="times" />
-        </CloseButton>
-      </ParentView>
+      <SearchForm onSubmit={this.handleSubmit}>
+        <SearchInput
+          type="text"
+          onChange={this.handleChange}
+          value={this.state.searchValue}
+          innerRef={this.searchInputRef}
+          onBlur={this.props.close}
+        />
+        {searchResults.length > 0 && searchValue ? (
+          <SearchResults>{searchResults.map(this.searchResult)}</SearchResults>
+        ) : null}
+      </SearchForm>
     );
   }
 }

@@ -7,30 +7,47 @@ import {
   // WINDOW_HEIGHT_IN_DAYS,
   // WINDOW_HEIGHT_IN_MS,
 } from "./config";
+import ITimezone from "./ITimezone";
 
-const ParentView = styled.div`
-  width: ${PARENT_VIEW_WIDTH}px;
-  background: rgba(255, 255, 255, 0.2);
+interface IParentView {
+  show: boolean;
+  color: string;
+}
+
+const ParentView = styled.div<IParentView>`
+  width: ${({ show }) => (show ? 350 : PARENT_VIEW_WIDTH)}px;
+  background: ${({ color }) => color};
   cursor: default;
 `;
 
-const Inner = styled.div`
+interface IInnerView {
+  show: boolean;
+}
+
+const InnerView = styled.div<IInnerView>`
   position: fixed;
   height: 100vh;
+  width: ${({ show }) => (show ? 350 : PARENT_VIEW_WIDTH)}px;
   display: flex;
-  width: ${PARENT_VIEW_WIDTH}px;
-  text-align: center;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   color: white;
   font-size: 1.2em;
 `;
+
+interface IAddTimeZoneButtonProps {
+  addTimezone: (timezone: ITimezone) => void;
+  color: string;
+  timezones: ITimezone[];
+}
 
 interface IAddTimeZoneButtonState {
   show: boolean;
 }
 
 export default class AddTimeZoneButton extends React.Component<
-  any,
+  IAddTimeZoneButtonProps,
   IAddTimeZoneButtonState
 > {
   public state = { show: false };
@@ -42,18 +59,21 @@ export default class AddTimeZoneButton extends React.Component<
   };
 
   public render() {
-    const { addTimezone, timezones } = this.props;
+    const { addTimezone, timezones, color } = this.props;
+    const { show } = this.state;
     return (
-      <ParentView onClick={this.toggle}>
-        {this.state.show ? (
-          <AddTimeZone
-            addTimezone={addTimezone}
-            close={this.toggle}
-            timezones={timezones}
-          />
-        ) : (
-          <Inner>Add Timezone</Inner>
-        )}
+      <ParentView onClick={this.toggle} show={show} color={color}>
+        <InnerView show={show}>
+          {show ? (
+            <AddTimeZone
+              addTimezone={addTimezone}
+              close={this.toggle}
+              timezones={timezones}
+            />
+          ) : (
+            "Add Timezone"
+          )}
+        </InnerView>
       </ParentView>
     );
   }
