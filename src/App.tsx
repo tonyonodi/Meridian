@@ -165,11 +165,8 @@ class App extends React.Component<{}, IAppState> {
             );
           })}
           <AddTimeZoneButton
-            handleClick={this.updateModal({
-              addTimezone: this.addTimezone,
-              kind: "addTimeZone",
-              timezones: timezoneData,
-            })}
+            addTimezone={this.addTimezone}
+            timezones={timezoneData}
           />
         </ContainerView>
       </div>
