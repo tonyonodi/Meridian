@@ -58,6 +58,29 @@ export default class AddTimeZoneButton extends React.Component<
     }));
   };
 
+  public componentDidMount() {
+    window.addEventListener("keypress", this.handleKeypress);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener("keypress", this.handleKeypress);
+  }
+
+  public handleKeypress = (event: any) => {
+    if (document.activeElement !== window.document.body) {
+      return;
+    }
+
+    switch (event.key) {
+      case "n":
+        event.preventDefault();
+        this.setState({
+          show: true,
+        });
+        break;
+    }
+  };
+
   public render() {
     const { addTimezone, timezones, color } = this.props;
     const { show } = this.state;
@@ -71,7 +94,7 @@ export default class AddTimeZoneButton extends React.Component<
               timezones={timezones}
             />
           ) : (
-            "Add Timezone"
+            <b>Add Timezone</b>
           )}
         </InnerView>
       </ParentView>

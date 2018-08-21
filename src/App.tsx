@@ -80,17 +80,6 @@ class App extends React.Component<{}, IAppState> {
       }
 
       switch (event.key) {
-        case "n":
-          event.preventDefault();
-          this.setState({
-            modal: {
-              addTimezone: this.addTimezone,
-              kind: "addTimeZone",
-              timezones: timezoneData,
-            },
-          });
-          break;
-
         case "j":
           event.preventDefault();
           this.setState(({ timeCursor }) => {
