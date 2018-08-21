@@ -87,7 +87,6 @@ export default class AddTimeZone extends React.Component<
       const { city, country } = timezone;
       return { ...timezone, niceName: `${city}, ${country}` };
     });
-    console.log(JSON.stringify(this.timezones.map(({niceName}) => niceName)))
   }
 
   public handleChange = (event: any) => {

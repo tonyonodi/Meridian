@@ -435,11 +435,6 @@ export default [
     timezone: "America/Caracas",
   },
   {
-    city: "Catamarca",
-    country: "Argentina",
-    timezone: "America/Catamarca",
-  },
-  {
     city: "Cayenne",
     country: "French Guiana",
     timezone: "America/Cayenne",
@@ -463,11 +458,6 @@ export default [
     city: "Coral Harbour",
     country: "Canada",
     timezone: "America/Coral_Harbour",
-  },
-  {
-    city: "Cordoba",
-    country: "Argentina",
-    timezone: "America/Cordoba",
   },
   {
     city: "Costa Rica",
@@ -615,11 +605,6 @@ export default [
     timezone: "America/Hermosillo",
   },
   {
-    city: "Indianapolis",
-    country: "United States of America",
-    timezone: "America/Indiana/Indianapolis",
-  },
-  {
     city: "Knox",
     country: "United States of America",
     timezone: "America/Indiana/Knox",
@@ -675,11 +660,6 @@ export default [
     timezone: "America/Jamaica",
   },
   {
-    city: "Jujuy",
-    country: "Argentina",
-    timezone: "America/Jujuy",
-  },
-  {
     city: "Juneau",
     country: "United States of America",
     timezone: "America/Juneau",
@@ -713,11 +693,6 @@ export default [
     city: "Los Angeles",
     country: "United States of America",
     timezone: "America/Los_Angeles",
-  },
-  {
-    city: "Louisville",
-    country: "United States of America",
-    timezone: "America/Louisville",
   },
   {
     city: "Lower Princes",
@@ -758,11 +733,6 @@ export default [
     city: "Mazatlan",
     country: "Mexico",
     timezone: "America/Mazatlan",
-  },
-  {
-    city: "Mendoza",
-    country: "Argentina",
-    timezone: "America/Mendoza",
   },
   {
     city: "Menominee",
@@ -2095,11 +2065,6 @@ export default [
     timezone: "Europe/Isle_of_Man",
   },
   {
-    city: "Istanbul",
-    country: "Turkey",
-    timezone: "Europe/Istanbul",
-  },
-  {
     city: "Jersey",
     country: "Jersey",
     timezone: "Europe/Jersey",
@@ -2313,11 +2278,6 @@ export default [
     city: "Zurich",
     country: "Switzerland",
     timezone: "Europe/Zurich",
-  },
-  {
-    city: "GMT",
-    country: null,
-    timezone: "GMT",
   },
   {
     city: "Antananarivo",
