@@ -29,27 +29,36 @@ interface IAppState {
 }
 
 class App extends React.Component<{}, IAppState> {
-  public state: IAppState = {
-    modal: {
-      kind: "none",
-    },
-    t_0: new Date().getTime(),
-    timeCursor: new Date().getTime(),
-    timezones: [
-      {
-        city: "London",
-        country: "United Kingdom",
-        timezone: "Europe/London",
-      },
-      {
-        city: "Bangkok",
-        country: "Thailand",
-        timezone: "Asia/Bangkok",
-      },
-    ],
-  };
-
   private containerElement: HTMLDivElement;
+
+  public constructor(props: {}) {
+    super(props);
+    const timezonesString = window.localStorage.getItem(
+      "__timezonesapp.timezones"
+    );
+    const timezones =
+      typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
+
+    this.state = {
+      modal: {
+        kind: "none",
+      },
+      t_0: new Date().getTime(),
+      timeCursor: new Date().getTime(),
+      timezones: timezones || [
+        {
+          city: "London",
+          country: "United Kingdom",
+          timezone: "Europe/London",
+        },
+        {
+          city: "Bangkok",
+          country: "Thailand",
+          timezone: "Asia/Bangkok",
+        },
+      ],
+    };
+  }
 
   public addTimezone = (timezone: ITimezone) => {
     this.setState(({ timezones }) => {
@@ -118,10 +127,22 @@ class App extends React.Component<{}, IAppState> {
     });
   }
 
+  public componentDidUpdate(prevprops: {}, prevState: IAppState) {
+    const { timezones: prevTimezones } = prevState;
+    const { timezones } = this.state;
+    if (prevTimezones === timezones) {
+      return;
+    }
+
+    window.localStorage.setItem(
+      "__timezonesapp.timezones",
+      JSON.stringify(timezones)
+    );
+  }
+
   public containerViewRef = (el: any) => (this.containerElement = el);
 
   public removeTimeline = (timezoneToRemove: string) => () => {
-    console.log(`removing ${timezoneToRemove}`);
     this.setState(({ timezones }) => {
       return {
         timezones: timezones.filter(
