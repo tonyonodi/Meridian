@@ -16,6 +16,8 @@ export const TIMELINE_WIDTH = 75;
 
 export const PARENT_VIEW_WIDTH = TIMELINE_WIDTH + LOCATION_NAME_WIDTH;
 
+export const ADD_TIMEZONE_FORM_WIDTH = 350;
+
 export const PALETTE = [
   "rgba(109, 211, 206, 1)",
   "rgba(200, 233, 160, 1)",

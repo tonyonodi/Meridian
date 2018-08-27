@@ -3,6 +3,7 @@ import styled from "styled-components";
 import AddTimeZone from "./AddTimeZone";
 import {
   // PALETTE,
+  ADD_TIMEZONE_FORM_WIDTH,
   PARENT_VIEW_WIDTH,
   // WINDOW_HEIGHT_IN_DAYS,
   // WINDOW_HEIGHT_IN_MS,
@@ -11,12 +12,14 @@ import ITimezone from "./ITimezone";
 
 interface IParentView {
   show: boolean;
-  color: string;
+  bgColor: string;
 }
 
 const ParentView = styled.div<IParentView>`
-  width: ${({ show }) => (show ? 350 : PARENT_VIEW_WIDTH)}px;
-  background: ${({ color }) => color};
+  position: relative;
+  width: ${({ show }) =>
+    show ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH}px;
+  background: ${({ bgColor }) => bgColor};
   cursor: default;
 `;
 
@@ -25,7 +28,9 @@ interface IInnerView {
 }
 
 const InnerView = styled.div<IInnerView>`
-  position: fixed;
+  position: sticky;
+  top: 0;
+  left: 0;
   height: 100vh;
   width: ${({ show }) => (show ? 350 : PARENT_VIEW_WIDTH)}px;
   display: flex;
@@ -85,7 +90,7 @@ export default class AddTimeZoneButton extends React.Component<
     const { addTimezone, timezones, color } = this.props;
     const { show } = this.state;
     return (
-      <ParentView onClick={this.toggle} show={show} color={color}>
+      <ParentView onClick={this.toggle} show={show} bgColor={color}>
         <InnerView show={show}>
           {show ? (
             <AddTimeZone

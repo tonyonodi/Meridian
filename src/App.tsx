@@ -3,6 +3,7 @@ import * as React from "react";
 import styled from "styled-components";
 import AddTimeZoneButton from "./AddTimeZoneButton";
 import {
+  ADD_TIMEZONE_FORM_WIDTH,
   PALETTE,
   PARENT_VIEW_WIDTH,
   WINDOW_HEIGHT_IN_DAYS,
@@ -157,7 +158,10 @@ class App extends React.Component<{}, IAppState> {
     return (
       <div
         className="App"
-        style={{ minWidth: `${(timezones.length + 1) * PARENT_VIEW_WIDTH}px` }}
+        style={{
+          minWidth: `${timezones.length * PARENT_VIEW_WIDTH +
+            ADD_TIMEZONE_FORM_WIDTH}px`,
+        }}
       >
         <Modal modalData={this.state.modal} closeModal={this.closeModal} />
         <ContainerView innerRef={this.containerViewRef}>

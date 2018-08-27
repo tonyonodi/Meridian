@@ -23,7 +23,7 @@ const ParentView = styled.div<IParentView>`
 `;
 
 const Cursor = styled.h1`
-  position: fixed;
+  position: sticky;
   top: 50%;
   transform: translateY(-50%);
   width: ${PARENT_VIEW_WIDTH}px;
@@ -56,8 +56,14 @@ const Cursor = styled.h1`
   }
 `;
 
+const TitleBar = styled.div`
+  position: sticky;
+  right: 0;
+  top: 0;
+  z-index: 20;
+`;
+
 const Title = styled.h1`
-  position: fixed;
   transform: rotate(90deg);
   transform-origin: left bottom 0;
   width: 100vh;
@@ -89,6 +95,9 @@ interface ITimeLineProps {
   color: string;
   remove: () => void;
 }
+
+
+
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
     const { t_0, timeCursor, timezone, color, index, remove } = this.props;
@@ -100,7 +109,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
 
     return (
       <ParentView bgColor={color} index={index}>
-        <div>
+        <TitleBar>
           <Title>
             {titleText}
             <CloseButton onClick={remove}>
@@ -114,7 +123,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
               />
             </CloseButton>
           </Title>
-        </div>
+        </TitleBar>
         <Day
           color={color}
           time={timeCursor}
