@@ -13,6 +13,7 @@ interface IParentView {
   bgColor: string;
   index: number;
 }
+
 const ParentView = styled.div<IParentView>`
   color: white;
   width: ${PARENT_VIEW_WIDTH}px;
@@ -20,6 +21,7 @@ const ParentView = styled.div<IParentView>`
   background: ${({ bgColor }) => bgColor};
   z-index: ${({ index }) => index};
   box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
+  user-select: none;
 `;
 
 const Cursor = styled.h1`
