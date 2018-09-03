@@ -14,6 +14,7 @@ import Modal from "./Modal";
 import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
 import timezoneData from "./timezonedata";
+import Toolbar from "./Toolbar";
 
 const ContainerView = styled.div`
   position: relative;
@@ -153,6 +154,29 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public updateTime = ({
+    t_0,
+    timeCursor,
+  }: {
+    t_0: number;
+    timeCursor: number;
+  }): void => {
+    const setStateCallback = () => {
+      window.scrollTo(
+        0,
+        document.body.clientHeight / 2 - window.innerHeight / 2
+      );
+    };
+
+    this.setState(
+      {
+        t_0,
+        timeCursor,
+      },
+      setStateCallback
+    );
+  };
+
   public render() {
     const { timeCursor, t_0, timezones } = this.state;
     return (
@@ -184,6 +208,7 @@ class App extends React.Component<{}, IAppState> {
             timezones={timezoneData}
           />
         </ContainerView>
+        <Toolbar updateTime={this.updateTime} />
       </div>
     );
   }
