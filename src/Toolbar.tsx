@@ -10,11 +10,11 @@ const ParentView = styled.div`
   position: fixed;
   box-sizing: border-box;
   right: 0;
-  top: 0;
+  bottom: 0;
   color: white;
   width: 60px;
   padding: 10px;
-  height: 98vh;
+  z-index: 100;
 `;
 
 const Button = styled.button`
@@ -23,15 +23,19 @@ const Button = styled.button`
   padding: 0;
   width: 100%;
   color: white;
-  margin-bottom: 20px;
+  margin-top: 20px;
   &:focus {
     outline: 0;
+  }
+  svg {
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.3));
   }
 `;
 
 const DatePickerContainer = styled.div`
   position: absolute;
   right: 10px;
+  bottom: 140px;
 `;
 
 interface IToolbarProps {
@@ -106,6 +110,9 @@ export default class Toolbar extends React.Component<
             />
           </DatePickerContainer>
         )}
+        <Button onClick={this.activateClockMode}>
+          <Icon type="mapMarker" />
+        </Button>
       </ParentView>
     );
   }

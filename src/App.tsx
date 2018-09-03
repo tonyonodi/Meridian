@@ -115,7 +115,13 @@ class App extends React.Component<{}, IAppState> {
     });
 
     let scrollEventFiredCount = 0;
+    let lastScrollYOffset = window.pageYOffset;
     window.addEventListener("scroll", (event: any) => {
+      // ignore if only scrolling horizontally
+      if (window.pageYOffset === lastScrollYOffset) {
+        return;
+      }
+      lastScrollYOffset = window.pageYOffset;
       if (this.state.ignoreNextScrollEvent) {
         this.setState({ ignoreNextScrollEvent: false });
         return;
@@ -184,7 +190,7 @@ class App extends React.Component<{}, IAppState> {
     activateClockMode: boolean;
     time: number;
   }): void => {
-    window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
+    window.scrollTo(window.scrollX, document.body.clientHeight / 2 - window.innerHeight / 2);
 
     this.setState({
       clockPosition: activateClockMode ? time : null,
