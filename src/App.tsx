@@ -9,7 +9,9 @@ import {
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
+import IMarker from "./IMarker";
 import ITimezone from "./ITimezone";
+import Markers from "./Markers";
 import Modal from "./Modal";
 import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
@@ -30,6 +32,7 @@ interface IAppState {
   timeCursor: number;
   timezones: ITimezone[];
   modal: ModalData;
+  markers: IMarker[];
 }
 
 class App extends React.Component<{}, IAppState> {
@@ -46,6 +49,15 @@ class App extends React.Component<{}, IAppState> {
     this.state = {
       clockPosition: new Date().getTime(),
       ignoreNextScrollEvent: false,
+      markers: [
+        {
+          id: Math.random()
+            .toString()
+            .substr(2),
+          text: "Flight from LHR",
+          time: 1535991002676,
+        },
+      ],
       modal: {
         kind: "none",
       },
@@ -190,7 +202,10 @@ class App extends React.Component<{}, IAppState> {
     activateClockMode: boolean;
     time: number;
   }): void => {
-    window.scrollTo(window.scrollX, document.body.clientHeight / 2 - window.innerHeight / 2);
+    window.scrollTo(
+      window.scrollX,
+      document.body.clientHeight / 2 - window.innerHeight / 2
+    );
 
     this.setState({
       clockPosition: activateClockMode ? time : null,
@@ -231,6 +246,7 @@ class App extends React.Component<{}, IAppState> {
             timezones={timezoneData}
           />
         </ContainerView>
+        <Markers markers={this.state.markers} t_0={this.state.t_0} />
         <Toolbar
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}
