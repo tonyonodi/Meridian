@@ -59,10 +59,9 @@ const Markers = styled.ul`
 const Marker = styled.li`
   height: calc(100% / 24);
   position: relative;
-  &:nth-child(odd) > div {
-    visibility: hidden;
-  }
-  &:first-child {
+  &:nth-child(even) > div,
+  &:first-child > div,
+  &:first-child > div:after {
     visibility: hidden;
   }
 `;

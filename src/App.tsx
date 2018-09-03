@@ -155,7 +155,7 @@ class App extends React.Component<{}, IAppState> {
         const currentTime = new Date().getTime();
         this.updateTime({ time: currentTime, activateClockMode: true });
       }
-    }, 1000);
+    }, 100);
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
