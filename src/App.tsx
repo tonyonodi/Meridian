@@ -147,7 +147,7 @@ class App extends React.Component<{}, IAppState> {
     window.setInterval(() => {
       if (this.state.clockPosition !== null) {
         const currentTime = new Date().getTime();
-        this.updateTime({ t_0: currentTime, timeCursor: currentTime });
+        this.updateTime({ time: currentTime, activateClockMode: true });
       }
     }, 1000);
   }
@@ -178,22 +178,20 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public updateTime = ({
-    t_0,
-    timeCursor,
+    activateClockMode,
+    time,
   }: {
-    t_0: number;
-    timeCursor: number;
+    activateClockMode: boolean;
+    time: number;
   }): void => {
     window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
 
-    this.setState(
-      {
-        clockPosition: timeCursor,
-        ignoreNextScrollEvent: true,
-        t_0,
-        timeCursor,
-      },
-    );
+    this.setState({
+      clockPosition: activateClockMode ? time : null,
+      ignoreNextScrollEvent: true,
+      t_0: time,
+      timeCursor: time,
+    });
   };
 
   public render() {
@@ -229,6 +227,7 @@ class App extends React.Component<{}, IAppState> {
         </ContainerView>
         <Toolbar
           clockPosition={this.state.clockPosition}
+          timeCursor={this.state.timeCursor}
           updateTime={this.updateTime}
         />
       </div>

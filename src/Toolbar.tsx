@@ -1,5 +1,8 @@
 // tslint:disable:no-console
+import * as moment from "moment";
 import * as React from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.min.css";
 import styled from "styled-components";
 import Icon from "./Icon";
 
@@ -14,45 +17,95 @@ const ParentView = styled.div`
   height: 98vh;
 `;
 
-interface IClockButton {
-  clockModeActive: boolean;
-}
-
-const ClockButton = styled.button<IClockButton>`
+const Button = styled.button`
   border: none;
   background: none;
   padding: 0;
   width: 100%;
   color: white;
-  opacity: ${({ clockModeActive }) => (clockModeActive ? 1 : 0.25)};
+  margin-bottom: 20px;
+  &:focus {
+    outline: 0;
+  }
+`;
+
+const DatePickerContainer = styled.div`
+  position: absolute;
+  right: 10px;
 `;
 
 interface IToolbarProps {
   clockPosition: number | null;
+  timeCursor: number;
   updateTime: (
-    { t_0, timeCursor }: { t_0: number; timeCursor: number }
+    { activateClockMode, time }: { activateClockMode: boolean; time: number }
   ) => void;
 }
 
-export default class Toolbar extends React.Component<IToolbarProps> {
-  public handleClick = () => {
-    const timeToGoTo = new Date().getTime();
+interface IToolbarState {
+  date: any;
+  showDatePicker: boolean;
+}
+
+export default class Toolbar extends React.Component<
+  IToolbarProps,
+  IToolbarState
+> {
+  public state = {
+    date: moment(),
+    showDatePicker: false,
+  };
+
+  public activateClockMode = () => {
+    const currentTime = new Date().getTime();
 
     this.props.updateTime({
-      t_0: timeToGoTo,
-      timeCursor: timeToGoTo,
+      activateClockMode: true,
+      time: currentTime,
+    });
+  };
+
+  public selectDay = () => {
+    console.log("select day");
+  };
+
+  public setDate = (date: any) => {
+    this.props.updateTime({
+      activateClockMode: false,
+      time: date.valueOf(),
+    });
+    this.setState({ showDatePicker: false });
+  };
+
+  public toggleDatePicker = () => {
+    this.setState(({ showDatePicker }) => {
+      return { showDatePicker: !showDatePicker };
     });
   };
 
   public render() {
     return (
       <ParentView className="toolbar">
-        <ClockButton
-          onClick={this.handleClick}
-          clockModeActive={this.props.clockPosition !== null}
-        >
-          <Icon type="clock" />
-        </ClockButton>
+        <Button onClick={this.activateClockMode}>
+          <Icon
+            type="clock"
+            style={{
+              opacity: this.props.clockPosition !== null ? 1 : 0.25,
+            }}
+          />
+        </Button>
+        <Button onClick={this.toggleDatePicker}>
+          <Icon type="calendar" />
+        </Button>
+        {this.state.showDatePicker && (
+          <DatePickerContainer>
+            <DatePicker
+              inline={true}
+              selected={moment(this.props.timeCursor)}
+              onChange={this.setDate}
+            />
+          </DatePickerContainer>
+        )}
       </ParentView>
     );
   }
