@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
 import Icon from "./Icon";
@@ -13,15 +14,21 @@ const ParentView = styled.div`
   height: 98vh;
 `;
 
-const ClockButton = styled.button`
+interface IClockButton {
+  clockModeActive: boolean;
+}
+
+const ClockButton = styled.button<IClockButton>`
   border: none;
   background: none;
   padding: 0;
   width: 100%;
   color: white;
+  opacity: ${({ clockModeActive }) => (clockModeActive ? 1 : 0.25)};
 `;
 
 interface IToolbarProps {
+  clockPosition: number | null;
   updateTime: (
     { t_0, timeCursor }: { t_0: number; timeCursor: number }
   ) => void;
@@ -40,7 +47,10 @@ export default class Toolbar extends React.Component<IToolbarProps> {
   public render() {
     return (
       <ParentView className="toolbar">
-        <ClockButton onClick={this.handleClick}>
+        <ClockButton
+          onClick={this.handleClick}
+          clockModeActive={this.props.clockPosition !== null}
+        >
           <Icon type="clock" />
         </ClockButton>
       </ParentView>

@@ -24,6 +24,8 @@ const ContainerView = styled.div`
 `;
 
 interface IAppState {
+  clockPosition: number | null;
+  ignoreNextScrollEvent: boolean;
   t_0: number;
   timeCursor: number;
   timezones: ITimezone[];
@@ -42,6 +44,8 @@ class App extends React.Component<{}, IAppState> {
       typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
 
     this.state = {
+      clockPosition: new Date().getTime(),
+      ignoreNextScrollEvent: false,
       modal: {
         kind: "none",
       },
@@ -110,7 +114,13 @@ class App extends React.Component<{}, IAppState> {
       }
     });
 
+    let scrollEventFiredCount = 0;
     window.addEventListener("scroll", (event: any) => {
+      if (this.state.ignoreNextScrollEvent) {
+        this.setState({ ignoreNextScrollEvent: false });
+        return;
+      }
+
       const { innerHeight } = window;
       const {
         top,
@@ -121,12 +131,25 @@ class App extends React.Component<{}, IAppState> {
         cursorPxDistanceFromTop - containerHeight / 2;
       const scrollFraction = cursorPxDistanceFromCenter / containerHeight;
 
+      // Don't set clockPosition to null the first two times a scroll event is fired.
+      scrollEventFiredCount += 1;
+      const clockPosition =
+        scrollEventFiredCount > 2 ? null : this.state.clockPosition;
+
       this.setState(state => {
         return {
+          clockPosition,
           timeCursor: state.t_0 + scrollFraction * WINDOW_HEIGHT_IN_MS,
         };
       });
     });
+
+    window.setInterval(() => {
+      if (this.state.clockPosition !== null) {
+        const currentTime = new Date().getTime();
+        this.updateTime({ t_0: currentTime, timeCursor: currentTime });
+      }
+    }, 1000);
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
@@ -161,19 +184,15 @@ class App extends React.Component<{}, IAppState> {
     t_0: number;
     timeCursor: number;
   }): void => {
-    const setStateCallback = () => {
-      window.scrollTo(
-        0,
-        document.body.clientHeight / 2 - window.innerHeight / 2
-      );
-    };
+    window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
 
     this.setState(
       {
+        clockPosition: timeCursor,
+        ignoreNextScrollEvent: true,
         t_0,
         timeCursor,
       },
-      setStateCallback
     );
   };
 
@@ -208,7 +227,10 @@ class App extends React.Component<{}, IAppState> {
             timezones={timezoneData}
           />
         </ContainerView>
-        <Toolbar updateTime={this.updateTime} />
+        <Toolbar
+          clockPosition={this.state.clockPosition}
+          updateTime={this.updateTime}
+        />
       </div>
     );
   }
