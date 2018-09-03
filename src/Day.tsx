@@ -59,6 +59,9 @@ const Markers = styled.ul`
 const Marker = styled.li`
   height: calc(100% / 24);
   position: relative;
+  &:nth-child(odd) > div {
+    visibility: hidden;
+  }
   &:first-child {
     visibility: hidden;
   }
@@ -70,6 +73,7 @@ const MarkerTime = styled.div`
   left: 16px;
   &:after {
     content: "";
+    visibility: visible;
     border-top: solid 2px white;
     width: 10px;
     display: block;
