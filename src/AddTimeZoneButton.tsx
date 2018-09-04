@@ -44,25 +44,14 @@ const InnerView = styled.div<IInnerView>`
 interface IAddTimeZoneButtonProps {
   addTimezone: (timezone: ITimezone) => void;
   color: string;
-  timezones: ITimezone[];
-}
-
-interface IAddTimeZoneButtonState {
   show: boolean;
+  timezones: ITimezone[];
+  toggle: (state?: boolean) => void;
 }
 
 export default class AddTimeZoneButton extends React.Component<
-  IAddTimeZoneButtonProps,
-  IAddTimeZoneButtonState
+  IAddTimeZoneButtonProps
 > {
-  public state = { show: false };
-
-  public toggle = () => {
-    this.setState(({ show }) => ({
-      show: !show,
-    }));
-  };
-
   public componentDidMount() {
     window.addEventListener("keypress", this.handleKeypress);
   }
@@ -79,23 +68,25 @@ export default class AddTimeZoneButton extends React.Component<
     switch (event.key) {
       case "n":
         event.preventDefault();
-        this.setState({
-          show: true,
-        });
+        this.props.toggle(true);
         break;
     }
   };
 
+  public handleClick = (event: any) => {
+    this.props.toggle(true);
+  };
+
   public render() {
-    const { addTimezone, timezones, color } = this.props;
-    const { show } = this.state;
+    const { addTimezone, timezones, color, show, toggle } = this.props;
+
     return (
-      <ParentView onClick={this.toggle} show={show} bgColor={color}>
+      <ParentView onClick={this.handleClick} show={show} bgColor={color}>
         <InnerView show={show}>
           {show ? (
             <AddTimeZone
               addTimezone={addTimezone}
-              close={this.toggle}
+              close={toggle}
               timezones={timezones}
             />
           ) : (

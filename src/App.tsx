@@ -28,6 +28,7 @@ const ContainerView = styled.div`
 interface IAppState {
   clockPosition: number | null;
   ignoreNextScrollEvent: boolean;
+  showAddTimezone: boolean;
   t_0: number;
   timeCursor: number;
   timezones: ITimezone[];
@@ -55,12 +56,13 @@ class App extends React.Component<{}, IAppState> {
             .toString()
             .substr(2),
           text: "Flight from LHR",
-          time: 1535991002676,
+          time: new Date().getTime() - 2 * 3600 * 1000,
         },
       ],
       modal: {
         kind: "none",
       },
+      showAddTimezone: false,
       t_0: new Date().getTime(),
       timeCursor: new Date().getTime(),
       timezones: timezones || [
@@ -195,6 +197,12 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public toggleAddTimezone = (state?: boolean) => {
+    this.setState(({ showAddTimezone }) => ({
+      showAddTimezone: state === undefined ? !showAddTimezone : state,
+    }));
+  };
+
   public updateTime = ({
     activateClockMode,
     time,
@@ -216,13 +224,15 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public render() {
-    const { timeCursor, t_0, timezones } = this.state;
+    const { timeCursor, t_0, timezones, showAddTimezone } = this.state;
+    const appWidth =
+      timezones.length * PARENT_VIEW_WIDTH +
+      (showAddTimezone ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH);
     return (
       <div
         className="App"
         style={{
-          minWidth: `${timezones.length * PARENT_VIEW_WIDTH +
-            ADD_TIMEZONE_FORM_WIDTH}px`,
+          minWidth: `${appWidth}px`,
         }}
       >
         <Modal modalData={this.state.modal} closeModal={this.closeModal} />
@@ -243,10 +253,16 @@ class App extends React.Component<{}, IAppState> {
           <AddTimeZoneButton
             addTimezone={this.addTimezone}
             color={PALETTE[timezones.length]}
+            show={this.state.showAddTimezone}
+            toggle={this.toggleAddTimezone}
             timezones={timezoneData}
           />
         </ContainerView>
-        <Markers markers={this.state.markers} t_0={this.state.t_0} />
+        <Markers
+          appWidth={appWidth}
+          markers={this.state.markers}
+          t_0={this.state.t_0}
+        />
         <Toolbar
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}

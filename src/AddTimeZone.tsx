@@ -43,7 +43,7 @@ const SearchResult = styled.li<ISearchResult>`
 
 interface IAddTimeZoneProps {
   addTimezone: (timezone: ITimezone) => void;
-  close: () => void;
+  close: (state?: boolean) => void;
   timezones: ITimezone[];
 }
 
@@ -85,10 +85,14 @@ export default class AddTimeZone extends React.Component<
     if (searchResults.length > 0) {
       this.props.addTimezone(searchResults[this.state.cursor]);
     }
-    this.props.close();
+    this.props.close(false);
   };
 
   public searchInputRef = (el: any) => (this.searchInput = el);
+
+  public closeForm = (event: any) => {
+    this.props.close(false);
+  }
 
   public componentDidMount() {
     this.searchInput.focus();
@@ -178,7 +182,7 @@ export default class AddTimeZone extends React.Component<
           onChange={this.handleChange}
           value={this.state.searchValue}
           innerRef={this.searchInputRef}
-          onBlur={this.props.close}
+          onBlur={this.closeForm}
         />
         {searchResults.length > 0 && searchValue ? (
           <SearchResults>{searchResults.map(this.searchResult)}</SearchResults>
