@@ -96,6 +96,16 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public updateMarkerText = (id: string, text: string) => {
+    this.setState(({ markers }) => {
+      return {
+        markers: markers.map(marker => {
+          return marker.id === id ? { ...marker, text } : marker;
+        }),
+      };
+    });
+  };
+
   public updateModal = (modal: ModalData) => () => {
     this.setState({ modal });
   };
@@ -263,6 +273,7 @@ class App extends React.Component<{}, IAppState> {
           markers={this.state.markers}
           t_0={this.state.t_0}
           timezones={this.state.timezones}
+          updateMarkerText={this.updateMarkerText}
         />
         <Toolbar
           clockPosition={this.state.clockPosition}

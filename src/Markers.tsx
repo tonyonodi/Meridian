@@ -13,11 +13,15 @@ const MarkerView = styled.div`
   position: absolute;
   width: 100%;
   color: white;
-  background: rgba(0, 0, 0, 0.15);
+  /* background: rgba(0, 0, 0, 0.15); */
   z-index: 99;
 `;
 
-const MarkerName = styled.input`
+interface IMarkerName {
+  onChange: (text: string) => void;
+}
+
+const MarkerName = styled.input<IMarkerName>`
   background: none;
   border: none;
   color: white;
@@ -54,6 +58,7 @@ const TimezoneTime = ({
 };
 
 interface IMarkerComponent {
+  handleNameChange: (event: any) => void;
   id: string;
   leftOffset: number;
   text: string;
@@ -69,6 +74,7 @@ const Marker = ({
   timezones,
   topOffset,
   leftOffset,
+  handleNameChange,
 }: IMarkerComponent) => {
   return (
     <MarkerView style={{ top: `${topOffset}px` }}>
@@ -83,7 +89,12 @@ const Marker = ({
           />
         );
       })}
-      <MarkerName value={text} style={{ marginLeft: `${leftOffset}px` }} />
+      <MarkerName
+        name={id}
+        value={text}
+        onChange={handleNameChange}
+        style={{ marginLeft: `${leftOffset}px` }}
+      />
     </MarkerView>
   );
 };
@@ -92,10 +103,16 @@ interface IMarkerProps {
   appWidth: number;
   markers: IMarker[];
   timezones: ITimezone[];
+  updateMarkerText: (id: string, text: string) => void;
   t_0: number;
 }
 
 export default class Markers extends React.Component<IMarkerProps> {
+  public handleNameChange = (event: any) => {
+    const { name, value } = event.target;
+    this.props.updateMarkerText(name, value);
+  };
+
   public render() {
     return (
       <React.Fragment>
@@ -111,6 +128,7 @@ export default class Markers extends React.Component<IMarkerProps> {
               {...marker}
               timezones={this.props.timezones}
               topOffset={topOffset}
+              handleNameChange={this.handleNameChange}
               leftOffset={this.props.appWidth}
             />
           );

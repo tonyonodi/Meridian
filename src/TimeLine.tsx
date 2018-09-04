@@ -98,8 +98,6 @@ interface ITimeLineProps {
   remove: () => void;
 }
 
-
-
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
     const { t_0, timeCursor, timezone, color, index, remove } = this.props;
