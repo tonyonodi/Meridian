@@ -1,14 +1,19 @@
 // tslint:disable:no-console
+import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
+import { PARENT_VIEW_WIDTH } from "./config";
 import IMarker from "./IMarker";
+import ITimezone from "./ITimezone";
 import getFractionalPositionFromTime from "./lib/getFractionalPositionFromTime";
+
+const { DateTime } = luxon;
 
 const MarkerView = styled.div`
   position: absolute;
   width: 100%;
   color: white;
-  border-bottom: solid 1px white;
+  background: rgba(0, 0, 0, 0.15);
   z-index: 99;
 `;
 
@@ -18,18 +23,66 @@ const MarkerName = styled.input`
   color: white;
   font-weight: bold;
   font-size: 1rem;
+  padding-left: 10px;
 `;
 
+const TimezoneTimeView = styled.div`
+  position: absolute;
+  text-align: right;
+  width: ${PARENT_VIEW_WIDTH}px;
+`;
+
+const TimezoneTime = ({
+  index,
+  timezone,
+  time,
+}: {
+  index: number;
+  timezone: string;
+  time: number;
+}) => {
+  const timeString = DateTime.fromMillis(time, {
+    zone: timezone,
+  }).toFormat("HH:mm");
+  const leftOffset = `${index * PARENT_VIEW_WIDTH}px`;
+
+  return (
+    <TimezoneTimeView style={{ left: leftOffset }}>
+      {timeString}
+    </TimezoneTimeView>
+  );
+};
+
 interface IMarkerComponent {
+  id: string;
   leftOffset: number;
   text: string;
   time: number;
+  timezones: ITimezone[];
   topOffset: number;
 }
 
-const Marker = ({ text, time, topOffset, leftOffset }: IMarkerComponent) => {
+const Marker = ({
+  id,
+  text,
+  time,
+  timezones,
+  topOffset,
+  leftOffset,
+}: IMarkerComponent) => {
   return (
     <MarkerView style={{ top: `${topOffset}px` }}>
+      {timezones.map(({ timezone }, index) => {
+        const key = `${id}_${timezone}`;
+        return (
+          <TimezoneTime
+            key={key}
+            index={index}
+            time={time}
+            timezone={timezone}
+          />
+        );
+      })}
       <MarkerName value={text} style={{ marginLeft: `${leftOffset}px` }} />
     </MarkerView>
   );
@@ -38,6 +91,7 @@ const Marker = ({ text, time, topOffset, leftOffset }: IMarkerComponent) => {
 interface IMarkerProps {
   appWidth: number;
   markers: IMarker[];
+  timezones: ITimezone[];
   t_0: number;
 }
 
@@ -55,6 +109,7 @@ export default class Markers extends React.Component<IMarkerProps> {
             <Marker
               key={marker.id}
               {...marker}
+              timezones={this.props.timezones}
               topOffset={topOffset}
               leftOffset={this.props.appWidth}
             />

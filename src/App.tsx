@@ -262,6 +262,7 @@ class App extends React.Component<{}, IAppState> {
           appWidth={appWidth}
           markers={this.state.markers}
           t_0={this.state.t_0}
+          timezones={this.state.timezones}
         />
         <Toolbar
           clockPosition={this.state.clockPosition}
