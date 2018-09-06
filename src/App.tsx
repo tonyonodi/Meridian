@@ -25,6 +25,19 @@ const ContainerView = styled.div`
   height: calc(200vh * ${WINDOW_HEIGHT_IN_DAYS});
 `;
 
+const defaultTimezones = [
+  {
+    city: "London",
+    country: "United Kingdom",
+    timezone: "Europe/London",
+  },
+  {
+    city: "Bangkok",
+    country: "Thailand",
+    timezone: "Asia/Bangkok",
+  },
+];
+
 interface IAppState {
   clockPosition: number | null;
   ignoreNextScrollEvent: boolean;
@@ -65,18 +78,7 @@ class App extends React.Component<{}, IAppState> {
       showAddTimezone: false,
       t_0: new Date().getTime(),
       timeCursor: new Date().getTime(),
-      timezones: timezones || [
-        {
-          city: "London",
-          country: "United Kingdom",
-          timezone: "Europe/London",
-        },
-        {
-          city: "Bangkok",
-          country: "Thailand",
-          timezone: "Asia/Bangkok",
-        },
-      ],
+      timezones: timezones || defaultTimezones,
     };
   }
 
