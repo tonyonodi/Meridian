@@ -58,7 +58,7 @@ const CursorContainer = styled.div<ICursorContainer>`
     position: absolute;
     background: linear-gradient(
       rgba(${({ color }) => color}, 1),
-      rgba(${({ color }) => color}, 0.001)
+      rgba(${({ color }) => color}, 0)
     );
   }
 `;
