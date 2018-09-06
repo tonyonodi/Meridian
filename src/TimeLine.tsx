@@ -24,17 +24,35 @@ const ParentView = styled.div<IParentView>`
   user-select: none;
 `;
 
-const Cursor = styled.h1`
+const Cursor = styled.input`
+  font-family: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  width: 100%;
   position: sticky;
+  overflow: visible;
   top: 50%;
   transform: translateY(-50%);
   width: ${PARENT_VIEW_WIDTH}px;
   text-align: center;
   margin: 0;
   background: ${({ color }) => color};
-  font-weight: 200;
+  &:focus {
+    outline: none;
+  }
+  &::-webkit-clear-button {
+    display: none;
+  }
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   &:before {
     content: "";
+    left: 0;
     top: -50px;
     background: linear-gradient(
       rgba(255, 255, 255, 0),
@@ -47,10 +65,12 @@ const Cursor = styled.h1`
   }
   &:after {
     content: "";
+    left: 0;
     background: linear-gradient(
       ${({ color }) => color},
       rgba(255, 255, 255, 0)
     );
+    bottom: -50px;
     height: 50px;
     width: 100%;
     display: block;
@@ -94,13 +114,36 @@ interface ITimeLineProps {
   t_0: number;
   timeCursor: number;
   timezone: ITimezone;
+  updateTime: (
+    { activateClockMode, time }: { activateClockMode?: boolean; time: number }
+  ) => void;
   color: string;
   remove: () => void;
 }
 
-
-
 export default class TimeLine extends React.Component<ITimeLineProps> {
+  public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const timeRegex = /^(\d\d):(\d\d)$/;
+    const match = timeRegex.exec(event.target.value);
+    if (!match) {
+      return;
+    }
+
+    const hours = match[1];
+    const minutes = match[2];
+
+    const millis = DateTime.fromMillis(this.props.timeCursor, {
+      zone: this.props.timezone.timezone,
+    })
+      .set({
+        hour: parseInt(hours, 10),
+        minute: parseInt(minutes, 10),
+      })
+      .toMillis();
+
+    this.props.updateTime({ time: millis });
+  };
+
   public render() {
     const { t_0, timeCursor, timezone, color, index, remove } = this.props;
     const titleText = timezone.city;
@@ -150,11 +193,14 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           date={startOfTomorrow.toFormat("dd")}
           month={startOfTomorrow.toFormat("MMM")}
         />
-        <Cursor color={color}>
-          {DateTime.fromMillis(timeCursor, {
+        <Cursor
+          color={color}
+          type="time"
+          value={DateTime.fromMillis(timeCursor, {
             zone: timezone.timezone,
           }).toFormat("HH:mm")}
-        </Cursor>
+          onChange={this.handleChange}
+        />
       </ParentView>
     );
   }

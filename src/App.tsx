@@ -184,13 +184,16 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public updateTime = ({
-    activateClockMode,
+    activateClockMode = false,
     time,
   }: {
-    activateClockMode: boolean;
+    activateClockMode?: boolean;
     time: number;
   }): void => {
-    window.scrollTo(window.scrollX, document.body.clientHeight / 2 - window.innerHeight / 2);
+    window.scrollTo(
+      window.scrollX,
+      document.body.clientHeight / 2 - window.innerHeight / 2
+    );
 
     this.setState({
       clockPosition: activateClockMode ? time : null,
@@ -219,6 +222,7 @@ class App extends React.Component<{}, IAppState> {
                 timeCursor={timeCursor}
                 t_0={t_0}
                 timezone={timezone}
+                updateTime={this.updateTime}
                 color={PALETTE[i]}
                 index={timezones.length - i}
                 remove={this.removeTimeline(timezone.timezone)}
