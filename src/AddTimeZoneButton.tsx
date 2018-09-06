@@ -12,14 +12,14 @@ import ITimezone from "./ITimezone";
 
 interface IParentView {
   show: boolean;
-  bgColor: string;
+  bgColor: [number, number, number];
 }
 
 const ParentView = styled.div<IParentView>`
   position: relative;
   width: ${({ show }) =>
     show ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH}px;
-  background: ${({ bgColor }) => bgColor};
+  background: rgb(${({ bgColor }) => bgColor.join(", ")});
   cursor: default;
 `;
 
@@ -43,7 +43,7 @@ const InnerView = styled.div<IInnerView>`
 
 interface IAddTimeZoneButtonProps {
   addTimezone: (timezone: ITimezone) => void;
-  color: string;
+  color: [number, number, number];
   timezones: ITimezone[];
 }
 

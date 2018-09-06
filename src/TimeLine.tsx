@@ -10,7 +10,7 @@ import ITimezone from "./ITimezone";
 const { DateTime } = luxon;
 
 interface IParentView {
-  bgColor: string;
+  bgColor: [number, number, number];
   index: number;
 }
 
@@ -18,10 +18,49 @@ const ParentView = styled.div<IParentView>`
   color: white;
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
-  background: ${({ bgColor }) => bgColor};
+  background: rgb(${({ bgColor }) => bgColor.join(", ")});
   z-index: ${({ index }) => index};
   box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
   user-select: none;
+`;
+
+interface ICursorContainer {
+  color: string;
+}
+
+const CursorContainer = styled.div<ICursorContainer>`
+  position: sticky;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  transform: translateY(-50%);
+  background: rgb(${({ color }) => color});
+  &:before {
+    content: "";
+    left: 0;
+    top: -50px;
+    height: 50px;
+    width: 100%;
+    display: block;
+    position: absolute;
+    background: linear-gradient(
+      rgba(${({ color }) => color}, 0),
+      rgba(${({ color }) => color}, 1)
+    );
+  }
+  &:after {
+    content: "";
+    left: 0;
+    bottom: -50px;
+    height: 50px;
+    width: 100%;
+    display: block;
+    position: absolute;
+    background: linear-gradient(
+      rgba(${({ color }) => color}, 1),
+      rgba(${({ color }) => color}, 0.001)
+    );
+  }
 `;
 
 const Cursor = styled.input`
@@ -29,53 +68,33 @@ const Cursor = styled.input`
   color: inherit;
   background: none;
   border: none;
-  font-size: 2rem;
-  width: 100%;
-  position: sticky;
+  font-size: 1.8rem;
   overflow: visible;
-  top: 50%;
-  transform: translateY(-50%);
   width: ${PARENT_VIEW_WIDTH}px;
   text-align: center;
   margin: 0;
-  background: ${({ color }) => color};
+  width: 105%;
   &:focus {
     outline: none;
   }
   &::-webkit-clear-button {
     display: none;
   }
-  &::-webkit-inner-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
   &::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  &:before {
-    content: "";
-    left: 0;
-    top: -50px;
-    background: linear-gradient(
-      rgba(255, 255, 255, 0),
-      ${({ color }) => color}
-    );
-    height: 50px;
-    width: 100%;
-    display: block;
-    position: absolute;
+  &::-webkit-search-cancel-button {
+    -webkit-appearance: none;
   }
-  &:after {
-    content: "";
-    left: 0;
-    background: linear-gradient(
-      ${({ color }) => color},
-      rgba(255, 255, 255, 0)
-    );
-    bottom: -50px;
-    height: 50px;
-    width: 100%;
-    display: block;
-    position: absolute;
+  &::-webkit-search-results-button {
+    -webkit-appearance: none;
   }
+  -webkit-appearance: none;
 `;
 
 const TitleBar = styled.div`
@@ -117,7 +136,7 @@ interface ITimeLineProps {
   updateTime: (
     { activateClockMode, time }: { activateClockMode?: boolean; time: number }
   ) => void;
-  color: string;
+  color: [number, number, number];
   remove: () => void;
 }
 
@@ -147,6 +166,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
   public render() {
     const { t_0, timeCursor, timezone, color, index, remove } = this.props;
     const titleText = timezone.city;
+    const colorString = color.join(", ");
 
     const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.timezone);
     const startOfToday = getStartOfDay(timeCursor, 0, timezone.timezone);
@@ -193,14 +213,15 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           date={startOfTomorrow.toFormat("dd")}
           month={startOfTomorrow.toFormat("MMM")}
         />
-        <Cursor
-          color={color}
-          type="time"
-          value={DateTime.fromMillis(timeCursor, {
-            zone: timezone.timezone,
-          }).toFormat("HH:mm")}
-          onChange={this.handleChange}
-        />
+        <CursorContainer color={colorString}>
+          <Cursor
+            type="time"
+            value={DateTime.fromMillis(timeCursor, {
+              zone: timezone.timezone,
+            }).toFormat("HH:mm")}
+            onChange={this.handleChange}
+          />
+        </CursorContainer>
       </ParentView>
     );
   }

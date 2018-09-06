@@ -16,10 +16,13 @@ const ParentView = styled.div`
   width: 100%;
 `;
 
-const Header = styled.div`
+interface IHeader {
+  color: string;
+}
+const Header = styled.div<IHeader>`
   position: sticky;
   top: -1px;
-  background: ${({ color }) => color};
+  background: rgb(${({ color }) => color});
   text-align: center;
   font-weight: bold;
   width: ${TIMELINE_WIDTH}px;
@@ -27,8 +30,8 @@ const Header = styled.div`
   &:after {
     content: "";
     background: linear-gradient(
-      ${({ color }) => color},
-      rgba(255, 255, 255, 0)
+      rgba(${({ color }) => color}, 1),
+      rgba(${({ color }) => color}, 0)
     );
     height: 30px;
     width: 100%;
@@ -87,7 +90,7 @@ interface IDayProps {
   midnight: number;
   date: string;
   month: string;
-  color: string;
+  color: [number, number, number];
 }
 
 export default ({ t_0, midnight, date, month, color }: IDayProps) => {
@@ -95,6 +98,7 @@ export default ({ t_0, midnight, date, month, color }: IDayProps) => {
 
   const midnightBottomOffset = midnight - windowBottomMS;
   const fractionOffset = midnightBottomOffset / WINDOW_HEIGHT_IN_MS;
+  const colorString = color.join(", ");
 
   return (
     <ParentView style={{ top: `${100 * fractionOffset}%` }}>
@@ -111,7 +115,7 @@ export default ({ t_0, midnight, date, month, color }: IDayProps) => {
           );
         })}
       </Markers>
-      <Header color={color}>
+      <Header color={colorString}>
         <Date>{date}</Date>
         <Month>{month}</Month>
       </Header>
