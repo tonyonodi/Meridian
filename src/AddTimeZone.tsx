@@ -155,11 +155,16 @@ export default class AddTimeZone extends React.Component<
     }
   };
 
+  public handleClick = (timezone: ITimezone) => (event: any) => {
+    this.props.addTimezone(timezone);
+  };
+
   public searchResult = (timezone: ITimezone, index: number) => {
     return (
       <SearchResult
         key={timezone.timezone}
         active={index === this.state.cursor}
+        onClick={this.handleClick(timezone)}
       >
         {timezone.country
           ? `${timezone.city}, ${timezone.country}`
@@ -178,7 +183,6 @@ export default class AddTimeZone extends React.Component<
           onChange={this.handleChange}
           value={this.state.searchValue}
           innerRef={this.searchInputRef}
-          onBlur={this.props.close}
         />
         {searchResults.length > 0 && searchValue ? (
           <SearchResults>{searchResults.map(this.searchResult)}</SearchResults>
