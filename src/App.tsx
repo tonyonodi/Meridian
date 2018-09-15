@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
 import AddTimeZoneButton from "./AddTimeZoneButton";
@@ -15,6 +16,8 @@ import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
 import timezoneData from "./timezonedata";
 import Toolbar from "./Toolbar";
+
+const { DateTime } = luxon;
 
 const ContainerView = styled.div`
   position: relative;
@@ -98,14 +101,32 @@ class App extends React.Component<{}, IAppState> {
         case "j":
           event.preventDefault();
           this.setState(({ timeCursor }) => {
-            return { timeCursor: timeCursor + 60 * 1000 };
+            const newTime = DateTime.fromMillis(timeCursor)
+              .plus({
+                minutes: 1,
+              })
+              .toMillis();
+
+            this.updateTime({
+              activateClockMode: false,
+              time: newTime,
+            });
           });
           break;
 
         case "k":
           event.preventDefault();
           this.setState(({ timeCursor }) => {
-            return { timeCursor: timeCursor - 60 * 1000 };
+            const newTime = DateTime.fromMillis(timeCursor)
+              .minus({
+                minutes: 1,
+              })
+              .toMillis();
+
+            this.updateTime({
+              activateClockMode: false,
+              time: newTime,
+            });
           });
           break;
 
