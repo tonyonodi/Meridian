@@ -181,8 +181,8 @@ class App extends React.Component<{}, IAppState> {
       const currentTimeMinutes = new Date().getMinutes();
       if (oldTimeMinutes !== currentTimeMinutes) {
         this.updateTime({
-          time: new Date().getTime(),
           activateClockMode: true,
+          time: new Date().getTime(),
         });
       }
     }, 100);
