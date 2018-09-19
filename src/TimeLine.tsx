@@ -121,6 +121,29 @@ const CloseButton = styled.button`
   padding: 0;
 `;
 
+enum TimeChange {
+  Decrement,
+  Increment,
+}
+
+interface IChangeTimeTargetProps {
+  changeType: TimeChange;
+}
+
+const ChangeTimeTarget = styled.div<IChangeTimeTargetProps>`
+  position: sticky;
+  width: 100%;
+  height: 50vh;
+  ${({ changeType }) => {
+    if (changeType === TimeChange.Increment) {
+      return "top: 50vh;";
+    } else {
+      return "top: 0;";
+    }
+  }} left: 0;
+  z-index: 0;
+`;
+
 const getStartOfDay = (time: number, offset: number, timezone: string) => {
   return DateTime.fromMillis(time)
     .setZone(timezone)
@@ -161,6 +184,17 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
       .toMillis();
 
     this.props.updateTime({ time: millis });
+  };
+
+  public handleClick = (changeType: TimeChange) => (event: any) => {
+    const time = DateTime.fromMillis(this.props.timeCursor);
+
+    const newTime =
+      changeType === TimeChange.Decrement
+        ? time.minus({ minutes: 1 })
+        : time.plus({ minutes: 1 });
+
+    this.props.updateTime({ time: newTime.toMillis() });
   };
 
   public render() {
@@ -212,6 +246,14 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           midnight={startOfTomorrow.toMillis()}
           date={startOfTomorrow.toFormat("dd")}
           month={startOfTomorrow.toFormat("MMM")}
+        />
+        <ChangeTimeTarget
+          changeType={TimeChange.Decrement}
+          onClick={this.handleClick(TimeChange.Decrement)}
+        />
+        <ChangeTimeTarget
+          changeType={TimeChange.Increment}
+          onClick={this.handleClick(TimeChange.Increment)}
         />
         <CursorContainer color={colorString}>
           <Cursor
