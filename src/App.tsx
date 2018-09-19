@@ -172,11 +172,20 @@ class App extends React.Component<{}, IAppState> {
     });
 
     window.setInterval(() => {
-      if (this.state.clockPosition !== null) {
-        const currentTime = new Date().getTime();
-        this.updateTime({ time: currentTime, activateClockMode: true });
+      const { clockPosition } = this.state;
+      if (clockPosition === null) {
+        return;
       }
-    }, 1000);
+
+      const oldTimeMinutes = new Date(clockPosition).getMinutes();
+      const currentTimeMinutes = new Date().getMinutes();
+      if (oldTimeMinutes !== currentTimeMinutes) {
+        this.updateTime({
+          time: new Date().getTime(),
+          activateClockMode: true,
+        });
+      }
+    }, 100);
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
