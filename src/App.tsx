@@ -2,7 +2,7 @@
 import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
-import AddTimeZoneButton from "./AddTimeZoneButton";
+
 import {
   ADD_TIMEZONE_FORM_WIDTH,
   PALETTE,
@@ -10,7 +10,12 @@ import {
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
+import { minuteTimestampFromMs } from "./lib/minuteUTCTimestamp";
+
+import AddTimeZoneButton from "./AddTimeZoneButton";
+import IMarker from "./IMarker";
 import ITimezone from "./ITimezone";
+import Markers from "./Markers";
 import Modal from "./Modal";
 import ModalData from "./ModalData";
 import TimeLine from "./TimeLine";
@@ -26,13 +31,28 @@ const ContainerView = styled.div`
   height: calc(200vh * ${WINDOW_HEIGHT_IN_DAYS});
 `;
 
+const defaultTimezones = [
+  {
+    city: "London",
+    country: "United Kingdom",
+    timezone: "Europe/London",
+  },
+  {
+    city: "Bangkok",
+    country: "Thailand",
+    timezone: "Asia/Bangkok",
+  },
+];
+
 interface IAppState {
   clockPosition: number | null;
   ignoreNextScrollEvent: boolean;
+  showAddTimezone: boolean;
   t_0: number;
   timeCursor: number;
   timezones: ITimezone[];
   modal: ModalData;
+  markers: { [timestamp: string]: IMarker };
 }
 
 class App extends React.Component<{}, IAppState> {
@@ -49,23 +69,14 @@ class App extends React.Component<{}, IAppState> {
     this.state = {
       clockPosition: new Date().getTime(),
       ignoreNextScrollEvent: false,
+      markers: {},
       modal: {
         kind: "none",
       },
+      showAddTimezone: false,
       t_0: new Date().getTime(),
       timeCursor: new Date().getTime(),
-      timezones: timezones || [
-        {
-          city: "London",
-          country: "United Kingdom",
-          timezone: "Europe/London",
-        },
-        {
-          city: "Bangkok",
-          country: "Thailand",
-          timezone: "Asia/Bangkok",
-        },
-      ],
+      timezones: timezones || defaultTimezones,
     };
   }
 
@@ -82,6 +93,16 @@ class App extends React.Component<{}, IAppState> {
       modal: {
         kind: "none",
       },
+    });
+  };
+
+  public updateMarkerText = (markerTimestamp: string, text: string) => {
+    this.setState(({ markers }) => {
+      // const marker = markers.get(markerTimestamp);
+      const newMarker = { text };
+      markers[markerTimestamp] = newMarker;
+
+      return { markers };
     });
   };
 
@@ -172,18 +193,14 @@ class App extends React.Component<{}, IAppState> {
     });
 
     window.setInterval(() => {
-      const { clockPosition } = this.state;
-      if (clockPosition === null) {
-        return;
-      }
-
-      const oldTimeMinutes = new Date(clockPosition).getMinutes();
-      const currentTimeMinutes = new Date().getMinutes();
-      if (oldTimeMinutes !== currentTimeMinutes) {
-        this.updateTime({
-          activateClockMode: true,
-          time: new Date().getTime(),
-        });
+      if (this.state.clockPosition !== null) {
+        const currentDate = new Date();
+        const newMinutes = currentDate.getMinutes();
+        const oldMinutes = new Date(this.state.clockPosition).getMinutes();
+        if (newMinutes !== oldMinutes) {
+          const currentTime = currentDate.getTime();
+          this.updateTime({ time: currentTime, activateClockMode: true });
+        }
       }
     }, 100);
   }
@@ -213,6 +230,12 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public toggleAddTimezone = (state?: boolean) => {
+    this.setState(({ showAddTimezone }) => ({
+      showAddTimezone: state === undefined ? !showAddTimezone : state,
+    }));
+  };
+
   public updateTime = ({
     activateClockMode = false,
     time,
@@ -233,14 +256,25 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public addMarker = () => {
+    this.setState(({ timeCursor, markers }) => {
+      const markerTimeStamp = minuteTimestampFromMs(timeCursor);
+      return {
+        markers: { ...markers, [markerTimeStamp]: { text: "" } },
+      };
+    });
+  };
+
   public render() {
-    const { timeCursor, t_0, timezones } = this.state;
+    const { timeCursor, t_0, timezones, showAddTimezone } = this.state;
+    const appWidth =
+      timezones.length * PARENT_VIEW_WIDTH +
+      (showAddTimezone ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH);
     return (
       <div
         className="App"
         style={{
-          minWidth: `${timezones.length * PARENT_VIEW_WIDTH +
-            ADD_TIMEZONE_FORM_WIDTH}px`,
+          minWidth: `${appWidth}px`,
         }}
       >
         <Modal modalData={this.state.modal} closeModal={this.closeModal} />
@@ -262,13 +296,23 @@ class App extends React.Component<{}, IAppState> {
           <AddTimeZoneButton
             addTimezone={this.addTimezone}
             color={PALETTE[timezones.length]}
+            show={this.state.showAddTimezone}
+            toggle={this.toggleAddTimezone}
             timezones={timezoneData}
           />
         </ContainerView>
+        <Markers
+          appWidth={appWidth}
+          markers={this.state.markers}
+          t_0={this.state.t_0}
+          timezones={this.state.timezones}
+          updateMarkerText={this.updateMarkerText}
+        />
         <Toolbar
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}
           updateTime={this.updateTime}
+          addMarker={this.addMarker}
         />
       </div>
     );
