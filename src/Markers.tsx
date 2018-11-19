@@ -6,6 +6,7 @@ import { PARENT_VIEW_WIDTH } from "./config";
 import IMarker from "./IMarker";
 import ITimezone from "./ITimezone";
 import getFractionalPositionFromTime from "./lib/getFractionalPositionFromTime";
+import TimeCursor from "./TimeCursor";
 
 const { DateTime } = luxon;
 
@@ -28,6 +29,7 @@ const MarkerName = styled.input<IMarkerName>`
   font-weight: bold;
   font-size: 1rem;
   padding-left: 10px;
+  transform: translateY(-50%);
 `;
 
 const TimezoneTimeView = styled.div`
@@ -52,7 +54,7 @@ const TimezoneTime = ({
 
   return (
     <TimezoneTimeView style={{ left: leftOffset }}>
-      {timeString}
+      <TimeCursor>{timeString}</TimeCursor>
     </TimezoneTimeView>
   );
 };
@@ -65,6 +67,7 @@ interface IMarkerComponent {
   time: number;
   timezones: ITimezone[];
   topOffset: number;
+  getInputRef: (el: any) => void;
 }
 
 const Marker = ({
@@ -75,6 +78,7 @@ const Marker = ({
   topOffset,
   leftOffset,
   handleNameChange,
+  getInputRef,
 }: IMarkerComponent) => {
   return (
     <MarkerView style={{ top: `${topOffset}px` }}>
@@ -92,8 +96,10 @@ const Marker = ({
       <MarkerName
         name={id}
         value={text}
+        placeholder="Untitled Marker"
         onChange={handleNameChange}
         style={{ marginLeft: `${leftOffset}px` }}
+        innerRef={getInputRef}
       />
     </MarkerView>
   );
@@ -108,10 +114,21 @@ interface IMarkerProps {
 }
 
 export default class Markers extends React.Component<IMarkerProps> {
+  public inputElement: any;
+
   public handleNameChange = (event: any) => {
     const { name, value } = event.target;
     this.props.updateMarkerText(name, value);
   };
+
+  public getInputRef = (el: any) => {
+    this.inputElement = el;
+  };
+
+  public componentDidMount() {
+    console.log("mounted!", this.inputElement);
+    // this.inputElement.focus();
+  }
 
   public render() {
     return (
@@ -130,6 +147,7 @@ export default class Markers extends React.Component<IMarkerProps> {
               topOffset={topOffset}
               handleNameChange={this.handleNameChange}
               leftOffset={this.props.appWidth}
+              getInputRef={this.getInputRef}
             />
           );
         })}

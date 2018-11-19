@@ -64,13 +64,13 @@ class App extends React.Component<{}, IAppState> {
       clockPosition: new Date().getTime(),
       ignoreNextScrollEvent: false,
       markers: [
-        {
-          id: Math.random()
-            .toString()
-            .substr(2),
-          text: "Flight from LHR",
-          time: new Date().getTime() - 2 * 3600 * 1000,
-        },
+        // {
+        //   id: Math.random()
+        //     .toString()
+        //     .substr(2),
+        //   text: "Flight from LHR",
+        //   time: new Date().getTime() - 2 * 3600 * 1000,
+        // },
       ],
       modal: {
         kind: "none",
@@ -235,6 +235,26 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public addMarker = () => {
+    this.setState(
+      ({ timeCursor, markers }) => {
+        const id = Math.random()
+          .toString()
+          .substr(2);
+        return {
+          markers: [
+            ...markers,
+            {
+              id,
+              text: "",
+              time: timeCursor,
+            },
+          ],
+        };
+      }
+    );
+  };
+
   public render() {
     const { timeCursor, t_0, timezones, showAddTimezone } = this.state;
     const appWidth =
@@ -281,6 +301,7 @@ class App extends React.Component<{}, IAppState> {
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}
           updateTime={this.updateTime}
+          addMarker={this.addMarker}
         />
       </div>
     );

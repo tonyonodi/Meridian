@@ -6,6 +6,7 @@ import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
 import Icon from "./Icon";
 import ITimezone from "./ITimezone";
+import TimeCursor from "./TimeCursor";
 
 const { DateTime } = luxon;
 
@@ -22,40 +23,6 @@ const ParentView = styled.div<IParentView>`
   z-index: ${({ index }) => index};
   box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
   user-select: none;
-`;
-
-const Cursor = styled.h1`
-  position: sticky;
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${PARENT_VIEW_WIDTH}px;
-  text-align: center;
-  margin: 0;
-  background: ${({ color }) => color};
-  font-weight: 200;
-  &:before {
-    content: "";
-    top: -50px;
-    background: linear-gradient(
-      rgba(255, 255, 255, 0),
-      ${({ color }) => color}
-    );
-    height: 50px;
-    width: 100%;
-    display: block;
-    position: absolute;
-  }
-  &:after {
-    content: "";
-    background: linear-gradient(
-      ${({ color }) => color},
-      rgba(255, 255, 255, 0)
-    );
-    height: 50px;
-    width: 100%;
-    display: block;
-    position: absolute;
-  }
 `;
 
 const TitleBar = styled.div`
@@ -81,6 +48,11 @@ const CloseButton = styled.button`
   color: white;
   padding: 0;
 `;
+
+const Cursor = TimeCursor.extend`
+  position: sticky;
+  top: 50%;
+`
 
 const getStartOfDay = (time: number, offset: number, timezone: string) => {
   return DateTime.fromMillis(time)
