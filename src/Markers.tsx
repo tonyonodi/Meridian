@@ -23,6 +23,7 @@ interface IMarkerName {
   onChange: (text: string) => void;
 }
 
+const markerInputUnderlineWidth = "2px"
 const MarkerName = styled.input<IMarkerName>`
   background: none;
   border: none;
@@ -31,6 +32,12 @@ const MarkerName = styled.input<IMarkerName>`
   font-size: 1rem;
   padding-left: 10px;
   transform: translateY(-50%);
+  padding-bottom: ${markerInputUnderlineWidth};
+  &:focus {
+    outline: none;
+    border-bottom: solid ${markerInputUnderlineWidth} white;
+    padding-bottom: 0;
+  }
 `;
 
 const TimezoneTimeView = styled.div`
@@ -81,6 +88,11 @@ class Marker extends React.Component<IMarkerComponent> {
     this.inputElement = el;
   };
 
+  public handleSubmit = (event: any) => {
+    event.preventDefault();
+    this.inputElement.blur();
+  }
+
   public render() {
     const {
       id,
@@ -105,14 +117,16 @@ class Marker extends React.Component<IMarkerComponent> {
             />
           );
         })}
-        <MarkerName
-          name={id}
-          value={text}
-          placeholder="Untitled Marker"
-          onChange={handleNameChange}
-          style={{ marginLeft: `${leftOffset}px` }}
-          innerRef={this.getInputRef}
-        />
+        <form onSubmit={this.handleSubmit}>
+          <MarkerName
+            name={id}
+            value={text}
+            placeholder="Untitled Marker"
+            onChange={handleNameChange}
+            style={{ marginLeft: `${leftOffset}px` }}
+            innerRef={this.getInputRef}
+          />
+        </form>
       </MarkerView>
     );
   }
