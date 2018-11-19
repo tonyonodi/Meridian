@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+// tslint:disable:max-classes-per-file
 import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
@@ -67,43 +68,55 @@ interface IMarkerComponent {
   time: number;
   timezones: ITimezone[];
   topOffset: number;
-  getInputRef: (el: any) => void;
 }
 
-const Marker = ({
-  id,
-  text,
-  time,
-  timezones,
-  topOffset,
-  leftOffset,
-  handleNameChange,
-  getInputRef,
-}: IMarkerComponent) => {
-  return (
-    <MarkerView style={{ top: `${topOffset}px` }}>
-      {timezones.map(({ timezone }, index) => {
-        const key = `${id}_${timezone}`;
-        return (
-          <TimezoneTime
-            key={key}
-            index={index}
-            time={time}
-            timezone={timezone}
-          />
-        );
-      })}
-      <MarkerName
-        name={id}
-        value={text}
-        placeholder="Untitled Marker"
-        onChange={handleNameChange}
-        style={{ marginLeft: `${leftOffset}px` }}
-        innerRef={getInputRef}
-      />
-    </MarkerView>
-  );
-};
+class Marker extends React.Component<IMarkerComponent> {
+  public inputElement: any;
+
+  public componentDidMount() {
+    this.inputElement.focus();
+  }
+
+  public getInputRef = (el: any) => {
+    this.inputElement = el;
+  };
+
+  public render() {
+    const {
+      id,
+      text,
+      time,
+      timezones,
+      topOffset,
+      leftOffset,
+      handleNameChange,
+    } = this.props;
+
+    return (
+      <MarkerView style={{ top: `${topOffset}px` }}>
+        {timezones.map(({ timezone }, index) => {
+          const key = `${id}_${timezone}`;
+          return (
+            <TimezoneTime
+              key={key}
+              index={index}
+              time={time}
+              timezone={timezone}
+            />
+          );
+        })}
+        <MarkerName
+          name={id}
+          value={text}
+          placeholder="Untitled Marker"
+          onChange={handleNameChange}
+          style={{ marginLeft: `${leftOffset}px` }}
+          innerRef={this.getInputRef}
+        />
+      </MarkerView>
+    );
+  }
+}
 
 interface IMarkerProps {
   appWidth: number;
@@ -114,21 +127,10 @@ interface IMarkerProps {
 }
 
 export default class Markers extends React.Component<IMarkerProps> {
-  public inputElement: any;
-
   public handleNameChange = (event: any) => {
     const { name, value } = event.target;
     this.props.updateMarkerText(name, value);
   };
-
-  public getInputRef = (el: any) => {
-    this.inputElement = el;
-  };
-
-  public componentDidMount() {
-    console.log("mounted!", this.inputElement);
-    // this.inputElement.focus();
-  }
 
   public render() {
     return (
@@ -147,7 +149,6 @@ export default class Markers extends React.Component<IMarkerProps> {
               topOffset={topOffset}
               handleNameChange={this.handleNameChange}
               leftOffset={this.props.appWidth}
-              getInputRef={this.getInputRef}
             />
           );
         })}
