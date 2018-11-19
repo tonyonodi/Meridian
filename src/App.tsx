@@ -1,7 +1,7 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
-import AddTimeZoneButton from "./AddTimeZoneButton";
+
 import {
   ADD_TIMEZONE_FORM_WIDTH,
   PALETTE,
@@ -9,6 +9,9 @@ import {
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
+import { minuteTimestampFromMs } from "./lib/minuteUTCTimestamp";
+
+import AddTimeZoneButton from "./AddTimeZoneButton";
 import IMarker from "./IMarker";
 import ITimezone from "./ITimezone";
 import Markers from "./Markers";
@@ -46,7 +49,7 @@ interface IAppState {
   timeCursor: number;
   timezones: ITimezone[];
   modal: ModalData;
-  markers: IMarker[];
+  markers: { [timestamp: string]: IMarker };
 }
 
 class App extends React.Component<{}, IAppState> {
@@ -63,15 +66,7 @@ class App extends React.Component<{}, IAppState> {
     this.state = {
       clockPosition: new Date().getTime(),
       ignoreNextScrollEvent: false,
-      markers: [
-        // {
-        //   id: Math.random()
-        //     .toString()
-        //     .substr(2),
-        //   text: "Flight from LHR",
-        //   time: new Date().getTime() - 2 * 3600 * 1000,
-        // },
-      ],
+      markers: {},
       modal: {
         kind: "none",
       },
@@ -98,13 +93,13 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
-  public updateMarkerText = (id: string, text: string) => {
+  public updateMarkerText = (markerTimestamp: string, text: string) => {
     this.setState(({ markers }) => {
-      return {
-        markers: markers.map(marker => {
-          return marker.id === id ? { ...marker, text } : marker;
-        }),
-      };
+      // const marker = markers.get(markerTimestamp);
+      const newMarker = { text };
+      markers[markerTimestamp] = newMarker;
+
+      return { markers };
     });
   };
 
@@ -178,10 +173,15 @@ class App extends React.Component<{}, IAppState> {
 
     window.setInterval(() => {
       if (this.state.clockPosition !== null) {
-        const currentTime = new Date().getTime();
-        this.updateTime({ time: currentTime, activateClockMode: true });
+        const currentDate = new Date();
+        const newMinutes = currentDate.getMinutes();
+        const oldMinutes = new Date(this.state.clockPosition).getMinutes();
+        if (newMinutes !== oldMinutes) {
+          const currentTime = currentDate.getTime();
+          this.updateTime({ time: currentTime, activateClockMode: true });
+        }
       }
-    }, 1000);
+    }, 100);
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
@@ -236,23 +236,12 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public addMarker = () => {
-    this.setState(
-      ({ timeCursor, markers }) => {
-        const id = Math.random()
-          .toString()
-          .substr(2);
-        return {
-          markers: [
-            ...markers,
-            {
-              id,
-              text: "",
-              time: timeCursor,
-            },
-          ],
-        };
-      }
-    );
+    this.setState(({ timeCursor, markers }) => {
+      const markerTimeStamp = minuteTimestampFromMs(timeCursor);
+      return {
+        markers: { ...markers, [markerTimeStamp]: { text: "" } },
+      };
+    });
   };
 
   public render() {
