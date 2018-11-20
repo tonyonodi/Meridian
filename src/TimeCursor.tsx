@@ -1,13 +1,13 @@
 import styled from "styled-components";
 import { PARENT_VIEW_WIDTH } from "./config";
 
-export default styled.h1`
-  transform: translateY(-50%);
+export default styled.div`
+  text-align: left;
+  padding-left: 10px;
   width: ${PARENT_VIEW_WIDTH}px;
-  text-align: center;
   margin: 0;
   background: ${({ color }) => color};
-  font-weight: 200;
+  font-weight: bold;
   &:before {
     content: "";
     top: -50px;

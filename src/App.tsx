@@ -1,4 +1,5 @@
 // tslint:disable:no-console
+import * as _ from "lodash";
 import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
@@ -66,10 +67,14 @@ class App extends React.Component<{}, IAppState> {
     const timezones =
       typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
 
+    const markersString = window.localStorage.getItem("__timezonesapp.markers");
+    const markers =
+      typeof markersString === "string" ? JSON.parse(markersString) : {};
+
     this.state = {
       clockPosition: new Date().getTime(),
       ignoreNextScrollEvent: false,
-      markers: {},
+      markers,
       modal: {
         kind: "none",
       },
@@ -208,14 +213,13 @@ class App extends React.Component<{}, IAppState> {
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
     const { timezones: prevTimezones } = prevState;
     const { timezones } = this.state;
-    if (prevTimezones === timezones) {
-      return;
-    }
 
-    window.localStorage.setItem(
-      "__timezonesapp.timezones",
-      JSON.stringify(timezones)
-    );
+    if (!_.isEqual(prevTimezones, timezones)) {
+      window.localStorage.setItem(
+        "__timezonesapp.timezones",
+        JSON.stringify(timezones)
+      );
+    }
   }
 
   public containerViewRef = (el: any) => (this.containerElement = el);

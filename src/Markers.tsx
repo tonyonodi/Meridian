@@ -14,10 +14,10 @@ import TimeCursor from "./TimeCursor";
 const { DateTime } = luxon;
 
 const MarkerView = styled.div`
+  transform: translateY(-50%);
   position: absolute;
   width: 100%;
   color: white;
-  /* background: rgba(0, 0, 0, 0.15); */
   z-index: 99;
 `;
 
@@ -33,7 +33,6 @@ const MarkerName = styled.input<IMarkerName>`
   font-weight: bold;
   font-size: 1rem;
   padding-left: 10px;
-  transform: translateY(-50%);
   padding-bottom: ${markerInputUnderlineWidth};
   &:focus {
     outline: none;
@@ -157,6 +156,15 @@ export default class Markers extends React.Component<IMarkerProps> {
     this.props.updateMarkerText(name, value);
   };
 
+  public componentDidUpdate() {
+      const { markers } = this.props;
+
+      window.localStorage.setItem(
+        "__timezonesapp.markers",
+        JSON.stringify(markers)
+      );
+  }
+
   public render() {
     return (
       <React.Fragment>
@@ -167,13 +175,6 @@ export default class Markers extends React.Component<IMarkerProps> {
             time,
           });
           const topOffset = fractionalPosition * document.body.clientHeight;
-          // id: string;
-          // text: string;
-          // time: number;
-          // timezones: ITimezone[];
-          // topOffset: number;
-          // handleNameChange: (event: any) => void;
-          // leftOffset: number;
           return (
             <Marker
               key={minuteTimestamp}
