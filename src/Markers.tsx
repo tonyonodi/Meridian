@@ -150,7 +150,7 @@ interface IMarkerProps {
   t_0: number;
 }
 
-export default class Markers extends React.Component<IMarkerProps> {
+export default class Markers extends React.Component<IMarkerProps, {}> {
   public handleNameChange = (event: any) => {
     const { name, value } = event.target;
     this.props.updateMarkerText(name, value);

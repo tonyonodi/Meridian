@@ -15,10 +15,12 @@ import { minuteTimestampFromMs } from "./lib/minuteUTCTimestamp";
 
 import AddTimeZoneButton from "./AddTimeZoneButton";
 import IMarker from "./IMarker";
+import { IRange } from "./IRange";
 import ITimezone from "./ITimezone";
 import Markers from "./Markers";
 import Modal from "./Modal";
 import ModalData from "./ModalData";
+import Ranges from "./Ranges";
 import TimeLine from "./TimeLine";
 import timezoneData from "./timezonedata";
 import Toolbar from "./Toolbar";
@@ -54,6 +56,7 @@ interface IAppState {
   timezones: ITimezone[];
   modal: ModalData;
   markers: { [timestamp: string]: IMarker };
+  ranges: IRange[];
 }
 
 class App extends React.Component<{}, IAppState> {
@@ -78,6 +81,21 @@ class App extends React.Component<{}, IAppState> {
       modal: {
         kind: "none",
       },
+      ranges: [
+        {
+          endpoints: [
+            {
+              text: "Arrive in Bangkok",
+              time: new Date().getTime() + 3 * 60 * 60 * 1000,
+            },
+            {
+              text: "Depart from London",
+              time: new Date().getTime() - 3 * 60 * 60 * 1000,
+            },
+          ],
+          id: "00023414357189843749",
+        },
+      ],
       showAddTimezone: false,
       t_0: new Date().getTime(),
       timeCursor: new Date().getTime(),
@@ -312,6 +330,7 @@ class App extends React.Component<{}, IAppState> {
           timezones={this.state.timezones}
           updateMarkerText={this.updateMarkerText}
         />
+        <Ranges appWidth={appWidth} ranges={this.state.ranges} t_0={this.state.t_0} />
         <Toolbar
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}
