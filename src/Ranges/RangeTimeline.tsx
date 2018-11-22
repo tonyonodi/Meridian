@@ -43,15 +43,15 @@ export default ({ appWidth, from, to, t_0 }: IRangeTimeline) => {
   const duration = Duration.fromMillis(deltaMs)
     .shiftTo("hours", "minutes")
     .toObject();
-  const hoursString = duration.hours;
-  const minutesString = duration.minutes;
-  const durationString = `${hoursString} hours ${minutesString} min`;
+  const hours = duration.hours;
+  const hoursString = hours && hours > 0 ? `${hours} hours` : undefined;
+  const minutes = duration.minutes;
+  const minutesString = minutes && minutes > 0 ? `${minutes} min` : undefined;
+  const durationString = [hoursString, minutesString].filter(s => s).join(" ");
 
   return (
     <React.Fragment>
-      <RangeTimelineView
-        style={{ top: topOffset, height, left }}
-      />
+      <RangeTimelineView style={{ top: topOffset, height, left }} />
       <DurationText style={{ top: topOffset + 60, left: left - 35 }}>
         {durationString}
       </DurationText>

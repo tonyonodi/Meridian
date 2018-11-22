@@ -87,19 +87,19 @@ class App extends React.Component<{}, IAppState> {
           waypoints: [
             {
               text: "Depart from London",
-              time: new Date().getTime() - 7.25 * 60 * 60 * 1000,
+              time: new Date().getTime() - 4.25 * 60 * 60 * 1000,
             },
             {
               text: "Land in Dubai",
-              time: new Date().getTime() - 4 * 60 * 60 * 1000,
+              time: new Date().getTime() + 0.05 * 60 * 60 * 1000,
             },
             {
               text: "Depart from Dubai",
-              time: new Date().getTime() - 1 * 60 * 60 * 1000,
+              time: new Date().getTime() + 1 * 60 * 60 * 1000,
             },
             {
               text: "Arrive in Bangkok",
-              time: new Date().getTime() + 4 * 60 * 60 * 1000,
+              time: new Date().getTime() + 5 * 60 * 60 * 1000,
             },
           ],
         },
