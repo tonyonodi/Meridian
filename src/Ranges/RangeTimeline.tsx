@@ -1,8 +1,17 @@
 // tslint:disable:no-console
+import * as Luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
 
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
+
+const { Duration } = Luxon;
+
+const DurationText = styled.div`
+  position: absolute;
+  color: white;
+  transform: rotate(90deg);
+`;
 
 const RangeTimelineView = styled.div`
   position: absolute;
@@ -28,7 +37,24 @@ export default ({ appWidth, from, to, t_0 }: IRangeTimeline) => {
   const topOffset = fromFractionalPosition * document.body.clientHeight;
   const deltaFraction = toFractionalPosition - fromFractionalPosition;
   const height = deltaFraction * document.body.clientHeight;
-  const left = `${appWidth + 16}px`;
+  const left = appWidth + 16;
 
-  return <RangeTimelineView style={{ top: topOffset, height, left }} />;
+  const deltaMs = to - from;
+  const duration = Duration.fromMillis(deltaMs)
+    .shiftTo("hours", "minutes")
+    .toObject();
+  const hoursString = duration.hours;
+  const minutesString = duration.minutes;
+  const durationString = `${hoursString} hours ${minutesString} min`;
+
+  return (
+    <React.Fragment>
+      <RangeTimelineView
+        style={{ top: topOffset, height, left }}
+      />
+      <DurationText style={{ top: topOffset + 60, left: left - 35 }}>
+        {durationString}
+      </DurationText>
+    </React.Fragment>
+  );
 };
