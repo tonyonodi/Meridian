@@ -83,17 +83,25 @@ class App extends React.Component<{}, IAppState> {
       },
       ranges: [
         {
-          endpoints: [
-            {
-              text: "Arrive in Bangkok",
-              time: new Date().getTime() + 3 * 60 * 60 * 1000,
-            },
+          id: "00023414357189843749",
+          waypoints: [
             {
               text: "Depart from London",
-              time: new Date().getTime() - 3 * 60 * 60 * 1000,
+              time: new Date().getTime() - 7.25 * 60 * 60 * 1000,
+            },
+            {
+              text: "Land in Dubai",
+              time: new Date().getTime() - 4 * 60 * 60 * 1000,
+            },
+            {
+              text: "Depart from Dubai",
+              time: new Date().getTime() - 1 * 60 * 60 * 1000,
+            },
+            {
+              text: "Arrive in Bangkok",
+              time: new Date().getTime() + 4 * 60 * 60 * 1000,
             },
           ],
-          id: "00023414357189843749",
         },
       ],
       showAddTimezone: false,
@@ -330,7 +338,11 @@ class App extends React.Component<{}, IAppState> {
           timezones={this.state.timezones}
           updateMarkerText={this.updateMarkerText}
         />
-        <Ranges appWidth={appWidth} ranges={this.state.ranges} t_0={this.state.t_0} />
+        <Ranges
+          appWidth={appWidth}
+          ranges={this.state.ranges}
+          t_0={this.state.t_0}
+        />
         <Toolbar
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}

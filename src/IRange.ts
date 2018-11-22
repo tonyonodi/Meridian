@@ -1,9 +1,9 @@
-export interface IRangeEndpoint {
+export interface IRangeWaypoint {
   text: string;
   time: number;
 }
 
 export interface IRange {
   id: string;
-  endpoints: IRangeEndpoint[];
+  waypoints: IRangeWaypoint[];
 }
