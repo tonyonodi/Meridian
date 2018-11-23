@@ -182,18 +182,6 @@ class App extends React.Component<{}, IAppState> {
       });
 
       return { ranges: newRanges };
-      // const newRanges = ranges.map(range => {
-      //   if (range.id !== rangeId) {
-      //     return;
-      //   }
-
-      //   return {
-      //     ...range,
-      //     draftWaypoint: null,
-      //   };
-      // });
-
-      // return { ranges: newRanges };
     });
   };
 
