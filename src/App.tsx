@@ -83,6 +83,10 @@ class App extends React.Component<{}, IAppState> {
       },
       ranges: [
         {
+          draftWaypoint: {
+            prevTime: null,
+            text: null,
+          },
           id: "00023414357189843749",
           waypoints: [
             {
@@ -342,6 +346,7 @@ class App extends React.Component<{}, IAppState> {
           appWidth={appWidth}
           ranges={this.state.ranges}
           t_0={this.state.t_0}
+          timeCursor={this.state.timeCursor}
         />
         <Toolbar
           clockPosition={this.state.clockPosition}

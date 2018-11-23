@@ -2,53 +2,74 @@
 import * as _ from "lodash";
 import * as React from "react";
 
-import { IRangeWaypoint } from "../IRange";
+import { IDraftWaypoint, IRangeWaypoint } from "../IRange";
 import RangeTimeline from "./RangeTimeline";
 import Waypoint from "./WayPoint";
 
 interface IRangeComponent {
   appWidth: number;
+  draftWaypoint: IDraftWaypoint | null;
   id: string;
   waypoints: IRangeWaypoint[];
   t_0: number;
+  timeCursor: number;
 }
 
-export default class RangeComponent extends React.Component<IRangeComponent> {
-  public render() {
-    const { waypoints, t_0 } = this.props;
-    const sortedWaypoints = _.sortBy(waypoints, ["time"]);
-
-    const { appWidth } = this.props;
-
-    return (
-      <React.Fragment>
-        {sortedWaypoints.reduce(
-          (acc, currentWaypoint, index, waypointsArray) => {
-            const prevWaypoint = waypointsArray[index - 1];
-
-            return [
-              ...acc,
-              <Waypoint
-                key={`waypoint_${currentWaypoint.time}`}
-                appWidth={appWidth}
-                time={currentWaypoint.time}
-                text={currentWaypoint.text}
-                t_0={t_0}
-              />,
-              prevWaypoint && (
-                <RangeTimeline
-                  key={`range_${prevWaypoint.time}_${currentWaypoint.time}`}
-                  appWidth={appWidth}
-                  from={prevWaypoint.time}
-                  to={currentWaypoint.time}
-                  t_0={t_0}
-                />
-              ),
-            ];
-          },
-          []
-        )}
-      </React.Fragment>
-    );
-  }
+function isDraftWaypoint(
+  waypoint: IDraftWaypoint | IRangeWaypoint
+): waypoint is IDraftWaypoint {
+  console.log(waypoint);
+  return (waypoint as IDraftWaypoint).prevTime !== undefined;
 }
+
+export default ({
+  draftWaypoint,
+  waypoints,
+  t_0,
+  appWidth,
+  timeCursor,
+}: IRangeComponent) => {
+  const allWaypoints =
+    draftWaypoint === null ? waypoints : [...waypoints, draftWaypoint];
+  const sortedWaypoints = _.sortBy(allWaypoints, ["time"]);
+
+  return (
+    <React.Fragment>
+      {sortedWaypoints.reduce((acc, currentValue, index, waypointsArray) => {
+        const currentWaypoint = isDraftWaypoint(currentValue)
+          ? { text: currentValue.text || "", time: timeCursor }
+          : currentValue;
+
+        const prevValue = waypointsArray[index - 1];
+        let prevWaypoint;
+        if (prevValue) {
+          prevWaypoint = isDraftWaypoint(prevValue)
+            ? { text: prevValue.text || "", time: timeCursor }
+            : prevValue;
+        } else {
+          prevWaypoint = undefined;
+        }
+
+        return [
+          ...acc,
+          <Waypoint
+            key={`waypoint_${currentWaypoint.time}`}
+            appWidth={appWidth}
+            time={currentWaypoint.time}
+            text={currentWaypoint.text}
+            t_0={t_0}
+          />,
+          prevWaypoint && (
+            <RangeTimeline
+              key={`range_${prevWaypoint.time}_${currentWaypoint.time}`}
+              appWidth={appWidth}
+              from={prevWaypoint.time}
+              to={currentWaypoint.time}
+              t_0={t_0}
+            />
+          ),
+        ];
+      }, [])}
+    </React.Fragment>
+  );
+};

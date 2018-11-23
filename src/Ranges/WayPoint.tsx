@@ -7,6 +7,7 @@ const WaypointView = styled.div`
   color: white;
   transform: translateY(-50%);
   z-index: 10;
+  font-weight: bold;
   &:before {
     content: "";
     width: 20px;
