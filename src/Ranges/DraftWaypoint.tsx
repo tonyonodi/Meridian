@@ -25,6 +25,7 @@ interface IDraftWaypointComponent {
       rangeText: string;
     }
   ) => void;
+  cancelWaypointDraft: (rangeId: string) => void;
   appWidth: number;
   rangeId: string;
 }
@@ -54,6 +55,12 @@ export default class DraftWaypointComponent extends React.Component<
     });
   };
 
+  public handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+
+    this.props.cancelWaypointDraft(this.props.rangeId)
+  }
+
   public render() {
     const { appWidth } = this.props;
     return (
@@ -66,7 +73,7 @@ export default class DraftWaypointComponent extends React.Component<
             onChange={this.handleChange}
           />
           <Button onClick={this.handleSubmit}>Add waypoint here</Button>
-          <Button>Cancel</Button>
+          <Button onClick={this.handleCancel}>Cancel</Button>
         </form>
       </ParentView>
     );

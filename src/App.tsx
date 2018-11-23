@@ -168,6 +168,35 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public cancelWaypointDraft = (rangeId: string) => {
+    this.setState(({ ranges }) => {
+      const newRanges = ranges.map(range => {
+        if (range.id !== rangeId) {
+          return range;
+        }
+
+        return {
+          ...range,
+          draftWaypoint: null,
+        };
+      });
+
+      return { ranges: newRanges };
+      // const newRanges = ranges.map(range => {
+      //   if (range.id !== rangeId) {
+      //     return;
+      //   }
+
+      //   return {
+      //     ...range,
+      //     draftWaypoint: null,
+      //   };
+      // });
+
+      // return { ranges: newRanges };
+    });
+  };
+
   public updateModal = (modal: ModalData) => () => {
     this.setState({ modal });
   };
@@ -374,6 +403,7 @@ class App extends React.Component<{}, IAppState> {
           ranges={this.state.ranges}
           t_0={this.state.t_0}
           addWaypoint={this.addWaypoint}
+          cancelWaypointDraft={this.cancelWaypointDraft}
         />
         <Toolbar
           clockPosition={this.state.clockPosition}

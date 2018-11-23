@@ -22,10 +22,12 @@ interface IRangeComponent {
       rangeText: string;
     }
   ) => void;
+  cancelWaypointDraft: (rangeId: string) => void;
 }
 
 export default ({
   addWaypoint,
+  cancelWaypointDraft,
   draftWaypoint,
   id,
   waypoints,
@@ -39,6 +41,7 @@ export default ({
       {draftWaypoint && (
         <DraftWaypoint
           addWaypoint={addWaypoint}
+          cancelWaypointDraft={cancelWaypointDraft}
           appWidth={appWidth}
           rangeId={id}
         />
