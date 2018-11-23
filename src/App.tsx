@@ -141,6 +141,33 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public addWaypoint = ({
+    rangeId,
+    rangeText,
+  }: {
+    rangeId: string;
+    rangeText: string;
+  }) => {
+    const { timeCursor } = this.state;
+    this.setState(({ ranges }) => {
+      const newRanges = ranges.map(range => {
+        if (range.id !== rangeId) {
+          return range;
+        }
+
+        return {
+          ...range,
+          waypoints: [
+            ...range.waypoints,
+            { text: rangeText, time: timeCursor },
+          ],
+        };
+      });
+
+      return { ranges: newRanges };
+    });
+  };
+
   public updateModal = (modal: ModalData) => () => {
     this.setState({ modal });
   };
@@ -346,7 +373,7 @@ class App extends React.Component<{}, IAppState> {
           appWidth={appWidth}
           ranges={this.state.ranges}
           t_0={this.state.t_0}
-          timeCursor={this.state.timeCursor}
+          addWaypoint={this.addWaypoint}
         />
         <Toolbar
           clockPosition={this.state.clockPosition}
