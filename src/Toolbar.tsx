@@ -70,10 +70,6 @@ export default class Toolbar extends React.Component<
     });
   };
 
-  public selectDay = () => {
-    console.log("select day");
-  };
-
   public setDate = (date: any) => {
     this.props.updateTime({
       activateClockMode: false,
