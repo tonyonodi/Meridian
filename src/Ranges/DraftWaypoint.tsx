@@ -53,13 +53,15 @@ export default class DraftWaypointComponent extends React.Component<
       rangeId: this.props.rangeId,
       rangeText: draftName,
     });
+
+    this.setState({ draftName: "" });
   };
 
   public handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    this.props.cancelWaypointDraft(this.props.rangeId)
-  }
+    this.props.cancelWaypointDraft(this.props.rangeId);
+  };
 
   public render() {
     const { appWidth } = this.props;

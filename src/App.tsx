@@ -11,7 +11,6 @@ import {
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
-import { minuteTimestampFromMs } from "./lib/minuteUTCTimestamp";
 
 import AddTimeZoneButton from "./AddTimeZoneButton";
 import IMarker from "./IMarker";
@@ -334,11 +333,20 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
-  public addMarker = () => {
-    this.setState(({ timeCursor, markers }) => {
-      const markerTimeStamp = minuteTimestampFromMs(timeCursor);
+  public addRange = () => {
+    this.setState(({ ranges }) => {
       return {
-        markers: { ...markers, [markerTimeStamp]: { text: "" } },
+        ranges: [
+          ...ranges,
+          {
+            draftWaypoint: {
+              prevTime: null,
+              text: null,
+            },
+            id: Math.random() + "",
+            waypoints: [],
+          },
+        ],
       };
     });
   };
@@ -397,7 +405,7 @@ class App extends React.Component<{}, IAppState> {
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}
           updateTime={this.updateTime}
-          addMarker={this.addMarker}
+          addRange={this.addRange}
         />
       </div>
     );

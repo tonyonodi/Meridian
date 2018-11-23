@@ -44,7 +44,7 @@ interface IToolbarProps {
   updateTime: (
     { activateClockMode, time }: { activateClockMode: boolean; time: number }
   ) => void;
-  addMarker: () => void;
+  addRange: () => void;
 }
 
 interface IToolbarState {
@@ -107,7 +107,7 @@ export default class Toolbar extends React.Component<
             />
           </DatePickerContainer>
         )}
-        <Button onClick={this.props.addMarker}>
+        <Button onClick={this.props.addRange}>
           <Icon type="mapMarker" />
         </Button>
       </ParentView>
