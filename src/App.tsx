@@ -148,23 +148,28 @@ class App extends React.Component<{}, IAppState> {
     rangeText: string;
   }) => {
     const { timeCursor } = this.state;
-    this.setState(({ ranges }) => {
-      const newRanges = ranges.map(range => {
-        if (range.id !== rangeId) {
-          return range;
-        }
+    this.setState(
+      ({ ranges }) => {
+        const newRanges = ranges.map(range => {
+          if (range.id !== rangeId) {
+            return range;
+          }
 
-        return {
-          ...range,
-          waypoints: [
-            ...range.waypoints,
-            { text: rangeText, time: timeCursor },
-          ],
-        };
-      });
+          return {
+            ...range,
+            waypoints: [
+              ...range.waypoints,
+              { text: rangeText, time: timeCursor },
+            ],
+          };
+        });
 
-      return { ranges: newRanges };
-    });
+        return { ranges: newRanges };
+      },
+      () => {
+        this.updateTime({ time: timeCursor + 60 * 60 * 1000 });
+      }
+    );
   };
 
   public cancelWaypointDraft = (rangeId: string) => {

@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
 
@@ -35,6 +36,16 @@ export default class DraftWaypointComponent extends React.Component<
 > {
   public state = { draftName: "" };
 
+  public waypointNameInput: HTMLInputElement;
+
+  public waypointNameInputRef = (ref: HTMLInputElement) => {
+    this.waypointNameInput = ref;
+  };
+
+  public componentDidMount() {
+    this.waypointNameInput.focus();
+  }
+
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
 
@@ -57,10 +68,18 @@ export default class DraftWaypointComponent extends React.Component<
     this.setState({ draftName: "" });
   };
 
-  public handleCancel = (event: React.MouseEvent<HTMLButtonElement>) => {
+  public handleCancel = (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.FocusEvent<HTMLInputElement>
+  ) => {
     event.preventDefault();
 
     this.props.cancelWaypointDraft(this.props.rangeId);
+  };
+
+  public handleBlur = () => {
+    console.log("blurring");
   };
 
   public render() {
@@ -69,10 +88,12 @@ export default class DraftWaypointComponent extends React.Component<
       <ParentView style={{ left: appWidth + 30 }}>
         <form onSubmit={this.handleSubmit}>
           <WaypointNameInput
+            innerRef={this.waypointNameInputRef}
             type="text"
             placeholder="Untitled waypoint"
             value={this.state.draftName}
             onChange={this.handleChange}
+            onBlur={this.handleBlur}
           />
           <Button onClick={this.handleSubmit}>Add waypoint here</Button>
           <Button onClick={this.handleCancel}>Cancel</Button>
