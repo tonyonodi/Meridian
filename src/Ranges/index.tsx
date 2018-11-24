@@ -15,16 +15,33 @@ interface IRangesComponent {
       rangeText: string;
     }
   ) => void;
+  deleteWaypoint: (
+    {
+      rangeId,
+      waypointId,
+    }: {
+      rangeId: string;
+      waypointId: string;
+    }
+  ) => void;
   cancelWaypointDraft: (rangeId: string) => void;
 }
 
-export default ({ appWidth, ranges, t_0, addWaypoint, cancelWaypointDraft }: IRangesComponent) => {
+export default ({
+  appWidth,
+  ranges,
+  t_0,
+  addWaypoint,
+  deleteWaypoint,
+  cancelWaypointDraft,
+}: IRangesComponent) => {
   return (
     <React.Fragment>
       {ranges.map(range => {
         return (
           <Range
             addWaypoint={addWaypoint}
+            deleteWaypoint={deleteWaypoint}
             cancelWaypointDraft={cancelWaypointDraft}
             key={range.id}
             appWidth={appWidth}

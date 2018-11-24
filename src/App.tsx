@@ -14,7 +14,7 @@ import {
 
 import AddTimeZoneButton from "./AddTimeZoneButton";
 import IMarker from "./IMarker";
-import { IRange } from "./IRange";
+import { IRange, IRangeWaypoint } from "./IRange";
 import ITimezone from "./ITimezone";
 import Markers from "./Markers";
 import Modal from "./Modal";
@@ -159,7 +159,7 @@ class App extends React.Component<{}, IAppState> {
             ...range,
             waypoints: [
               ...range.waypoints,
-              { text: rangeText, time: timeCursor },
+              { text: rangeText, time: timeCursor, id: Math.random() + "" },
             ],
           };
         });
@@ -170,6 +170,37 @@ class App extends React.Component<{}, IAppState> {
         this.updateTime({ time: timeCursor + 60 * 60 * 1000 });
       }
     );
+  };
+
+  public deleteWaypoint = ({
+    rangeId,
+    waypointId,
+  }: {
+    rangeId: string;
+    waypointId: string;
+  }) => {
+    this.setState(({ ranges }) => {
+      const mapWaypoints = (waypoint: IRangeWaypoint) => {
+        return waypoint.id !== waypointId;
+      };
+
+      const mapRanges = (range: IRange) => {
+        if (range.id !== rangeId) {
+          return range;
+        }
+
+        const waypoints = range.waypoints.filter(mapWaypoints);
+
+        return {
+          ...range,
+          waypoints,
+        };
+      };
+
+      const newRanges = ranges.map(mapRanges);
+
+      return { ranges: newRanges };
+    });
   };
 
   public cancelWaypointDraft = (rangeId: string) => {
@@ -404,6 +435,7 @@ class App extends React.Component<{}, IAppState> {
           ranges={this.state.ranges}
           t_0={this.state.t_0}
           addWaypoint={this.addWaypoint}
+          deleteWaypoint={this.deleteWaypoint}
           cancelWaypointDraft={this.cancelWaypointDraft}
         />
         <Toolbar

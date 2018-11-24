@@ -6,6 +6,7 @@ export interface IDraftWaypoint {
 export interface IRangeWaypoint {
   text: string;
   time: number;
+  id: string;
 }
 
 export interface IRange {

@@ -1,3 +1,4 @@
+// tslint:disable:jsx-no-lambda
 import * as React from "react";
 import styled from "styled-components";
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
@@ -24,17 +25,50 @@ const WaypointView = styled.div`
 
 interface IWaypointComponent {
   appWidth: number;
+  id: string;
+  rangeId: string;
   t_0: number;
   text: string;
   time: number;
+  deleteWaypoint: (
+    {
+      rangeId,
+      waypointId,
+    }: {
+      rangeId: string;
+      waypointId: string;
+    }
+  ) => void;
 }
 
-export default ({ appWidth, time, text, t_0 }: IWaypointComponent) => {
+export default ({
+  appWidth,
+  id,
+  rangeId,
+  time,
+  text,
+  t_0,
+  deleteWaypoint,
+}: IWaypointComponent) => {
   const fractionalPosition = getFractionalPositionFromTime({
     t_0,
     time,
   });
   const topOffset = fractionalPosition * document.body.clientHeight;
   const left = `${appWidth + 10}px`;
-  return <WaypointView style={{ top: topOffset, left }}>{text}</WaypointView>;
+  return (
+    <WaypointView style={{ top: topOffset, left }}>
+      {text}
+      <button
+        onClick={() =>
+          deleteWaypoint({
+            rangeId,
+            waypointId: id,
+          })
+        }
+      >
+        Delete
+      </button>
+    </WaypointView>
+  );
 };

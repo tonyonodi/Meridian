@@ -22,6 +22,15 @@ interface IRangeComponent {
       rangeText: string;
     }
   ) => void;
+  deleteWaypoint: (
+    {
+      rangeId,
+      waypointId,
+    }: {
+      rangeId: string;
+      waypointId: string;
+    }
+  ) => void;
   cancelWaypointDraft: (rangeId: string) => void;
 }
 
@@ -33,6 +42,7 @@ export default ({
   waypoints,
   t_0,
   appWidth,
+  deleteWaypoint
 }: IRangeComponent) => {
   const sortedWaypoints = _.sortBy(waypoints, ["time"]);
 
@@ -52,11 +62,14 @@ export default ({
         return [
           ...acc,
           <Waypoint
-            key={`waypoint_${currentWaypoint.time}`}
+            key={`waypoint_${currentWaypoint.id}`}
+            id={currentWaypoint.id}
             appWidth={appWidth}
+            rangeId={id}
             time={currentWaypoint.time}
             text={currentWaypoint.text}
             t_0={t_0}
+            deleteWaypoint={deleteWaypoint}
           />,
           prevWaypoint && (
             <RangeTimeline
