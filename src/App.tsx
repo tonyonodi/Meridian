@@ -73,6 +73,10 @@ class App extends React.Component<{}, IAppState> {
     const markers =
       typeof markersString === "string" ? JSON.parse(markersString) : {};
 
+    const rangesString = window.localStorage.getItem("__timezonesapp.ranges");
+    const ranges =
+      typeof rangesString === "string" ? JSON.parse(rangesString) : [];
+
     this.state = {
       clockPosition: new Date().getTime(),
       ignoreNextScrollEvent: false,
@@ -80,33 +84,7 @@ class App extends React.Component<{}, IAppState> {
       modal: {
         kind: "none",
       },
-      ranges: [
-        // {
-        //   draftWaypoint: {
-        //     prevTime: null,
-        //     text: null,
-        //   },
-        //   id: "00023414357189843749",
-        //   waypoints: [
-        //     {
-        //       text: "Depart from London",
-        //       time: new Date().getTime() - 4.25 * 60 * 60 * 1000,
-        //     },
-        //     {
-        //       text: "Land in Dubai",
-        //       time: new Date().getTime() + 0.05 * 60 * 60 * 1000,
-        //     },
-        //     {
-        //       text: "Depart from Dubai",
-        //       time: new Date().getTime() + 1 * 60 * 60 * 1000,
-        //     },
-        //     {
-        //       text: "Arrive in Bangkok",
-        //       time: new Date().getTime() + 5 * 60 * 60 * 1000,
-        //     },
-        //   ],
-        // },
-      ],
+      ranges,
       showAddTimezone: false,
       t_0: new Date().getTime(),
       timeCursor: new Date().getTime(),
@@ -320,13 +298,20 @@ class App extends React.Component<{}, IAppState> {
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
-    const { timezones: prevTimezones } = prevState;
-    const { timezones } = this.state;
+    const { timezones: prevTimezones, ranges: prevRanges } = prevState;
+    const { timezones, ranges } = this.state;
 
     if (!_.isEqual(prevTimezones, timezones)) {
       window.localStorage.setItem(
         "__timezonesapp.timezones",
         JSON.stringify(timezones)
+      );
+    }
+
+    if (!_.isEqual(prevRanges, ranges)) {
+      window.localStorage.setItem(
+        "__timezonesapp.ranges",
+        JSON.stringify(ranges)
       );
     }
   }
