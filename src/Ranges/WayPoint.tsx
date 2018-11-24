@@ -1,7 +1,26 @@
 // tslint:disable:jsx-no-lambda
 import * as React from "react";
 import styled from "styled-components";
+
+import Icon from "src/Icon";
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
+
+const DeleteButton = styled.button`
+  background: none;
+  border: none;
+  margin-top: 2.5px;
+`;
+
+const Marker = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  background: white;
+  display: inline-block;
+  border: solid 5px black;
+  box-sizing: border-box;
+  margin-right: 4px;
+`;
 
 const WaypointView = styled.div`
   position: absolute;
@@ -9,18 +28,8 @@ const WaypointView = styled.div`
   transform: translateY(-50%);
   z-index: 10;
   font-weight: bold;
-  &:before {
-    content: "";
-    width: 20px;
-    height: 20px;
-    border-radius: 100%;
-    background: white;
-    display: inline-block;
-    border: solid 5px black;
-    box-sizing: border-box;
-    transform: translateY(4px);
-    margin-right: 4px;
-  }
+  display: flex;
+  align-items: center;
 `;
 
 interface IWaypointComponent {
@@ -58,8 +67,9 @@ export default ({
   const left = `${appWidth + 10}px`;
   return (
     <WaypointView style={{ top: topOffset, left }}>
-      {text}
-      <button
+      <Marker />
+      <div>{text}</div>
+      <DeleteButton
         onClick={() =>
           deleteWaypoint({
             rangeId,
@@ -67,8 +77,8 @@ export default ({
           })
         }
       >
-        Delete
-      </button>
+        <Icon type="times" style={{ color: "white", height: 15 }} />
+      </DeleteButton>
     </WaypointView>
   );
 };
