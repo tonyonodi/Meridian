@@ -31,6 +31,7 @@ interface IRangeComponent {
       waypointId: string;
     }
   ) => void;
+  deleteRange: (rangeId: string) => void;
   cancelWaypointDraft: (rangeId: string) => void;
 }
 
@@ -42,7 +43,8 @@ export default ({
   waypoints,
   t_0,
   appWidth,
-  deleteWaypoint
+  deleteWaypoint,
+  deleteRange
 }: IRangeComponent) => {
   const sortedWaypoints = _.sortBy(waypoints, ["time"]);
 
@@ -70,6 +72,7 @@ export default ({
             text={currentWaypoint.text}
             t_0={t_0}
             deleteWaypoint={deleteWaypoint}
+            deleteRange={deleteRange}
           />,
           prevWaypoint && (
             <RangeTimeline

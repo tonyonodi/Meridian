@@ -5,10 +5,77 @@ import styled from "styled-components";
 import Icon from "src/Icon";
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
 
-const DeleteButton = styled.button`
+const { useState } = React;
+
+const MenuView = styled.div`
+  position: absolute;
+  right: 0;
+  background: white;
+  margin-top: 4px;
+  border-radius: 5px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.15);
+`;
+
+const MenuItem = styled.div`
+  cursor: default;
+  width: 140px;
+  margin-top: 2px;
+  padding: 5px 10px;
+  &:hover {
+    background: lightgrey;
+  }
+`;
+
+interface IMenu {
+  waypointId: string;
+  rangeId: string;
+  deleteWaypoint: (
+    {
+      rangeId,
+      waypointId,
+    }: {
+      rangeId: string;
+      waypointId: string;
+    }
+  ) => void;
+  deleteRange: (rangeId: string) => void;
+}
+
+const Menu = ({ waypointId, rangeId, deleteWaypoint, deleteRange }: IMenu) => {
+  return (
+    <MenuView>
+      <MenuItem
+        onClick={() =>
+          deleteWaypoint({
+            rangeId,
+            waypointId,
+          })
+        }
+      >
+        Delete Waypoint
+      </MenuItem>
+      <MenuItem>Add Waypoint</MenuItem>
+      <MenuItem onClick={() => deleteRange(rangeId)}>Delete Range</MenuItem>
+    </MenuView>
+  );
+};
+
+const MenuButton = styled.button`
   background: none;
   border: none;
   margin-top: 2.5px;
+  border-radius: 3px;
+  padding-top: 5px;
+  margin-left: 4px;
+  margin-top: -2px;
+  padding-left: 4px;
+  padding-right: 5px;
+  &:focus {
+    outline: none;
+  }
+  &:hover {
+    background: rgba(0, 0, 0, 0.2);
+  }
 `;
 
 const Marker = styled.div`
@@ -22,14 +89,17 @@ const Marker = styled.div`
   margin-right: 4px;
 `;
 
-const WaypointView = styled.div`
+const ParentView = styled.div`
   position: absolute;
-  color: white;
   transform: translateY(-50%);
   z-index: 10;
-  font-weight: bold;
+`;
+
+const WaypointView = styled.div`
   display: flex;
   align-items: center;
+  color: white;
+  font-weight: bold;
 `;
 
 interface IWaypointComponent {
@@ -48,6 +118,7 @@ interface IWaypointComponent {
       waypointId: string;
     }
   ) => void;
+  deleteRange: (rangeId: string) => void;
 }
 
 export default ({
@@ -58,27 +129,37 @@ export default ({
   text,
   t_0,
   deleteWaypoint,
+  deleteRange,
 }: IWaypointComponent) => {
+  const [menuOpen, toggleMenuOpen] = useState(false);
+
   const fractionalPosition = getFractionalPositionFromTime({
     t_0,
     time,
   });
+
   const topOffset = fractionalPosition * document.body.clientHeight;
   const left = `${appWidth + 10}px`;
   return (
-    <WaypointView style={{ top: topOffset, left }}>
-      <Marker />
-      <div>{text}</div>
-      <DeleteButton
-        onClick={() =>
-          deleteWaypoint({
-            rangeId,
-            waypointId: id,
-          })
-        }
-      >
-        <Icon type="times" style={{ color: "white", height: 15 }} />
-      </DeleteButton>
-    </WaypointView>
+    <ParentView style={{ top: topOffset, left }}>
+      <WaypointView>
+        <Marker />
+        <div>{text}</div>
+        <MenuButton onClick={() => toggleMenuOpen(currentVal => !currentVal)}>
+          <Icon
+            type="horizontalEllipsis"
+            style={{ color: "white", width: 15 }}
+          />
+        </MenuButton>
+      </WaypointView>
+      {menuOpen && (
+        <Menu
+          waypointId={id}
+          rangeId={rangeId}
+          deleteWaypoint={deleteWaypoint}
+          deleteRange={deleteRange}
+        />
+      )}
+    </ParentView>
   );
 };

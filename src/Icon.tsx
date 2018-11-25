@@ -10,6 +10,8 @@ export default ({ type, style }: { type: string; style?: any }) => {
       return calendar(style);
     case "mapMarker":
       return mapMarker(style);
+    case "horizontalEllipsis":
+      return ellipsisH(style);
     default:
       return null;
   }
@@ -83,6 +85,24 @@ const mapMarker = (style: any) => (
     <path
       fill="currentColor"
       d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"
+    />
+  </svg>
+);
+
+const ellipsisH = (style: any) => (
+  <svg
+    aria-hidden="true"
+    data-prefix="fas"
+    data-icon="ellipsis-h"
+    className="svg-inline--fa fa-ellipsis-h fa-w-16"
+    role="img"
+    style={style}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 512 512"
+  >
+    <path
+      fill="currentColor"
+      d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
     />
   </svg>
 );

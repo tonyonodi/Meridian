@@ -181,6 +181,14 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public deleteRange = (rangeId: string) => {
+    this.setState(({ ranges }) => {
+      const newRanges = ranges.filter(range => range.id !== rangeId);
+
+      return { ranges: newRanges };
+    });
+  };
+
   public cancelWaypointDraft = (rangeId: string) => {
     this.setState(({ ranges }) => {
       const newRanges = ranges.map(range => {
@@ -421,6 +429,7 @@ class App extends React.Component<{}, IAppState> {
           t_0={this.state.t_0}
           addWaypoint={this.addWaypoint}
           deleteWaypoint={this.deleteWaypoint}
+          deleteRange={this.deleteRange}
           cancelWaypointDraft={this.cancelWaypointDraft}
         />
         <Toolbar

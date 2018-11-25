@@ -24,6 +24,7 @@ interface IRangesComponent {
       waypointId: string;
     }
   ) => void;
+  deleteRange: (id: string) => void;
   cancelWaypointDraft: (rangeId: string) => void;
 }
 
@@ -33,6 +34,7 @@ export default ({
   t_0,
   addWaypoint,
   deleteWaypoint,
+  deleteRange,
   cancelWaypointDraft,
 }: IRangesComponent) => {
   return (
@@ -42,6 +44,7 @@ export default ({
           <Range
             addWaypoint={addWaypoint}
             deleteWaypoint={deleteWaypoint}
+            deleteRange={deleteRange}
             cancelWaypointDraft={cancelWaypointDraft}
             key={range.id}
             appWidth={appWidth}
