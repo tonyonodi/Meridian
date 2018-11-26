@@ -421,7 +421,7 @@ class App extends React.Component<{}, IAppState> {
           appWidth={appWidth}
           ranges={this.state.ranges}
           t_0={this.state.t_0}
-          addWaypoint={this.addWaypoint}
+          addWaypointDraft={this.addWaypointDraft}
           deleteWaypoint={this.deleteWaypoint}
           deleteRange={this.deleteRange}
           cancelWaypointDraft={this.cancelWaypointDraft}

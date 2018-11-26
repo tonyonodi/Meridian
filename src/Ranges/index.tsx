@@ -6,15 +6,7 @@ interface IRangesComponent {
   appWidth: number;
   ranges: IRange[];
   t_0: number;
-  addWaypoint: (
-    {
-      rangeId,
-      rangeText,
-    }: {
-      rangeId: string;
-      rangeText: string;
-    }
-  ) => void;
+  addWaypointDraft: (rangeId: string) => void;
   deleteWaypoint: (
     {
       rangeId,
@@ -32,7 +24,7 @@ export default ({
   appWidth,
   ranges,
   t_0,
-  addWaypoint,
+  addWaypointDraft,
   deleteWaypoint,
   deleteRange,
   cancelWaypointDraft,
@@ -42,7 +34,7 @@ export default ({
       {ranges.map(range => {
         return (
           <Range
-            addWaypoint={addWaypoint}
+            addWaypointDraft={addWaypointDraft}
             deleteWaypoint={deleteWaypoint}
             deleteRange={deleteRange}
             cancelWaypointDraft={cancelWaypointDraft}
