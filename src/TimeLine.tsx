@@ -6,6 +6,7 @@ import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
 import Icon, { IconTypes } from "./Icon";
 import ITimezone from "./ITimezone";
+import { isFirefox } from "./lib/browserInfo";
 
 const { DateTime } = luxon;
 
@@ -73,7 +74,9 @@ const Cursor = styled.input`
   width: ${PARENT_VIEW_WIDTH}px;
   text-align: center;
   margin: 0;
-  width: 105%;
+  width: 100%;
+  ${() => (isFirefox ? "clip-path: inset(0 17px 0 0);" : "")}
+  ${() => (isFirefox ? "padding-left: 5px;" : "")}
   &:focus {
     outline: none;
   }
@@ -262,6 +265,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
               zone: timezone.timezone,
             }).toFormat("HH:mm")}
             onChange={this.handleChange}
+            required={true}
           />
         </CursorContainer>
       </ParentView>
