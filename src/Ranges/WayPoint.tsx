@@ -2,7 +2,7 @@
 import * as React from "react";
 import styled from "styled-components";
 
-import Icon from "src/Icon";
+import Icon, { IconTypes } from "src/Icon";
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
 
 const { useState } = React;
@@ -147,7 +147,7 @@ export default ({
         <div>{text}</div>
         <MenuButton onClick={() => toggleMenuOpen(currentVal => !currentVal)}>
           <Icon
-            type="horizontalEllipsis"
+            type={IconTypes.HorizontalEllipsis}
             style={{ color: "white", width: 15 }}
           />
         </MenuButton>

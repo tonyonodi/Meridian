@@ -4,7 +4,7 @@ import * as React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.min.css";
 import styled from "styled-components";
-import Icon from "./Icon";
+import Icon, { IconTypes } from "./Icon";
 
 const ParentView = styled.div`
   position: fixed;
@@ -94,14 +94,14 @@ export default class Toolbar extends React.Component<
       <ParentView className="toolbar">
         <Button onClick={this.activateClockMode}>
           <Icon
-            type="clock"
+            type={IconTypes.Clock}
             style={{
               opacity: this.props.clockPosition !== null ? 1 : 0.25,
             }}
           />
         </Button>
         <Button onClick={this.toggleDatePicker}>
-          <Icon type="calendar" />
+          <Icon type={IconTypes.Calendar} />
         </Button>
         {this.state.showDatePicker && (
           <DatePickerContainer>
@@ -113,7 +113,7 @@ export default class Toolbar extends React.Component<
           </DatePickerContainer>
         )}
         <Button onClick={this.handleAddRange}>
-          <Icon type="mapMarker" />
+          <Icon type={IconTypes.Aeroplane} />
         </Button>
       </ParentView>
     );

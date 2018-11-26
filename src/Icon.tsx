@@ -1,23 +1,25 @@
 import * as React from "react";
 
-export default ({ type, style }: { type: string; style?: any }) => {
+export enum IconTypes { Times, Clock, Calendar, HorizontalEllipsis, Aeroplane };
+
+export default ({ type, style }: { type: IconTypes; style?: any }) => {
   switch (type) {
-    case "times":
+    case IconTypes.Times:
       return times(style);
-    case "clock":
+    case IconTypes.Clock:
       return clock(style);
-    case "calendar":
+    case IconTypes.Calendar:
       return calendar(style);
-    case "mapMarker":
-      return mapMarker(style);
-    case "horizontalEllipsis":
+    case IconTypes.HorizontalEllipsis:
       return ellipsisH(style);
+    case IconTypes.Aeroplane:
+      return aeroplane(style);
     default:
       return null;
   }
 };
 
-const times = (style: any) => (
+const times = (style: object) => (
   <svg
     aria-hidden="true"
     data-prefix="fas"
@@ -35,7 +37,7 @@ const times = (style: any) => (
   </svg>
 );
 
-const clock = (style: any) => (
+const clock = (style: object) => (
   <svg
     aria-hidden="true"
     data-prefix="far"
@@ -53,7 +55,7 @@ const clock = (style: any) => (
   </svg>
 );
 
-const calendar = (style: any) => (
+const calendar = (style: object) => (
   <svg
     aria-hidden="true"
     data-prefix="far"
@@ -71,25 +73,7 @@ const calendar = (style: any) => (
   </svg>
 );
 
-const mapMarker = (style: any) => (
-  <svg
-    aria-hidden="true"
-    data-prefix="fas"
-    data-icon="map-marker-alt"
-    className="svg-inline--fa fa-map-marker-alt fa-w-12"
-    role="img"
-    style={style}
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 384 512"
-  >
-    <path
-      fill="currentColor"
-      d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"
-    />
-  </svg>
-);
-
-const ellipsisH = (style: any) => (
+const ellipsisH = (style: object) => (
   <svg
     aria-hidden="true"
     data-prefix="fas"
@@ -103,6 +87,24 @@ const ellipsisH = (style: any) => (
     <path
       fill="currentColor"
       d="M328 256c0 39.8-32.2 72-72 72s-72-32.2-72-72 32.2-72 72-72 72 32.2 72 72zm104-72c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72zm-352 0c-39.8 0-72 32.2-72 72s32.2 72 72 72 72-32.2 72-72-32.2-72-72-72z"
+    />
+  </svg>
+);
+
+const aeroplane = (style: object) => (
+  <svg
+    aria-hidden="true"
+    data-prefix="fas"
+    data-icon="plane"
+    className="svg-inline--fa fa-plane fa-w-18"
+    role="img"
+    style={style}
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 576 512"
+  >
+    <path
+      fill="currentColor"
+      d="M480 192H365.71L260.61 8.06A16.014 16.014 0 0 0 246.71 0h-65.5c-10.63 0-18.3 10.17-15.38 20.39L214.86 192H112l-43.2-57.6c-3.02-4.03-7.77-6.4-12.8-6.4H16.01C5.6 128-2.04 137.78.49 147.88L32 256 .49 364.12C-2.04 374.22 5.6 384 16.01 384H56c5.04 0 9.78-2.37 12.8-6.4L112 320h102.86l-49.03 171.6c-2.92 10.22 4.75 20.4 15.38 20.4h65.5c5.74 0 11.04-3.08 13.89-8.06L365.71 320H480c35.35 0 96-28.65 96-64s-60.65-64-96-64z"
     />
   </svg>
 );

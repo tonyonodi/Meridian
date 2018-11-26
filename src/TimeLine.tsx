@@ -4,7 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
-import Icon from "./Icon";
+import Icon, { IconTypes } from "./Icon";
 import ITimezone from "./ITimezone";
 
 const { DateTime } = luxon;
@@ -218,7 +218,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
                   marginBottom: "-2px",
                   marginLeft: "10px",
                 }}
-                type="times"
+                type={IconTypes.Times}
               />
             </CloseButton>
           </Title>
