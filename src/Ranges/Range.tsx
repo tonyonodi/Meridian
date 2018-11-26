@@ -34,8 +34,6 @@ interface IRangeComponent {
 }
 
 export default ({
-  addWaypoint,
-  cancelWaypointDraft,
   id,
   waypoints,
   t_0,

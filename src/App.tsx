@@ -14,10 +14,8 @@ import {
 
 import AddTimeZoneButton from "./AddTimeZoneButton";
 import DraftWaypoint from "./DraftWaypoint";
-import IMarker from "./IMarker";
 import { IRange, IRangeWaypoint } from "./IRange";
 import ITimezone from "./ITimezone";
-import Markers from "./Markers";
 import Modal from "./Modal";
 import ModalData from "./ModalData";
 import Ranges from "./Ranges";
@@ -58,7 +56,6 @@ interface IAppState {
   timeCursor: number;
   timezones: ITimezone[];
   modal: ModalData;
-  markers: { [timestamp: string]: IMarker };
   ranges: IRange[];
 }
 
@@ -73,9 +70,7 @@ class App extends React.Component<{}, IAppState> {
     const timezones =
       typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
 
-    const markersString = window.localStorage.getItem("__timezonesapp.markers");
-    const markers =
-      typeof markersString === "string" ? JSON.parse(markersString) : {};
+
 
     const rangesString = window.localStorage.getItem("__timezonesapp.ranges");
     const ranges =
@@ -85,7 +80,6 @@ class App extends React.Component<{}, IAppState> {
       clockPosition: new Date().getTime(),
       draftWaypoint: null,
       ignoreNextScrollEvent: false,
-      markers,
       modal: {
         kind: "none",
       },
@@ -110,16 +104,6 @@ class App extends React.Component<{}, IAppState> {
       modal: {
         kind: "none",
       },
-    });
-  };
-
-  public updateMarkerText = (markerTimestamp: string, text: string) => {
-    this.setState(({ markers }) => {
-      // const marker = markers.get(markerTimestamp);
-      const newMarker = { text };
-      markers[markerTimestamp] = newMarker;
-
-      return { markers };
     });
   };
 
@@ -425,13 +409,6 @@ class App extends React.Component<{}, IAppState> {
             timezones={timezoneData}
           />
         </ContainerView>
-        <Markers
-          appWidth={appWidth}
-          markers={this.state.markers}
-          t_0={this.state.t_0}
-          timezones={this.state.timezones}
-          updateMarkerText={this.updateMarkerText}
-        />
         {this.state.draftWaypoint && (
           <DraftWaypoint
             addWaypoint={this.addWaypoint}
