@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IRange } from "../IRange";
+import { IRange } from "./IRange";
 import Range from "./Range";
 
 interface IRangesComponent {

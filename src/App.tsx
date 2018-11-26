@@ -14,11 +14,11 @@ import {
 
 import AddTimeZoneButton from "./AddTimeZoneButton";
 import DraftWaypoint from "./DraftWaypoint";
-import { IRange, IRangeWaypoint } from "./IRange";
 import ITimezone from "./ITimezone";
 import Modal from "./Modal";
 import ModalData from "./ModalData";
 import Ranges from "./Ranges";
+import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./TimeLine";
 import timezoneData from "./timezonedata";
 import Toolbar from "./Toolbar";

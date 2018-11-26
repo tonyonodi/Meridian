@@ -2,7 +2,7 @@
 import * as _ from "lodash";
 import * as React from "react";
 
-import { IRangeWaypoint } from "../IRange";
+import { IRangeWaypoint } from "./IRange";
 import RangeTimeline from "./RangeTimeline";
 import Waypoint from "./WayPoint";
 
