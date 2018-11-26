@@ -2,14 +2,12 @@
 import * as _ from "lodash";
 import * as React from "react";
 
-import { IDraftWaypoint, IRangeWaypoint } from "../IRange";
-import DraftWaypoint from "./DraftWaypoint";
+import { IRangeWaypoint } from "../IRange";
 import RangeTimeline from "./RangeTimeline";
 import Waypoint from "./WayPoint";
 
 interface IRangeComponent {
   appWidth: number;
-  draftWaypoint: IDraftWaypoint | null;
   id: string;
   waypoints: IRangeWaypoint[];
   t_0: number;
@@ -38,7 +36,6 @@ interface IRangeComponent {
 export default ({
   addWaypoint,
   cancelWaypointDraft,
-  draftWaypoint,
   id,
   waypoints,
   t_0,
@@ -50,14 +47,6 @@ export default ({
 
   return (
     <React.Fragment>
-      {draftWaypoint && (
-        <DraftWaypoint
-          addWaypoint={addWaypoint}
-          cancelWaypointDraft={cancelWaypointDraft}
-          appWidth={appWidth}
-          rangeId={id}
-        />
-      )}
       {sortedWaypoints.reduce((acc, currentWaypoint, index, waypointsArray) => {
         const prevWaypoint = waypointsArray[index - 1];
 

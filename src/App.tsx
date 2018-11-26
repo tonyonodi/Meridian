@@ -13,6 +13,7 @@ import {
 } from "./config";
 
 import AddTimeZoneButton from "./AddTimeZoneButton";
+import DraftWaypoint from "./DraftWaypoint";
 import IMarker from "./IMarker";
 import { IRange, IRangeWaypoint } from "./IRange";
 import ITimezone from "./ITimezone";
@@ -48,6 +49,9 @@ const defaultTimezones = [
 
 interface IAppState {
   clockPosition: number | null;
+  draftWaypoint: {
+    rangeId: string;
+  } | null;
   ignoreNextScrollEvent: boolean;
   showAddTimezone: boolean;
   t_0: number;
@@ -79,6 +83,7 @@ class App extends React.Component<{}, IAppState> {
 
     this.state = {
       clockPosition: new Date().getTime(),
+      draftWaypoint: null,
       ignoreNextScrollEvent: false,
       markers,
       modal: {
@@ -118,6 +123,10 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  public addWaypointDraft = (rangeId: string) => {
+    this.setState({ draftWaypoint: { rangeId } });
+  };
+
   public addWaypoint = ({
     rangeId,
     rangeText,
@@ -125,9 +134,22 @@ class App extends React.Component<{}, IAppState> {
     rangeId: string;
     rangeText: string;
   }) => {
-    const { timeCursor } = this.state;
     this.setState(
-      ({ ranges }) => {
+      ({ ranges, timeCursor }) => {
+        const rangeIndex = ranges.findIndex(range => range.id === rangeId);
+
+        if (rangeIndex < 0) {
+          const newRange = {
+            id: rangeId,
+            waypoints: [
+              { text: rangeText, time: timeCursor, id: Math.random() + "" },
+            ],
+          };
+          return {
+            ranges: [...ranges, newRange],
+          };
+        }
+
         const newRanges = ranges.map(range => {
           if (range.id !== rangeId) {
             return range;
@@ -145,7 +167,7 @@ class App extends React.Component<{}, IAppState> {
         return { ranges: newRanges };
       },
       () => {
-        this.updateTime({ time: timeCursor + 60 * 60 * 1000 });
+        this.updateTime({ time: this.state.timeCursor + 60 * 60 * 1000 });
       }
     );
   };
@@ -189,21 +211,8 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
-  public cancelWaypointDraft = (rangeId: string) => {
-    this.setState(({ ranges }) => {
-      const newRanges = ranges.map(range => {
-        if (range.id !== rangeId) {
-          return range;
-        }
-
-        return {
-          ...range,
-          draftWaypoint: null,
-        };
-      });
-
-      return { ranges: newRanges };
-    });
+  public cancelWaypointDraft = () => {
+    this.setState({ draftWaypoint: null });
   };
 
   public updateModal = (modal: ModalData) => () => {
@@ -423,6 +432,14 @@ class App extends React.Component<{}, IAppState> {
           timezones={this.state.timezones}
           updateMarkerText={this.updateMarkerText}
         />
+        {this.state.draftWaypoint && (
+          <DraftWaypoint
+            addWaypoint={this.addWaypoint}
+            cancelWaypointDraft={this.cancelWaypointDraft}
+            appWidth={appWidth}
+            draftWaypoint={this.state.draftWaypoint}
+          />
+        )}
         <Ranges
           appWidth={appWidth}
           ranges={this.state.ranges}
@@ -436,7 +453,7 @@ class App extends React.Component<{}, IAppState> {
           clockPosition={this.state.clockPosition}
           timeCursor={this.state.timeCursor}
           updateTime={this.updateTime}
-          addRange={this.addRange}
+          addWaypointDraft={this.addWaypointDraft}
         />
       </div>
     );

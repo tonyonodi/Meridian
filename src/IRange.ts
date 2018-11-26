@@ -10,7 +10,6 @@ export interface IRangeWaypoint {
 }
 
 export interface IRange {
-  draftWaypoint: IDraftWaypoint | null;
   id: string;
   waypoints: IRangeWaypoint[];
 }

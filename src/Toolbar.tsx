@@ -44,7 +44,7 @@ interface IToolbarProps {
   updateTime: (
     { activateClockMode, time }: { activateClockMode: boolean; time: number }
   ) => void;
-  addRange: () => void;
+  addWaypointDraft: (rangeId: string) => void;
 }
 
 interface IToolbarState {
@@ -84,6 +84,11 @@ export default class Toolbar extends React.Component<
     });
   };
 
+  public handleAddRange = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    this.props.addWaypointDraft(Math.random() + "");
+  };
+
   public render() {
     return (
       <ParentView className="toolbar">
@@ -107,7 +112,7 @@ export default class Toolbar extends React.Component<
             />
           </DatePickerContainer>
         )}
-        <Button onClick={this.props.addRange}>
+        <Button onClick={this.handleAddRange}>
           <Icon type="mapMarker" />
         </Button>
       </ParentView>

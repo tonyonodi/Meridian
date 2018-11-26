@@ -18,17 +18,11 @@ const Button = styled.button``;
 
 interface IDraftWaypointComponent {
   addWaypoint: (
-    {
-      rangeId,
-      rangeText,
-    }: {
-      rangeId: string;
-      rangeText: string;
-    }
+    { rangeId, rangeText }: { rangeId: string; rangeText: string }
   ) => void;
-  cancelWaypointDraft: (rangeId: string) => void;
+  cancelWaypointDraft: () => void;
   appWidth: number;
-  rangeId: string;
+  draftWaypoint: { rangeId: string };
 }
 
 export default class DraftWaypointComponent extends React.Component<
@@ -61,7 +55,7 @@ export default class DraftWaypointComponent extends React.Component<
 
     const { draftName } = this.state;
     this.props.addWaypoint({
-      rangeId: this.props.rangeId,
+      rangeId: this.props.draftWaypoint.rangeId,
       rangeText: draftName,
     });
 
@@ -75,7 +69,7 @@ export default class DraftWaypointComponent extends React.Component<
   ) => {
     event.preventDefault();
 
-    this.props.cancelWaypointDraft(this.props.rangeId);
+    this.props.cancelWaypointDraft();
   };
 
   public handleBlur = () => {
