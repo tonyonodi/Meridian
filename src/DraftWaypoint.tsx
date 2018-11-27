@@ -73,7 +73,7 @@ export default class DraftWaypointComponent extends React.Component<
   };
 
   public handleBlur = () => {
-    console.log("blurring");
+    this.props.cancelWaypointDraft();
   };
 
   public render() {
