@@ -47,7 +47,7 @@ export default ({
   deleteWaypoint,
   deleteRange,
   addWaypointDraft,
-  closeMenu
+  closeMenu,
 }: IMenu) => {
   useEffect(() => {
     const handleClick = (event: MouseEvent) => {
@@ -91,7 +91,12 @@ export default ({
       >
         Delete Waypoint
       </MenuItem>
-      <MenuItem onClick={() => addWaypointDraft(rangeId)}>
+      <MenuItem
+        onClick={() => {
+          addWaypointDraft(rangeId);
+          closeMenu();
+        }}
+      >
         Add Waypoint
       </MenuItem>
       <MenuItem onClick={() => deleteRange(rangeId)}>Delete Range</MenuItem>
