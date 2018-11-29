@@ -12,11 +12,9 @@ import {
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
 
-import AddTimeZoneButton from "./AddTimeZoneButton";
+import AddTimezone from "./AddTimezone";
 import DraftWaypoint from "./DraftWaypoint";
 import ITimezone from "./ITimezone";
-import Modal from "./Modal";
-import ModalData from "./ModalData";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./TimeLine";
@@ -55,7 +53,6 @@ interface IAppState {
   t_0: number;
   timeCursor: number;
   timezones: ITimezone[];
-  modal: ModalData;
   ranges: IRange[];
 }
 
@@ -78,9 +75,6 @@ class App extends React.Component<{}, IAppState> {
       clockPosition: new Date().getTime(),
       draftWaypoint: null,
       ignoreNextScrollEvent: false,
-      modal: {
-        kind: "none",
-      },
       ranges,
       showAddTimezone: false,
       t_0: new Date().getTime(),
@@ -94,14 +88,6 @@ class App extends React.Component<{}, IAppState> {
       return {
         timezones: [...timezones, timezone],
       };
-    });
-  };
-
-  public closeModal = () => {
-    this.setState({
-      modal: {
-        kind: "none",
-      },
     });
   };
 
@@ -195,10 +181,6 @@ class App extends React.Component<{}, IAppState> {
 
   public cancelWaypointDraft = () => {
     this.setState({ draftWaypoint: null });
-  };
-
-  public updateModal = (modal: ModalData) => () => {
-    this.setState({ modal });
   };
 
   public componentDidMount() {
@@ -328,7 +310,6 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public toggleAddTimezone = (state?: boolean) => {
-
     this.setState(({ showAddTimezone }) => {
       const newState = state === undefined ? !showAddTimezone : state;
       return {
@@ -387,7 +368,6 @@ class App extends React.Component<{}, IAppState> {
           minWidth: `${appWidth}px`,
         }}
       >
-        <Modal modalData={this.state.modal} closeModal={this.closeModal} />
         <ContainerView innerRef={this.containerViewRef}>
           {this.state.timezones.map((timezone, i) => {
             return (
@@ -403,7 +383,7 @@ class App extends React.Component<{}, IAppState> {
               />
             );
           })}
-          <AddTimeZoneButton
+          <AddTimezone
             addTimezone={this.addTimezone}
             color={PALETTE[timezones.length]}
             show={this.state.showAddTimezone}

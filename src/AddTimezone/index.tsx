@@ -1,15 +1,12 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
+import { ADD_TIMEZONE_FORM_WIDTH, PARENT_VIEW_WIDTH } from "../config";
+import ITimezone from "../ITimezone";
 import AddTimeZone from "./AddTimeZone";
-import {
-  // PALETTE,
-  ADD_TIMEZONE_FORM_WIDTH,
-  PARENT_VIEW_WIDTH,
-  // WINDOW_HEIGHT_IN_DAYS,
-  // WINDOW_HEIGHT_IN_MS,
-} from "./config";
-import ITimezone from "./ITimezone";
+
+
+
 
 interface IParentView {
   show: boolean;

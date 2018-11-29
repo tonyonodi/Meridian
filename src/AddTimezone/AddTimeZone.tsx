@@ -3,7 +3,7 @@
 import * as fuzzysort from "fuzzysort";
 import * as React from "react";
 import styled from "styled-components";
-import ITimezone from "./ITimezone";
+import ITimezone from "../ITimezone";
 import SearchResult from "./SearchResult";
 
 const SearchForm = styled.form`
