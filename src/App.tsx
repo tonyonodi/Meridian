@@ -15,10 +15,10 @@ import {
 import AddTimezone from "./AddTimezone";
 import DraftWaypoint from "./DraftWaypoint";
 import ITimezone from "./ITimezone";
+import timezoneData from "./lib/timezonedata";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./TimeLine";
-import timezoneData from "./timezonedata";
 import Toolbar from "./Toolbar";
 
 const { DateTime } = luxon;
