@@ -28,6 +28,8 @@ interface IDraftWaypointComponent {
 export default class DraftWaypointComponent extends React.Component<
   IDraftWaypointComponent
 > {
+  public parentElement: HTMLElement;
+
   public state = { draftName: "" };
 
   public waypointNameInput: HTMLInputElement;
@@ -38,6 +40,13 @@ export default class DraftWaypointComponent extends React.Component<
 
   public componentDidMount() {
     this.waypointNameInput.focus();
+    window.addEventListener("mousedown", this.handleMousedown);
+    window.addEventListener("keydown", this.handleKeypress);
+  }
+
+  public componentWillUnmount() {
+    window.removeEventListener("mousedown", this.handleMousedown);
+    window.removeEventListener("keydown", this.handleKeypress);
   }
 
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,14 +81,37 @@ export default class DraftWaypointComponent extends React.Component<
     this.props.cancelWaypointDraft();
   };
 
-  public handleBlur = () => {
-    this.props.cancelWaypointDraft();
+  public handleKeypress = (event: KeyboardEvent) => {
+    switch (event.key) {
+      case "Escape":
+        this.props.cancelWaypointDraft();
+        break;
+    }
+  };
+
+  public handleMousedown = (event: Event) => {
+    const clickedElement = event.target;
+
+    if (
+      clickedElement instanceof Element &&
+      clickedElement !== this.parentElement &&
+      !this.parentElement.contains(clickedElement)
+    ) {
+      this.props.cancelWaypointDraft();
+    }
+  };
+
+  public parentElementRef = (element: HTMLElement) => {
+    this.parentElement = element;
   };
 
   public render() {
     const { appWidth } = this.props;
     return (
-      <ParentView style={{ left: appWidth + 30 }}>
+      <ParentView
+        style={{ left: appWidth + 30 }}
+        innerRef={this.parentElementRef}
+      >
         <form onSubmit={this.handleSubmit}>
           <WaypointNameInput
             innerRef={this.waypointNameInputRef}
@@ -87,7 +119,6 @@ export default class DraftWaypointComponent extends React.Component<
             placeholder="Untitled waypoint"
             value={this.state.draftName}
             onChange={this.handleChange}
-            onBlur={this.handleBlur}
           />
           <Button onClick={this.handleSubmit}>Add waypoint here</Button>
           <Button onClick={this.handleCancel}>Cancel</Button>
