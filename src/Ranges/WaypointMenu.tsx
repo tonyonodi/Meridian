@@ -1,6 +1,9 @@
+// tslint:disable:no-console
 // tslint:disable:jsx-no-lambda
 import * as React from "react";
 import styled from "styled-components";
+
+const { useEffect, useRef } = React;
 
 const MenuView = styled.div`
   position: absolute;
@@ -35,6 +38,7 @@ interface IMenu {
   ) => void;
   deleteRange: (rangeId: string) => void;
   addWaypointDraft: (rangeId: string) => void;
+  closeMenu: () => void;
 }
 
 export default ({
@@ -43,9 +47,40 @@ export default ({
   deleteWaypoint,
   deleteRange,
   addWaypointDraft,
+  closeMenu
 }: IMenu) => {
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      const clickedElement = event.target as Node;
+      const containsElement =
+        parentElement &&
+        (parentElement as React.MutableRefObject<
+          HTMLDivElement
+        >).current.contains(clickedElement);
+
+      if (
+        clickedElement instanceof Element &&
+        clickedElement !== parentElement.current &&
+        parentElement.current !== null &&
+        !containsElement
+      ) {
+        closeMenu();
+      }
+    };
+
+    window.addEventListener("mousedown", handleClick);
+
+    return () => {
+      window.removeEventListener("mousedown", handleClick);
+    };
+  });
+
+  const parentElement: React.MutableRefObject<HTMLDivElement | null> = useRef(
+    null
+  );
+
   return (
-    <MenuView>
+    <MenuView innerRef={parentElement}>
       <MenuItem
         onClick={() =>
           deleteWaypoint({
@@ -56,7 +91,9 @@ export default ({
       >
         Delete Waypoint
       </MenuItem>
-      <MenuItem onClick={() => addWaypointDraft(rangeId)}>Add Waypoint</MenuItem>
+      <MenuItem onClick={() => addWaypointDraft(rangeId)}>
+        Add Waypoint
+      </MenuItem>
       <MenuItem onClick={() => deleteRange(rangeId)}>Delete Range</MenuItem>
     </MenuView>
   );

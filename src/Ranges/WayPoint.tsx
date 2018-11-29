@@ -109,6 +109,7 @@ export default ({
           deleteWaypoint={deleteWaypoint}
           deleteRange={deleteRange}
           addWaypointDraft={addWaypointDraft}
+          closeMenu={() => toggleMenuOpen(() => false)}
         />
       )}
     </ParentView>
