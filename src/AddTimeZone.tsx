@@ -1,8 +1,10 @@
 // tslint:disable:no-console
+// tslint:disable:jsx-no-lambda
 import * as fuzzysort from "fuzzysort";
 import * as React from "react";
 import styled from "styled-components";
 import ITimezone from "./ITimezone";
+import SearchResult from "./SearchResult";
 
 const SearchForm = styled.form`
   width: 90%;
@@ -29,16 +31,6 @@ const SearchResults = styled.ul`
   margin: 0;
   overflow: auto;
   text-align: left;
-`;
-
-interface ISearchResult {
-  active: boolean;
-  children: string;
-}
-
-const SearchResult = styled.li<ISearchResult>`
-  padding: 5px;
-  background: ${({ active }) => (active ? "rgba(255, 255, 255, 0.3)" : "none")};
 `;
 
 interface IAddTimeZoneProps {
@@ -72,13 +64,13 @@ export default class AddTimeZone extends React.Component<
     });
   }
 
-  public handleChange = (event: any) => {
+  public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       searchValue: event.target.value,
     });
   };
 
-  public handleSubmit = (event: any) => {
+  public handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { searchResults } = this.state;
 
@@ -89,10 +81,6 @@ export default class AddTimeZone extends React.Component<
   };
 
   public searchInputRef = (el: any) => (this.searchInput = el);
-
-  public closeForm = (event: any) => {
-    this.props.close(false);
-  }
 
   public componentDidMount() {
     this.searchInput.focus();
@@ -159,22 +147,12 @@ export default class AddTimeZone extends React.Component<
     }
   };
 
-  public handleClick = (timezone: ITimezone) => (event: any) => {
+  public handleResultClick = (timezone: ITimezone) => (
+    event: React.MouseEvent<HTMLLIElement>
+  ) => {
+    event.stopPropagation();
     this.props.addTimezone(timezone);
-  };
-
-  public searchResult = (timezone: ITimezone, index: number) => {
-    return (
-      <SearchResult
-        key={timezone.timezone}
-        active={index === this.state.cursor}
-        onClick={this.handleClick(timezone)}
-      >
-        {timezone.country
-          ? `${timezone.city}, ${timezone.country}`
-          : timezone.city}
-      </SearchResult>
-    );
+    this.props.close();
   };
 
   public render() {
@@ -187,10 +165,17 @@ export default class AddTimeZone extends React.Component<
           onChange={this.handleChange}
           value={this.state.searchValue}
           innerRef={this.searchInputRef}
-          onBlur={this.closeForm}
         />
-        {searchResults.length > 0 && searchValue ? (
-          <SearchResults>{searchResults.map(this.searchResult)}</SearchResults>
+        {searchValue ? (
+          <SearchResults>
+            {searchResults.map((timezone, index) => (
+              <SearchResult
+                active={index === this.state.cursor}
+                timezone={timezone}
+                handleClick={this.handleResultClick(timezone)}
+              />
+            ))}
+          </SearchResults>
         ) : null}
       </SearchForm>
     );

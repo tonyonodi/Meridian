@@ -70,8 +70,6 @@ class App extends React.Component<{}, IAppState> {
     const timezones =
       typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
 
-
-
     const rangesString = window.localStorage.getItem("__timezonesapp.ranges");
     const ranges =
       typeof rangesString === "string" ? JSON.parse(rangesString) : [];
@@ -330,9 +328,13 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public toggleAddTimezone = (state?: boolean) => {
-    this.setState(({ showAddTimezone }) => ({
-      showAddTimezone: state === undefined ? !showAddTimezone : state,
-    }));
+
+    this.setState(({ showAddTimezone }) => {
+      const newState = state === undefined ? !showAddTimezone : state;
+      return {
+        showAddTimezone: newState,
+      };
+    });
   };
 
   public updateTime = ({

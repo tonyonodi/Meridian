@@ -1,3 +1,4 @@
+// tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
 import AddTimeZone from "./AddTimeZone";
@@ -52,12 +53,16 @@ interface IAddTimeZoneButtonProps {
 export default class AddTimeZoneButton extends React.Component<
   IAddTimeZoneButtonProps
 > {
+  public parentElement: HTMLElement;
+
   public componentDidMount() {
     window.addEventListener("keypress", this.handleKeypress);
+    window.addEventListener("mousedown", this.handleMouseDown);
   }
 
   public componentWillUnmount() {
     window.removeEventListener("keypress", this.handleKeypress);
+    window.removeEventListener("mousedown", this.handleMouseDown);
   }
 
   public handleKeypress = (event: any) => {
@@ -73,15 +78,36 @@ export default class AddTimeZoneButton extends React.Component<
     }
   };
 
-  public handleClick = (event: any) => {
+  public handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
     this.props.toggle(true);
+  };
+
+  public handleMouseDown = (event: Event) => {
+    const clickedElement = event.target;
+
+    if (
+      clickedElement instanceof Element &&
+      clickedElement !== this.parentElement &&
+      !this.parentElement.contains(clickedElement)
+    ) {
+      this.props.toggle(false);
+    }
+  };
+
+  public refMethod = (element: HTMLElement) => {
+    this.parentElement = element;
   };
 
   public render() {
     const { addTimezone, timezones, color, show, toggle } = this.props;
 
     return (
-      <ParentView onClick={this.handleClick} show={show} bgColor={color}>
+      <ParentView
+        onClick={this.handleClick}
+        show={show}
+        bgColor={color}
+        innerRef={this.refMethod}
+      >
         <InnerView show={show}>
           {show ? (
             <AddTimeZone
