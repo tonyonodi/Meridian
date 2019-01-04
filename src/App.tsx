@@ -377,7 +377,7 @@ class App extends React.Component<{}, IAppState> {
                 t_0={t_0}
                 timezone={timezone}
                 updateTime={this.updateTime}
-                color={PALETTE[i]}
+                color={PALETTE[i % PALETTE.length]}
                 index={timezones.length - i}
                 remove={this.removeTimeline(timezone.timezone)}
               />
@@ -385,7 +385,7 @@ class App extends React.Component<{}, IAppState> {
           })}
           <AddTimezone
             addTimezone={this.addTimezone}
-            color={PALETTE[timezones.length]}
+            color={PALETTE[timezones.length % PALETTE.length]}
             show={this.state.showAddTimezone}
             toggle={this.toggleAddTimezone}
             timezones={timezoneData}
