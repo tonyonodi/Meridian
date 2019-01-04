@@ -6,7 +6,7 @@ import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
 import Icon, { IconTypes } from "./Icon";
 import ITimezone from "./ITimezone";
-import { isFirefox } from "./lib/browserInfo";
+import { isAndroidChrome, isFirefox } from "./lib/browserInfo";
 
 const { DateTime } = luxon;
 
@@ -74,9 +74,10 @@ const Cursor = styled.input`
   width: ${PARENT_VIEW_WIDTH}px;
   text-align: center;
   margin: 0;
-  width: 100%;
-  ${() => (isFirefox ? "clip-path: inset(0 17px 0 0);" : "")}
-  ${() => (isFirefox ? "padding-left: 5px;" : "")}
+  width: ${isAndroidChrome ? "105%" : "100%"};
+  margin-left: ${isAndroidChrome ? "8%" : "0"};
+  ${isFirefox ? "clip-path: inset(0 17px 0 0);" : ""}
+  ${isFirefox ? "padding-left: 5px;" : ""}
   &:focus {
     outline: none;
   }
