@@ -1,20 +1,59 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
+import { DEFAULT_UI_BUTTON_COLOR } from "./config";
 
 const ParentView = styled.div`
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
+  width: 200px;
   background: white;
   padding: 7px;
   border-radius: 5px;
   z-index: 30;
+  margin-left: 10px;
 `;
 
-const WaypointNameInput = styled.input``;
+const Header = styled.h3`
+  margin: 0 0 10px 0;
+`;
 
-const Button = styled.button``;
+const WaypointNameInput = styled.input`
+  padding: 5px;
+  width: 100%;
+  font-size: 1rem;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: solid 2px lightgrey;
+  &:focus {
+    outline: none;
+    border-bottom: solid 2px ${DEFAULT_UI_BUTTON_COLOR};
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+`;
+
+const Button = styled.button`
+  padding: 6px 10px;
+  background: none;
+  border: none;
+  border-radius: 5px;
+  width: calc(50% - 3px);
+  background: ${DEFAULT_UI_BUTTON_COLOR};
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+  &:focus {
+    outline: none;
+    filter: brightness(85%);
+  }
+`;
 
 interface IDraftWaypointComponent {
   addWaypoint: (
@@ -23,6 +62,7 @@ interface IDraftWaypointComponent {
   cancelWaypointDraft: () => void;
   appWidth: number;
   draftWaypoint: { rangeId: string };
+  waypointNumber: number;
 }
 
 export default class DraftWaypointComponent extends React.Component<
@@ -40,12 +80,10 @@ export default class DraftWaypointComponent extends React.Component<
 
   public componentDidMount() {
     this.waypointNameInput.focus();
-    window.addEventListener("mousedown", this.handleMousedown);
     window.addEventListener("keydown", this.handleKeypress);
   }
 
   public componentWillUnmount() {
-    window.removeEventListener("mousedown", this.handleMousedown);
     window.removeEventListener("keydown", this.handleKeypress);
   }
 
@@ -89,39 +127,33 @@ export default class DraftWaypointComponent extends React.Component<
     }
   };
 
-  public handleMousedown = (event: Event) => {
-    const clickedElement = event.target;
-
-    if (
-      clickedElement instanceof Element &&
-      clickedElement !== this.parentElement &&
-      !this.parentElement.contains(clickedElement)
-    ) {
-      this.props.cancelWaypointDraft();
-    }
-  };
-
   public parentElementRef = (element: HTMLElement) => {
     this.parentElement = element;
   };
 
   public render() {
     const { appWidth } = this.props;
+    const addWaypointText =
+      ["From here", "To here"][this.props.waypointNumber] || "...and here";
+
     return (
       <ParentView
         style={{ left: appWidth + 30 }}
         innerRef={this.parentElementRef}
       >
+        <Header>Measure duration</Header>
         <form onSubmit={this.handleSubmit}>
           <WaypointNameInput
             innerRef={this.waypointNameInputRef}
             type="text"
-            placeholder="Untitled waypoint"
+            placeholder="Waypoint name (optional)"
             value={this.state.draftName}
             onChange={this.handleChange}
           />
-          <Button onClick={this.handleSubmit}>Add waypoint here</Button>
-          <Button onClick={this.handleCancel}>Cancel</Button>
+          <ButtonContainer>
+            <Button onClick={this.handleSubmit}>{addWaypointText}</Button>
+            <Button onClick={this.handleCancel}>Cancel</Button>
+          </ButtonContainer>
         </form>
       </ParentView>
     );

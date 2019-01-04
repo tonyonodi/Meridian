@@ -183,6 +183,17 @@ class App extends React.Component<{}, IAppState> {
     this.setState({ draftWaypoint: null });
   };
 
+  public getDraftWaypointNumber(
+    draftWaypoint: { rangeId: string },
+    ranges: IRange[]
+  ) {
+    const draftWaypointRange = ranges.find(
+      range => range.id === draftWaypoint.rangeId
+    );
+
+    return draftWaypointRange ? draftWaypointRange.waypoints.length : 0;
+  }
+
   public componentDidMount() {
     window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
 
@@ -397,6 +408,10 @@ class App extends React.Component<{}, IAppState> {
             cancelWaypointDraft={this.cancelWaypointDraft}
             appWidth={appWidth}
             draftWaypoint={this.state.draftWaypoint}
+            waypointNumber={this.getDraftWaypointNumber(
+              this.state.draftWaypoint,
+              this.state.ranges
+            )}
           />
         )}
         <Ranges
