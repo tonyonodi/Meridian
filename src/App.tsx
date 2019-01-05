@@ -8,6 +8,7 @@ import {
   ADD_TIMEZONE_FORM_WIDTH,
   PALETTE,
   PARENT_VIEW_WIDTH,
+  SCROLL_BOUNDARY_FRACTION,
   WINDOW_HEIGHT_IN_DAYS,
   WINDOW_HEIGHT_IN_MS,
 } from "./config";
@@ -267,6 +268,14 @@ class App extends React.Component<{}, IAppState> {
       scrollEventFiredCount += 1;
       const clockPosition =
         scrollEventFiredCount > 2 ? null : this.state.clockPosition;
+
+      if (Math.abs(scrollFraction) > SCROLL_BOUNDARY_FRACTION) {
+        this.updateTime({
+          activateClockMode: false,
+          time: this.state.t_0 + scrollFraction * WINDOW_HEIGHT_IN_MS,
+        });
+        return;
+      }
 
       this.setState(state => {
         return {

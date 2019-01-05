@@ -25,3 +25,5 @@ export const PALETTE: Array<[number, number, number]> = [
   [161, 61, 99],
   [53, 30, 41],
 ];
+
+export const SCROLL_BOUNDARY_FRACTION = 0.45;
