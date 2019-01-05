@@ -18,6 +18,7 @@ const DurationText = styled.div`
     top: 0;
     padding-left: 11px;
     padding-top: 5px;
+    padding-bottom: 20px;
   }
 `;
 
