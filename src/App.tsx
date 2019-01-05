@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import {
   ADD_TIMEZONE_FORM_WIDTH,
+  DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
   PALETTE,
   PARENT_VIEW_WIDTH,
   SCROLL_BOUNDARY_FRACTION,
@@ -385,7 +386,7 @@ class App extends React.Component<{}, IAppState> {
       <div
         className="App"
         style={{
-          minWidth: `${appWidth}px`,
+          minWidth: appWidth + DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
         }}
       >
         <ContainerView innerRef={this.containerViewRef}>
@@ -410,19 +411,20 @@ class App extends React.Component<{}, IAppState> {
             toggle={this.toggleAddTimezone}
             timezones={timezoneData}
           />
+          {this.state.draftWaypoint && (
+            <DraftWaypoint
+              addWaypoint={this.addWaypoint}
+              cancelWaypointDraft={this.cancelWaypointDraft}
+              appWidth={appWidth}
+              draftWaypoint={this.state.draftWaypoint}
+              waypointNumber={this.getDraftWaypointNumber(
+                this.state.draftWaypoint,
+                this.state.ranges
+              )}
+            />
+          )}
         </ContainerView>
-        {this.state.draftWaypoint && (
-          <DraftWaypoint
-            addWaypoint={this.addWaypoint}
-            cancelWaypointDraft={this.cancelWaypointDraft}
-            appWidth={appWidth}
-            draftWaypoint={this.state.draftWaypoint}
-            waypointNumber={this.getDraftWaypointNumber(
-              this.state.draftWaypoint,
-              this.state.ranges
-            )}
-          />
-        )}
+
         <Ranges
           appWidth={appWidth}
           ranges={this.state.ranges}

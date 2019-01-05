@@ -37,6 +37,10 @@ const Marker = styled.div`
   margin-right: 4px;
 `;
 
+const MarkerText = styled.div`
+  white-space: nowrap;
+`
+
 const ParentView = styled.div`
   position: absolute;
   transform: translateY(-50%);
@@ -94,7 +98,7 @@ export default ({
     <ParentView style={{ top: topOffset, left }}>
       <WaypointView>
         <Marker />
-        <div>{text}</div>
+        <MarkerText>{text}</MarkerText>
         <MenuButton onClick={() => toggleMenuOpen(currentVal => !currentVal)}>
           <Icon
             type={IconTypes.HorizontalEllipsis}

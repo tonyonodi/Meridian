@@ -16,7 +16,7 @@ export const PARENT_VIEW_WIDTH = TIMELINE_WIDTH + LOCATION_NAME_WIDTH;
 
 export const ADD_TIMEZONE_FORM_WIDTH = 350;
 
-export const DEFAULT_UI_BUTTON_COLOR = "#0a4254"
+export const DEFAULT_UI_BUTTON_COLOR = "#0a4254";
 
 export const PALETTE: Array<[number, number, number]> = [
   [109, 211, 206],
@@ -27,3 +27,10 @@ export const PALETTE: Array<[number, number, number]> = [
 ];
 
 export const SCROLL_BOUNDARY_FRACTION = 0.45;
+
+export const DRAFT_WAYPOINT_ELEMENT_WIDTH = 200;
+
+export const DRAFT_WAYPOINT_ELEMENT_MARGIN_LEFT = 37;
+
+export const DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH =
+  DRAFT_WAYPOINT_ELEMENT_WIDTH + DRAFT_WAYPOINT_ELEMENT_MARGIN_LEFT;

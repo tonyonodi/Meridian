@@ -1,18 +1,30 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
-import { DEFAULT_UI_BUTTON_COLOR } from "./config";
+import {
+  DEFAULT_UI_BUTTON_COLOR,
+  DRAFT_WAYPOINT_ELEMENT_MARGIN_LEFT,
+  DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
+  DRAFT_WAYPOINT_ELEMENT_WIDTH,
+} from "./config";
+
+const ContainerDiv = styled.div`
+  background: "red";
+  position: "relative";
+  width: ${DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH};
+`;
 
 const ParentView = styled.div`
-  position: fixed;
+  position: sticky;
   top: 50%;
   transform: translateY(-50%);
-  width: 200px;
+  width: ${DRAFT_WAYPOINT_ELEMENT_WIDTH}px;
   background: white;
   padding: 7px;
   border-radius: 5px;
   z-index: 30;
-  margin-left: 10px;
+  margin-left: ${DRAFT_WAYPOINT_ELEMENT_MARGIN_LEFT}px;
+  margin-right: 20px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.15);
   &:after {
     right: 100%;
@@ -152,25 +164,27 @@ export default class DraftWaypointComponent extends React.Component<
       ["From here", "To here"][this.props.waypointNumber] || "...and here";
 
     return (
-      <ParentView
-        style={{ left: appWidth + 30 }}
-        innerRef={this.parentElementRef}
-      >
-        <Header>Measure duration</Header>
-        <ButtonContainer>
-          <Button onClick={this.handleSubmit}>{addWaypointText}</Button>
-          <Button onClick={this.handleCancel}>Cancel</Button>
-        </ButtonContainer>
-        <form onSubmit={this.handleSubmit}>
-          <WaypointNameInput
-            innerRef={this.waypointNameInputRef}
-            type="text"
-            placeholder="Waypoint name (optional)"
-            value={this.state.draftName}
-            onChange={this.handleChange}
-          />
-        </form>
-      </ParentView>
+      <ContainerDiv>
+        <ParentView
+          style={{ left: appWidth - 100 }}
+          innerRef={this.parentElementRef}
+        >
+          <Header>Measure duration</Header>
+          <ButtonContainer>
+            <Button onClick={this.handleSubmit}>{addWaypointText}</Button>
+            <Button onClick={this.handleCancel}>Cancel</Button>
+          </ButtonContainer>
+          <form onSubmit={this.handleSubmit}>
+            <WaypointNameInput
+              innerRef={this.waypointNameInputRef}
+              type="text"
+              placeholder="Waypoint name (optional)"
+              value={this.state.draftName}
+              onChange={this.handleChange}
+            />
+          </form>
+        </ParentView>
+      </ContainerDiv>
     );
   }
 }
