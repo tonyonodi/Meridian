@@ -16,7 +16,7 @@ export const PARENT_VIEW_WIDTH = TIMELINE_WIDTH + LOCATION_NAME_WIDTH;
 
 export const ADD_TIMEZONE_FORM_WIDTH = 350;
 
-export const DEFAULT_UI_BUTTON_COLOR = "#8966e8"
+export const DEFAULT_UI_BUTTON_COLOR = "#0a4254"
 
 export const PALETTE: Array<[number, number, number]> = [
   [109, 211, 206],

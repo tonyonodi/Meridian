@@ -13,6 +13,21 @@ const ParentView = styled.div`
   border-radius: 5px;
   z-index: 30;
   margin-left: 10px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.15);
+  &:after {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #ffffff;
+    border-width: 7px;
+    margin-top: -7px;
+  }
 `;
 
 const Header = styled.h3`
@@ -142,6 +157,10 @@ export default class DraftWaypointComponent extends React.Component<
         innerRef={this.parentElementRef}
       >
         <Header>Measure duration</Header>
+        <ButtonContainer>
+          <Button onClick={this.handleSubmit}>{addWaypointText}</Button>
+          <Button onClick={this.handleCancel}>Cancel</Button>
+        </ButtonContainer>
         <form onSubmit={this.handleSubmit}>
           <WaypointNameInput
             innerRef={this.waypointNameInputRef}
@@ -150,10 +169,6 @@ export default class DraftWaypointComponent extends React.Component<
             value={this.state.draftName}
             onChange={this.handleChange}
           />
-          <ButtonContainer>
-            <Button onClick={this.handleSubmit}>{addWaypointText}</Button>
-            <Button onClick={this.handleCancel}>Cancel</Button>
-          </ButtonContainer>
         </form>
       </ParentView>
     );
