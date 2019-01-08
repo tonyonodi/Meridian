@@ -25,6 +25,13 @@ import Toolbar from "./Toolbar";
 
 const { DateTime } = luxon;
 
+// const setMobileConsole = (...messages: string[]) => {
+//   const cons = document.querySelector("#console");
+//   if (cons) {
+//     cons.innerHTML = messages.join("<br/>");
+//   }
+// };
+
 const ContainerView = styled.div`
   position: relative;
   display: flex;
@@ -244,12 +251,14 @@ class App extends React.Component<{}, IAppState> {
 
     let scrollEventFiredCount = 0;
     let lastScrollYOffset = window.pageYOffset;
+
     window.addEventListener("scroll", (event: any) => {
       // ignore if only scrolling horizontally
       if (window.pageYOffset === lastScrollYOffset) {
         return;
       }
       lastScrollYOffset = window.pageYOffset;
+
       if (this.state.ignoreNextScrollEvent) {
         this.setState({ ignoreNextScrollEvent: false });
         return;
@@ -270,6 +279,7 @@ class App extends React.Component<{}, IAppState> {
       const clockPosition =
         scrollEventFiredCount > 2 ? null : this.state.clockPosition;
 
+      // Reset everything if viewport too close to the top or bottom of the page.
       if (Math.abs(scrollFraction) > SCROLL_BOUNDARY_FRACTION) {
         this.updateTime({
           activateClockMode: false,
@@ -351,12 +361,17 @@ class App extends React.Component<{}, IAppState> {
       document.body.clientHeight / 2 - window.innerHeight / 2
     );
 
-    this.setState({
-      clockPosition: activateClockMode ? time : null,
-      ignoreNextScrollEvent: true,
-      t_0: time,
-      timeCursor: time,
-    });
+    this.setState(
+      {
+        clockPosition: activateClockMode ? time : null,
+        ignoreNextScrollEvent: true,
+        t_0: time,
+        timeCursor: time,
+      },
+      () => {
+        this.forceUpdate();
+      }
+    );
   };
 
   public addRange = () => {
@@ -389,6 +404,17 @@ class App extends React.Component<{}, IAppState> {
           minWidth: appWidth + DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
         }}
       >
+        <div
+          id="console"
+          style={{
+            background: "red",
+            color: "white",
+            left: 0,
+            position: "fixed",
+            top: 0,
+            zIndex: 10000,
+          }}
+        />
         <ContainerView innerRef={this.containerViewRef}>
           {this.state.timezones.map((timezone, i) => {
             return (
@@ -417,6 +443,8 @@ class App extends React.Component<{}, IAppState> {
               cancelWaypointDraft={this.cancelWaypointDraft}
               appWidth={appWidth}
               draftWaypoint={this.state.draftWaypoint}
+              timeCursor={this.state.timeCursor}
+              updateTime={this.updateTime}
               waypointNumber={this.getDraftWaypointNumber(
                 this.state.draftWaypoint,
                 this.state.ranges

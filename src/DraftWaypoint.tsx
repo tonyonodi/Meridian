@@ -89,6 +89,16 @@ interface IDraftWaypointComponent {
   cancelWaypointDraft: () => void;
   appWidth: number;
   draftWaypoint: { rangeId: string };
+  timeCursor: number;
+  updateTime: (
+    {
+      activateClockMode,
+      time,
+    }: {
+      activateClockMode?: boolean;
+      time: number;
+    }
+  ) => void;
   waypointNumber: number;
 }
 
@@ -158,6 +168,56 @@ export default class DraftWaypointComponent extends React.Component<
     this.parentElement = element;
   };
 
+  public handleFocus = () => {
+    const timeCursorOnFocus = this.props.timeCursor;
+    let scrollCount = 0;
+    let prevPageYOffset = window.pageYOffset;
+
+    const scrollListener = () => {
+      // ignore horizontal scrolling
+      if (window.pageYOffset === prevPageYOffset) {
+        return;
+      }
+      prevPageYOffset = window.pageYOffset;
+
+      scrollCount++;
+      if (scrollCount < 10) {
+        this.props.updateTime({ time: timeCursorOnFocus });
+      }
+    };
+
+    window.addEventListener("scroll", scrollListener);
+
+    window.setTimeout(() => {
+      window.removeEventListener("scroll", scrollListener);
+    }, 2000);
+  };
+
+  public handleBlur = () => {
+    const timeCursorOnBlur = this.props.timeCursor;
+    let scrollCount = 0;
+    let prevPageYOffset = window.pageYOffset;
+
+    const scrollListener = () => {
+      // ignore horizontal scrolling
+      if (window.pageYOffset === prevPageYOffset) {
+        return;
+      }
+      prevPageYOffset = window.pageYOffset;
+
+      scrollCount++;
+      if (scrollCount < 10) {
+        this.props.updateTime({ time: timeCursorOnBlur });
+      }
+    };
+
+    window.addEventListener("scroll", scrollListener);
+
+    window.setTimeout(() => {
+      window.removeEventListener("scroll", scrollListener);
+    }, 2000);
+  };
+
   public render() {
     const { appWidth } = this.props;
     const addWaypointText =
@@ -181,6 +241,8 @@ export default class DraftWaypointComponent extends React.Component<
               placeholder="Waypoint name (optional)"
               value={this.state.draftName}
               onChange={this.handleChange}
+              onFocus={this.handleFocus}
+              onBlur={this.handleBlur}
             />
           </form>
         </ParentView>
