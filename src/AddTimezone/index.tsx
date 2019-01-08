@@ -19,6 +19,7 @@ const ParentView = styled.div<IParentView>`
     show ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH}px;
   background: rgb(${({ bgColor }) => bgColor.join(", ")});
   cursor: default;
+  box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
 `;
 
 interface IInnerView {
