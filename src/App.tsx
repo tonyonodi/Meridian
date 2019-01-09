@@ -429,6 +429,8 @@ class App extends React.Component<{}, IAppState> {
             show={this.state.showAddTimezone}
             toggle={this.toggleAddTimezone}
             timezones={timezoneData}
+            timeCursor={this.state.timeCursor}
+            updateTime={this.updateTime}
           />
           {this.state.draftWaypoint && (
             <DraftWaypoint

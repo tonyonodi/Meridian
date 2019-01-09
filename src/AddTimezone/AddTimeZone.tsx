@@ -37,6 +37,16 @@ interface IAddTimeZoneProps {
   addTimezone: (timezone: ITimezone) => void;
   close: (state?: boolean) => void;
   timezones: ITimezone[];
+  timeCursor: number;
+  updateTime: (
+    {
+      activateClockMode,
+      time,
+    }: {
+      activateClockMode?: boolean;
+      time: number;
+    }
+  ) => void;
 }
 
 interface IAddTimeZoneState {
@@ -101,6 +111,7 @@ export default class AddTimeZone extends React.Component<
 
   public componentWillUnmount() {
     window.removeEventListener("keydown", this.handleKeyDown);
+    this.handleBlurOrUnmount();
   }
 
   public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
@@ -155,6 +166,51 @@ export default class AddTimeZone extends React.Component<
     this.props.close();
   };
 
+  public handleFocus = () => {
+    const timeCursorOnFocus = this.props.timeCursor;
+    let scrollCount = 0;
+    let prevPageYOffset = window.pageYOffset;
+
+    const scrollListener = () => {
+      // ignore horizontal scrolling
+      if (window.pageYOffset === prevPageYOffset) {
+        return;
+      }
+      prevPageYOffset = window.pageYOffset;
+
+      scrollCount++;
+      if (scrollCount < 10) {
+        this.props.updateTime({ time: timeCursorOnFocus });
+      } else {
+        window.removeEventListener("scroll", scrollListener);
+      }
+    };
+
+    const resizeListener = () => {
+      window.addEventListener("scroll", scrollListener);
+    };
+    window.addEventListener("resize", resizeListener);
+
+    window.setTimeout(() => {
+      window.removeEventListener("resize", resizeListener);
+      window.removeEventListener("scroll", scrollListener);
+    }, 2000);
+  };
+
+  public handleBlurOrUnmount = () => {
+    const timeCursorOnBlur = this.props.timeCursor;
+
+    const resizeListener = () => {
+      this.props.updateTime({ time: timeCursorOnBlur });
+      window.removeEventListener("resize", resizeListener);
+    };
+    window.addEventListener("resize", resizeListener);
+
+    window.setTimeout(() => {
+      window.removeEventListener("resize", resizeListener);
+    }, 2000);
+  };
+
   public render() {
     const { searchResults, searchValue } = this.state;
 
@@ -165,6 +221,8 @@ export default class AddTimeZone extends React.Component<
           onChange={this.handleChange}
           value={this.state.searchValue}
           innerRef={this.searchInputRef}
+          onFocus={this.handleFocus}
+          onBlur={this.handleBlurOrUnmount}
         />
         {searchValue ? (
           <SearchResults>

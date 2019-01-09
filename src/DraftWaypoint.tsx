@@ -183,6 +183,8 @@ export default class DraftWaypointComponent extends React.Component<
       scrollCount++;
       if (scrollCount < 10) {
         this.props.updateTime({ time: timeCursorOnFocus });
+      } else {
+        window.removeEventListener("scroll", scrollListener);
       }
     };
 
@@ -200,30 +202,15 @@ export default class DraftWaypointComponent extends React.Component<
 
   public handleBlur = () => {
     const timeCursorOnBlur = this.props.timeCursor;
-    let scrollCount = 0;
-    let prevPageYOffset = window.pageYOffset;
-
-    const scrollListener = () => {
-      // ignore horizontal scrolling
-      if (window.pageYOffset === prevPageYOffset) {
-        return;
-      }
-      prevPageYOffset = window.pageYOffset;
-
-      scrollCount++;
-      if (scrollCount < 10) {
-        this.props.updateTime({ time: timeCursorOnBlur });
-      }
-    };
 
     const resizeListener = () => {
-      window.addEventListener("scroll", scrollListener);
+      this.props.updateTime({ time: timeCursorOnBlur });
+      window.removeEventListener("resize", resizeListener);
     };
     window.addEventListener("resize", resizeListener);
 
     window.setTimeout(() => {
       window.removeEventListener("resize", resizeListener);
-      window.removeEventListener("scroll", scrollListener);
     }, 2000);
   };
 
