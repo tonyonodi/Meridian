@@ -7,7 +7,6 @@ import {
   DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
   DRAFT_WAYPOINT_ELEMENT_WIDTH,
 } from "./config";
-import mobileConsoleLog from "./lib/mobileConsoleLog";
 
 const ContainerDiv = styled.div`
   background: "red";
@@ -189,7 +188,6 @@ export default class DraftWaypointComponent extends React.Component<
 
     const resizeListener = () => {
       // if a resize happens within 2000ms we assume mobile keyboard has appeared
-      mobileConsoleLog(`resizing ${Math.random()}`);
       window.addEventListener("scroll", scrollListener);
     };
     window.addEventListener("resize", resizeListener);
