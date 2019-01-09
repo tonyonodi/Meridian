@@ -99,7 +99,7 @@ export default ({
       >
         Add Waypoint
       </MenuItem>
-      <MenuItem onClick={() => deleteRange(rangeId)}>Delete Range</MenuItem>
+      <MenuItem onClick={() => deleteRange(rangeId)}>Delete Duration</MenuItem>
     </MenuView>
   );
 };
