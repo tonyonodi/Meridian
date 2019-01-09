@@ -7,6 +7,7 @@ import {
   DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
   DRAFT_WAYPOINT_ELEMENT_WIDTH,
 } from "./config";
+import mobileConsoleLog from "./lib/mobileConsoleLog";
 
 const ContainerDiv = styled.div`
   background: "red";
@@ -186,10 +187,16 @@ export default class DraftWaypointComponent extends React.Component<
       }
     };
 
-    window.addEventListener("scroll", scrollListener);
+    const resizeListener = () => {
+      // if a resize happens within 2000ms we assume mobile keyboard has appeared
+      mobileConsoleLog(`resizing ${Math.random()}`);
+      window.addEventListener("scroll", scrollListener);
+    };
+    window.addEventListener("resize", resizeListener);
 
     window.setTimeout(() => {
       window.removeEventListener("scroll", scrollListener);
+      window.removeEventListener("resize", resizeListener);
     }, 2000);
   };
 
@@ -211,9 +218,13 @@ export default class DraftWaypointComponent extends React.Component<
       }
     };
 
-    window.addEventListener("scroll", scrollListener);
+    const resizeListener = () => {
+      window.addEventListener("scroll", scrollListener);
+    };
+    window.addEventListener("resize", resizeListener);
 
     window.setTimeout(() => {
+      window.removeEventListener("resize", resizeListener);
       window.removeEventListener("scroll", scrollListener);
     }, 2000);
   };

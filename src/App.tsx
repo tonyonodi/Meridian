@@ -25,13 +25,6 @@ import Toolbar from "./Toolbar";
 
 const { DateTime } = luxon;
 
-// const setMobileConsole = (...messages: string[]) => {
-//   const cons = document.querySelector("#console");
-//   if (cons) {
-//     cons.innerHTML = messages.join("<br/>");
-//   }
-// };
-
 const ContainerView = styled.div`
   position: relative;
   display: flex;
