@@ -300,6 +300,8 @@ class App extends React.Component<{}, IAppState> {
         }
       }
     }, 100);
+
+    this.updateTime({ activateClockMode: true, time: this.state.timeCursor });
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
