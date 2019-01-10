@@ -3,25 +3,63 @@
 import * as fuzzysort from "fuzzysort";
 import * as React from "react";
 import styled from "styled-components";
+import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
 import SearchResult from "./SearchResult";
 
+interface IParentView {
+  bgColor: [number, number, number];
+}
+
+const Close = styled.button`
+  width: 40px;
+  color: white;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  &:focus {
+    outline: none;
+  }
+  &:focus svg {
+    filter: drop-shadow(4px 4px 0px rgba(0, 0, 0, 0.3));
+    transform: translateY(-4px);
+    transition: transform 1s;
+  }
+`;
+
+const ParentView = styled.div<IParentView>`
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  background: rgb(${({ bgColor }) => bgColor.join(", ")});
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+`;
+
 const SearchForm = styled.form`
-  width: 90%;
-  height: 90vh;
   display: flex;
   flex-direction: column;
+  width: 80%;
+  height: 80vh;
 `;
 
 const SearchInput = styled.input`
   background: none;
   border: none;
   width: 100%;
-  border-bottom: solid 2px white;
+  border-bottom: solid 1px #d2d2d2;
   font-size: 2rem;
   color: white;
   &:focus {
     outline: none;
+    border-bottom: solid 3px white;
   }
 `;
 
@@ -31,10 +69,12 @@ const SearchResults = styled.ul`
   margin: 0;
   overflow: auto;
   text-align: left;
+  color: white;
 `;
 
 interface IAddTimeZoneProps {
   addTimezone: (timezone: ITimezone) => void;
+  bgColor: [number, number, number];
   close: (state?: boolean) => void;
   timezones: ITimezone[];
   timeCursor: number;
@@ -93,7 +133,9 @@ export default class AddTimeZone extends React.Component<
   public searchInputRef = (el: any) => (this.searchInput = el);
 
   public componentDidMount() {
-    this.searchInput.focus();
+    setTimeout(() => {
+      this.searchInput.focus();
+    }, 0);
     window.addEventListener("keydown", this.handleKeyDown);
     window.scrollTo(document.body.clientWidth, window.scrollY);
   }
@@ -107,11 +149,6 @@ export default class AddTimeZone extends React.Component<
       this.state.searchValue
     );
     this.setState({ searchResults });
-  }
-
-  public componentWillUnmount() {
-    window.removeEventListener("keydown", this.handleKeyDown);
-    this.handleBlurOrUnmount();
   }
 
   public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
@@ -197,45 +234,40 @@ export default class AddTimeZone extends React.Component<
     }, 2000);
   };
 
-  public handleBlurOrUnmount = () => {
-    const timeCursorOnBlur = this.props.timeCursor;
-
-    const resizeListener = () => {
-      this.props.updateTime({ time: timeCursorOnBlur });
-      window.removeEventListener("resize", resizeListener);
-    };
-    window.addEventListener("resize", resizeListener);
-
-    window.setTimeout(() => {
-      window.removeEventListener("resize", resizeListener);
-    }, 2000);
+  public closeModal = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    this.props.close();
   };
 
   public render() {
     const { searchResults, searchValue } = this.state;
 
     return (
-      <SearchForm onSubmit={this.handleSubmit}>
-        <SearchInput
-          type="text"
-          onChange={this.handleChange}
-          value={this.state.searchValue}
-          innerRef={this.searchInputRef}
-          onFocus={this.handleFocus}
-          onBlur={this.handleBlurOrUnmount}
-        />
-        {searchValue ? (
-          <SearchResults>
-            {searchResults.map((timezone, index) => (
-              <SearchResult
-                active={index === this.state.cursor}
-                timezone={timezone}
-                handleClick={this.handleResultClick(timezone)}
-              />
-            ))}
-          </SearchResults>
-        ) : null}
-      </SearchForm>
+      <ParentView bgColor={this.props.bgColor}>
+        <Close onClick={this.closeModal}>
+          <Icon type={IconTypes.Times} />
+        </Close>
+        <SearchForm onSubmit={this.handleSubmit}>
+          <SearchInput
+            type="text"
+            onChange={this.handleChange}
+            value={this.state.searchValue}
+            innerRef={this.searchInputRef}
+            onFocus={this.handleFocus}
+          />
+          {searchValue ? (
+            <SearchResults>
+              {searchResults.map((timezone, index) => (
+                <SearchResult
+                  active={index === this.state.cursor}
+                  timezone={timezone}
+                  handleClick={this.handleResultClick(timezone)}
+                />
+              ))}
+            </SearchResults>
+          ) : null}
+        </SearchForm>
+      </ParentView>
     );
   }
 }

@@ -3,10 +3,8 @@ import * as React from "react";
 import styled from "styled-components";
 import { ADD_TIMEZONE_FORM_WIDTH, PARENT_VIEW_WIDTH } from "../config";
 import ITimezone from "../ITimezone";
+import Modal from "../Modal";
 import AddTimeZone from "./AddTimeZone";
-
-
-
 
 interface IParentView {
   show: boolean;
@@ -65,12 +63,10 @@ export default class AddTimeZoneButton extends React.Component<
 
   public componentDidMount() {
     window.addEventListener("keypress", this.handleKeypress);
-    window.addEventListener("mousedown", this.handleMouseDown);
   }
 
   public componentWillUnmount() {
     window.removeEventListener("keypress", this.handleKeypress);
-    window.removeEventListener("mousedown", this.handleMouseDown);
   }
 
   public handleKeypress = (event: any) => {
@@ -90,18 +86,6 @@ export default class AddTimeZoneButton extends React.Component<
     this.props.toggle(true);
   };
 
-  public handleMouseDown = (event: Event) => {
-    const clickedElement = event.target;
-
-    if (
-      clickedElement instanceof Element &&
-      clickedElement !== this.parentElement &&
-      !this.parentElement.contains(clickedElement)
-    ) {
-      this.props.toggle(false);
-    }
-  };
-
   public refMethod = (element: HTMLElement) => {
     this.parentElement = element;
   };
@@ -118,13 +102,16 @@ export default class AddTimeZoneButton extends React.Component<
       >
         <InnerView show={show}>
           {show ? (
-            <AddTimeZone
-              addTimezone={addTimezone}
-              close={toggle}
-              timeCursor={this.props.timeCursor}
-              timezones={timezones}
-              updateTime={this.props.updateTime}
-            />
+            <Modal>
+              <AddTimeZone
+                addTimezone={addTimezone}
+                bgColor={color}
+                close={toggle}
+                timeCursor={this.props.timeCursor}
+                timezones={timezones}
+                updateTime={this.props.updateTime}
+              />
+            </Modal>
           ) : (
             <b>Add Timezone</b>
           )}
