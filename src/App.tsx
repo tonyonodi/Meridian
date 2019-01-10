@@ -396,6 +396,9 @@ class App extends React.Component<{}, IAppState> {
       <div
         className="App"
         style={{
+          background: `url(/bg_${
+            timezones.length >= 5 ? 5 : timezones.length + 1
+          }_column.svg) repeat-y left top fixed`,
           minWidth: appWidth + DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
         }}
       >
