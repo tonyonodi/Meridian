@@ -123,6 +123,12 @@ const CloseButton = styled.button`
   border: none;
   color: white;
   padding: 0;
+  &:focus {
+    outline: none;
+  }
+  &:focus svg {
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.3));
+  }
 `;
 
 enum TimeChange {
