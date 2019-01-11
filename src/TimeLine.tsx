@@ -19,7 +19,7 @@ const ParentView = styled.div<IParentView>`
   color: white;
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
-  background: rgb(${({ bgColor }) => bgColor.join(", ")});
+  // background: rgb($ {({ bgColor }) => bgColor.join(", ")});
   z-index: ${({ index }) => index};
   box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
   user-select: none;

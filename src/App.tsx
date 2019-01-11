@@ -244,8 +244,22 @@ class App extends React.Component<{}, IAppState> {
 
     let scrollEventFiredCount = 0;
     let lastScrollYOffset = window.pageYOffset;
+    let lastScrollXOffset = window.pageXOffset;
 
     window.addEventListener("scroll", (event: any) => {
+      if (window.pageXOffset !== lastScrollXOffset) {
+        const appElement = (document.querySelector(".App") as HTMLElement);
+        if (
+          appElement &&
+          appElement.style &&
+          appElement.style.backgroundPosition
+        ) {
+          appElement.style.backgroundPosition = `${-window.pageXOffset}px`;
+        }
+
+        lastScrollXOffset = window.pageXOffset;
+      }
+
       // ignore if only scrolling horizontally
       if (window.pageYOffset === lastScrollYOffset) {
         return;
