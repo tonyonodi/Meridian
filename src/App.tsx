@@ -22,6 +22,7 @@ import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./TimeLine";
 import Toolbar from "./Toolbar";
+import Year from "./Year";
 
 const { DateTime } = luxon;
 
@@ -483,6 +484,7 @@ class App extends React.Component<{}, IAppState> {
           updateTime={this.updateTime}
           addWaypointDraft={this.addWaypointDraft}
         />
+        <Year timeCursor={timeCursor} />
       </div>
     );
   }
