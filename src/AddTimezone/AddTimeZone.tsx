@@ -137,7 +137,6 @@ export default class AddTimeZone extends React.Component<
       this.searchInput.focus();
     }, 0);
     window.addEventListener("keydown", this.handleKeyDown);
-    window.scrollTo(document.body.clientWidth, window.scrollY);
   }
 
   public componentDidUpdate(prevProps: any, prevState: any) {
