@@ -51,6 +51,7 @@ interface IAppState {
     rangeId: string;
   } | null;
   ignoreNextScrollEvent: boolean;
+  pageXOffset: number;
   showAddTimezone: boolean;
   t_0: number;
   timeCursor: number;
@@ -77,6 +78,7 @@ class App extends React.Component<{}, IAppState> {
       clockPosition: new Date().getTime(),
       draftWaypoint: null,
       ignoreNextScrollEvent: false,
+      pageXOffset: window.pageXOffset,
       ranges,
       showAddTimezone: false,
       t_0: new Date().getTime(),
@@ -248,15 +250,7 @@ class App extends React.Component<{}, IAppState> {
 
     window.addEventListener("scroll", (event: any) => {
       if (window.pageXOffset !== lastScrollXOffset) {
-        const appElement = (document.querySelector(".App") as HTMLElement);
-        if (
-          appElement &&
-          appElement.style &&
-          appElement.style.backgroundPosition
-        ) {
-          appElement.style.backgroundPosition = `${-window.pageXOffset}px`;
-        }
-
+        this.setState({ pageXOffset: window.pageXOffset });
         lastScrollXOffset = window.pageXOffset;
       }
 
@@ -402,7 +396,13 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public render() {
-    const { timeCursor, t_0, timezones, showAddTimezone } = this.state;
+    const {
+      pageXOffset,
+      timeCursor,
+      t_0,
+      timezones,
+      showAddTimezone,
+    } = this.state;
     const appWidth =
       timezones.length * PARENT_VIEW_WIDTH +
       (showAddTimezone ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH);
@@ -410,9 +410,6 @@ class App extends React.Component<{}, IAppState> {
       <div
         className="App"
         style={{
-          background: `url(/bg_${
-            timezones.length >= 5 ? 5 : timezones.length + 1
-          }_column.svg) repeat-y left top fixed`,
           minWidth: appWidth + DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
         }}
       >
@@ -437,14 +434,18 @@ class App extends React.Component<{}, IAppState> {
                 timezone={timezone}
                 updateTime={this.updateTime}
                 color={PALETTE[i % PALETTE.length]}
-                index={timezones.length - i}
+                index={i}
+                zIndex={timezones.length - i}
                 remove={this.removeTimeline(timezone.timezone)}
+                pageXOffset={pageXOffset}
               />
             );
           })}
           <AddTimezone
             addTimezone={this.addTimezone}
             color={PALETTE[timezones.length % PALETTE.length]}
+            index={this.state.timezones.length}
+            pageXOffset={pageXOffset}
             show={this.state.showAddTimezone}
             toggle={this.toggleAddTimezone}
             timezones={timezoneData}

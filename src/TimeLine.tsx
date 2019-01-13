@@ -13,16 +13,28 @@ const { DateTime } = luxon;
 interface IParentView {
   bgColor: [number, number, number];
   index: number;
+  pageXOffset: number;
+  zIndex: number;
 }
 
 const ParentView = styled.div<IParentView>`
   color: white;
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
-  // background: rgb($ {({ bgColor }) => bgColor.join(", ")});
-  z-index: ${({ index }) => index};
-  box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
+  z-index: ${({ zIndex }) => zIndex};
+  
   user-select: none;
+  &:after {
+    content: "";
+    display: block;
+    position: sticky;
+    background: rgb(${({ bgColor }) => bgColor.join(", ")});
+    width: ${PARENT_VIEW_WIDTH}px;
+    height: 100vh;
+    top: 0;
+    z-index: -1;
+    box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 interface ICursorContainer {
@@ -163,6 +175,7 @@ const getStartOfDay = (time: number, offset: number, timezone: string) => {
 
 interface ITimeLineProps {
   index: number;
+  pageXOffset: number;
   t_0: number;
   timeCursor: number;
   timezone: ITimezone;
@@ -171,6 +184,7 @@ interface ITimeLineProps {
   ) => void;
   color: [number, number, number];
   remove: () => void;
+  zIndex: number;
 }
 
 export default class TimeLine extends React.Component<ITimeLineProps> {
@@ -208,7 +222,15 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
   };
 
   public render() {
-    const { t_0, timeCursor, timezone, color, index, remove } = this.props;
+    const {
+      t_0,
+      timeCursor,
+      timezone,
+      color,
+      index,
+      remove,
+      zIndex,
+    } = this.props;
     const titleText = timezone.city;
     const colorString = color.join(", ");
 
@@ -217,7 +239,12 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
     const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone.timezone);
 
     return (
-      <ParentView bgColor={color} index={index}>
+      <ParentView
+        bgColor={color}
+        pageXOffset={pageXOffset}
+        index={index}
+        zIndex={zIndex}
+      >
         <TitleBar>
           <Title>
             {titleText}

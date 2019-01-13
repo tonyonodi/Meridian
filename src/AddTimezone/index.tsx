@@ -9,15 +9,26 @@ import AddTimeZone from "./AddTimeZone";
 interface IParentView {
   show: boolean;
   bgColor: [number, number, number];
+  index: number;
+  pageXOffset: number;
 }
 
 const ParentView = styled.div<IParentView>`
   position: relative;
   width: ${({ show }) =>
     show ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH}px;
-  background: rgb(${({ bgColor }) => bgColor.join(", ")});
   cursor: default;
-  box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
+  &:after {
+    content: "";
+    display: block;
+    position: sticky;
+    background: rgb(${({ bgColor }) => bgColor.join(", ")});
+    width: ${PARENT_VIEW_WIDTH}px;
+    height: 100vh;
+    top: 0;
+    z-index: -1;
+    box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
+  }
 `;
 
 interface IInnerView {
@@ -41,6 +52,8 @@ const InnerView = styled.div<IInnerView>`
 interface IAddTimeZoneButtonProps {
   addTimezone: (timezone: ITimezone) => void;
   color: [number, number, number];
+  index: number;
+  pageXOffset: number;
   show: boolean;
   timezones: ITimezone[];
   timeCursor: number;
@@ -91,7 +104,7 @@ export default class AddTimeZoneButton extends React.Component<
   };
 
   public render() {
-    const { addTimezone, timezones, color, show, toggle } = this.props;
+    const { addTimezone, index, pageXOffset, timezones, color, show, toggle } = this.props;
 
     return (
       <ParentView
@@ -99,6 +112,8 @@ export default class AddTimeZoneButton extends React.Component<
         show={show}
         bgColor={color}
         innerRef={this.refMethod}
+        index={index}
+        pageXOffset={pageXOffset}
       >
         <InnerView show={show}>
           {show ? (
