@@ -50,6 +50,7 @@ const CursorContainer = styled.div<ICursorContainer>`
   width: 100%;
   transform: translateY(-50%);
   background: rgb(${({ color }) => color});
+  z-index: 2;
   &:before {
     content: "";
     left: 0;
