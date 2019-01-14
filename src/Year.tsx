@@ -2,14 +2,14 @@ import * as React from "react";
 import styled from "styled-components";
 
 const ParentView = styled.div`
-  position: fixed;
-  top: 0;
-  right: 0;
-  padding-right: 5px;
-  padding-top: 5px;
-  font-size: 1.3rem;
-  font-weight: 100;
   color: white;
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  font-size: 2.1rem;
+  line-height: 1.8rem;
+  font-weight: bold;
+  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
 `;
 
 interface IComponentProps {
@@ -17,6 +17,7 @@ interface IComponentProps {
 }
 
 export default ({ timeCursor }: IComponentProps) => {
-  const year = new Date(timeCursor).getFullYear();
+  const year = new Date(timeCursor).getFullYear().toString();
+
   return <ParentView>{year}</ParentView>;
 };

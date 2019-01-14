@@ -28,6 +28,7 @@ const Button = styled.button`
     outline: 0;
   }
   svg {
+    /* Removed because it causes artefacting in iOS */
     /* filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.3)); */
   }
 `;
@@ -90,6 +91,7 @@ export default class Toolbar extends React.Component<
   };
 
   public render() {
+
     return (
       <ParentView className="toolbar">
         <Button onClick={this.activateClockMode}>
