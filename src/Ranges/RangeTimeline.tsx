@@ -15,7 +15,7 @@ const DurationText = styled.div`
   padding-top: 7px;
   & > div {
     position: sticky;
-    top: 0;
+    top: 30px;
     padding-left: 11px;
     padding-top: 5px;
     padding-bottom: 20px;

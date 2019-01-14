@@ -10,6 +10,7 @@ const ParentView = styled.div`
   line-height: 1.8rem;
   font-weight: bold;
   text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+  z-index: 10;
 `;
 
 interface IComponentProps {
