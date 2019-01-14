@@ -20,7 +20,7 @@ import ITimezone from "./ITimezone";
 import timezoneData from "./lib/timezonedata";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
-import TimeLine from "./TimeLine";
+import TimeLine from "./Timeline";
 import Toolbar from "./Toolbar";
 import Year from "./Year";
 
@@ -439,6 +439,7 @@ class App extends React.Component<{}, IAppState> {
                 zIndex={timezones.length - i}
                 remove={this.removeTimeline(timezone.timezone)}
                 pageXOffset={pageXOffset}
+                ranges={this.state.ranges}
               />
             );
           })}

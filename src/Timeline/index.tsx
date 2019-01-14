@@ -2,11 +2,13 @@
 import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
-import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "./config";
 import Day from "./Day";
-import Icon, { IconTypes } from "./Icon";
-import ITimezone from "./ITimezone";
-import { isAndroidChrome, isFirefox } from "./lib/browserInfo";
+import WaypointCursor from "./WaypointCursor";
+import Icon, { IconTypes } from "../Icon";
+import ITimezone from "../ITimezone";
+import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "../config";
+import { isAndroidChrome, isFirefox } from "../lib/browserInfo";
+import { IRange } from "../Ranges/IRange";
 
 const { DateTime } = luxon;
 
@@ -22,7 +24,7 @@ const ParentView = styled.div<IParentView>`
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
   z-index: ${({ zIndex }) => zIndex};
-  
+
   user-select: none;
   &:after {
     content: "";
@@ -183,6 +185,7 @@ interface ITimeLineProps {
     { activateClockMode, time }: { activateClockMode?: boolean; time: number }
   ) => void;
   color: [number, number, number];
+  ranges: IRange[];
   remove: () => void;
   zIndex: number;
 }
@@ -228,6 +231,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
       timezone,
       color,
       index,
+      ranges,
       remove,
       zIndex,
     } = this.props;
@@ -238,6 +242,10 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
     const startOfToday = getStartOfDay(timeCursor, 0, timezone.timezone);
     const startOfTomorrow = getStartOfDay(timeCursor, 1, timezone.timezone);
 
+    const waypoints = ranges.reduce((acc, range) => {
+      return [...acc, ...range.waypoints];
+    }, []);
+
     return (
       <ParentView
         bgColor={color}
@@ -245,6 +253,17 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
         index={index}
         zIndex={zIndex}
       >
+        <React.Fragment>
+          {waypoints.map(waypoint => (
+            <WaypointCursor
+              color={color}
+              key={waypoint.id}
+              t_0={t_0}
+              timezone={timezone}
+              {...waypoint}
+            />
+          ))}
+        </React.Fragment>
         <TitleBar>
           <Title>
             {titleText}

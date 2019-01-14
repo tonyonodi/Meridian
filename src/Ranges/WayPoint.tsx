@@ -39,7 +39,7 @@ const Marker = styled.div`
 
 const MarkerText = styled.div`
   white-space: nowrap;
-`
+`;
 
 const ParentView = styled.div`
   position: absolute;

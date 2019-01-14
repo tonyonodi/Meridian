@@ -6,7 +6,7 @@ import {
   TIMELINE_WIDTH,
   VIEWPORT_HEIGHT_IN_HOURS,
   WINDOW_HEIGHT_IN_MS,
-} from "./config";
+} from "../config";
 
 const DAY_HEIGHT = (100 * 24) / VIEWPORT_HEIGHT_IN_HOURS;
 
