@@ -10,7 +10,7 @@ const ParentView = styled.div`
   position: fixed;
   box-sizing: border-box;
   right: 0;
-  bottom: 0;
+  bottom: 40px;
   color: white;
   width: 60px;
   padding: 10px;

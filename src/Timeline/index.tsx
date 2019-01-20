@@ -286,7 +286,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           t_0={t_0}
           midnight={startOfYesterday.toMillis()}
           date={startOfYesterday.toFormat("dd")}
-          month={startOfYesterday.toFormat("MMM")}
+          day={startOfYesterday.toFormat("ccc")}
         />
         <Day
           color={color}
@@ -294,7 +294,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           t_0={t_0}
           midnight={startOfToday.toMillis()}
           date={startOfToday.toFormat("dd")}
-          month={startOfToday.toFormat("MMM")}
+          day={startOfToday.toFormat("ccc")}
         />
         <Day
           color={color}
@@ -302,7 +302,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           t_0={t_0}
           midnight={startOfTomorrow.toMillis()}
           date={startOfTomorrow.toFormat("dd")}
-          month={startOfTomorrow.toFormat("MMM")}
+          day={startOfTomorrow.toFormat("ccc")}
         />
         <ChangeTimeTarget
           changeType={TimeChange.Decrement}

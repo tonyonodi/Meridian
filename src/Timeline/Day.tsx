@@ -44,9 +44,10 @@ const Date = styled.div`
   font-size: 2em;
 `;
 
-const Month = styled.div`
+const Day = styled.div`
   text-transform: uppercase;
   font-weight: bold;
+  margin-top: -2px;
 `;
 
 const Markers = styled.ul`
@@ -89,11 +90,11 @@ interface IDayProps {
   time: number;
   midnight: number;
   date: string;
-  month: string;
+  day: string;
   color: [number, number, number];
 }
 
-export default ({ t_0, midnight, date, month, color }: IDayProps) => {
+export default ({ t_0, midnight, date, day, color }: IDayProps) => {
   const windowBottomMS = t_0 - WINDOW_HEIGHT_IN_MS / 2;
 
   const midnightBottomOffset = midnight - windowBottomMS;
@@ -117,7 +118,7 @@ export default ({ t_0, midnight, date, month, color }: IDayProps) => {
       </Markers>
       <Header color={colorString}>
         <Date>{date}</Date>
-        <Month>{month}</Month>
+        <Day>{day}</Day>
       </Header>
     </ParentView>
   );
