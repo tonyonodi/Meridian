@@ -7,6 +7,7 @@ interface ISearchResultView {
 }
 
 const SearchResultView = styled.li<ISearchResultView>`
+  font-size: 2rem;
   padding: 5px;
   background: ${({ active }) => (active ? "rgba(255, 255, 255, 0.3)" : "none")};
 `;

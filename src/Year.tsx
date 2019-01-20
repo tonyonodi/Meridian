@@ -9,7 +9,7 @@ const ParentView = styled.div`
   font-size: 2.1rem;
   line-height: 1.8rem;
   font-weight: bold;
-  text-shadow: 3px 3px 0px rgba(0, 0, 0, 0.5);
+  text-shadow: 2px 2px 2px rgba(0,0,0,0.5);
   z-index: 10;
 `;
 

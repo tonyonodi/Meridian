@@ -57,6 +57,7 @@ const SearchInput = styled.input`
   border-bottom: solid 1px #d2d2d2;
   font-size: 2rem;
   color: white;
+  padding: 5px;
   &:focus {
     outline: none;
     border-bottom: solid 3px white;

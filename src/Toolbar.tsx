@@ -91,14 +91,13 @@ export default class Toolbar extends React.Component<
   };
 
   public render() {
-
     return (
       <ParentView className="toolbar">
         <Button onClick={this.activateClockMode}>
           <Icon
             type={IconTypes.Clock}
             style={{
-              opacity: this.props.clockPosition !== null ? 1 : 0.25,
+              opacity: this.props.clockPosition !== null ? 0.25 : 1,
             }}
           />
         </Button>
