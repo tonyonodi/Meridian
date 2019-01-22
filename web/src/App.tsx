@@ -17,7 +17,6 @@ import {
 import AddTimezone from "./AddTimezone";
 import DraftWaypoint from "./DraftWaypoint";
 import ITimezone from "./ITimezone";
-import timezoneData from "./lib/timezonedata";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./Timeline";
@@ -450,7 +449,6 @@ class App extends React.Component<{}, IAppState> {
             pageXOffset={pageXOffset}
             show={this.state.showAddTimezone}
             toggle={this.toggleAddTimezone}
-            timezones={timezoneData}
             timeCursor={this.state.timeCursor}
             updateTime={this.updateTime}
           />

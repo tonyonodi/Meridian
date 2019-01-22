@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import ITimezone from "../ITimezone";
+import ISearchResult from "./ISearchResult";
 
 interface ISearchResultView {
   active: boolean;
@@ -12,22 +12,20 @@ const SearchResultView = styled.li<ISearchResultView>`
   background: ${({ active }) => (active ? "rgba(255, 255, 255, 0.3)" : "none")};
 `;
 
-interface ISearchResult {
+interface ISearchResultProps {
   active: boolean;
-  timezone: ITimezone;
+  searchResult: ISearchResult;
   handleClick: (event: React.MouseEvent<HTMLLIElement>) => void;
 }
 
-export default ({ active, timezone, handleClick }: ISearchResult) => {
+export default ({ active, handleClick, searchResult }: ISearchResultProps) => {
   return (
     <SearchResultView
-      key={timezone.timezone}
+      key={`${searchResult.niceName}_${searchResult.timezone}`}
       onClick={handleClick}
       active={active}
     >
-      {timezone.country
-        ? `${timezone.city}, ${timezone.country}`
-        : timezone.city}
+      {searchResult.niceName}
     </SearchResultView>
   );
 };

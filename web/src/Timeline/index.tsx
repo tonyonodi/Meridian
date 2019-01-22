@@ -236,7 +236,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
       remove,
       zIndex,
     } = this.props;
-    const titleText = timezone.city;
+    const titleText = timezone.niceName.split(",")[0];
     const colorString = color.join(", ");
 
     const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.timezone);

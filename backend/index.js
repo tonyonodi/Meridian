@@ -1,5 +1,6 @@
 const express = require("express");
 const fetch = require("node-fetch");
+const { flatten, uniqBy } = require("lodash");
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -34,7 +35,8 @@ const getCoordsFromIP = async ip => {
   const url = `${BASE_HOSTTIP_URL}/${ip}?access_key=${IPSTACK_API_KEY}&format=1`;
   const ipstackResponse = await fetch(url);
   const json = await ipstackResponse.json();
-  const coords = [json.latitude, json.longitude];
+  const coords =
+    json.latitude && json.longitude ? [json.latitude, json.longitude] : [0, 0];
 
   ipLocationsCache[ip] = coords;
 
@@ -64,12 +66,60 @@ app.get("/autosuggest/:string", async (req, res) => {
   const bingResponse = await fetch(url);
   const json = await bingResponse.json();
 
-  if (json.statusCode === 200) {
-    res.send(json.resourceSets[0].resources[0].value);
-    res.end();
+  if (json.statusCode !== 200) {
+    res.sendStatus(json.statusCode);
+    return;
   }
 
-  res.json(json);
+  const suggestions = json.resourceSets[0].resources[0].value;
+
+  const suggestionsWithTimezones = (await Promise.all(
+    suggestions
+      .filter(
+        suggestion => suggestion.address && suggestion.address.formattedAddress
+      )
+      .slice(0, 5)
+      .map(async suggestion => {
+        const { formattedAddress } = suggestion.address;
+
+        const url = `${BING_API_BASE_URL}/TimeZone/?query=${encodeURI(
+          formattedAddress
+        )}&key=${BING_MAP_API_KEY}`;
+
+        try {
+          const bingResponse = await fetch(url);
+          const responseJson = await bingResponse.json();
+
+          const location =
+            responseJson.resourceSets[0].resources[0].timeZoneAtLocation[0];
+          if (!location) return undefined;
+
+          const timezones = location.timeZone;
+
+          return timezones.map((timezone, _index, timezones) => {
+            const locationHasSingleTimezone = timezones.length === 1;
+
+            const niceName = locationHasSingleTimezone
+              ? formattedAddress
+              : `${timezone.genericName}, ${location.placeName}`;
+            return {
+              placeName: location.placeName,
+              formattedAddress,
+              timezone: timezone.ianaTimeZoneId,
+              genericName: timezone.genericName,
+              niceName,
+            };
+          });
+        } catch (e) {
+          return undefined;
+        }
+      })
+  )).filter(x => x);
+
+  const flattenedSuggestions = flatten(suggestionsWithTimezones);
+  const dedupedSuggestions = uniqBy(flattenedSuggestions, "niceName");
+
+  res.json(dedupedSuggestions);
   res.end();
 });
 

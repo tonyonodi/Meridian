@@ -4,7 +4,8 @@ import * as React from "react";
 import styled from "styled-components";
 import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
-// import SearchResult from "./SearchResult";
+import SearchResult from "./SearchResult";
+import ISearchResult from "./ISearchResult";
 
 interface IParentView {
   bgColor: [number, number, number];
@@ -64,6 +65,12 @@ const searchIconStyle = {
   bottom: 13,
 };
 
+const loadingIconStyle = {
+  position: "absolute",
+  width: 26,
+  bottom: 8,
+};
+
 const SearchInput = styled.input`
   background: none;
   border: none;
@@ -74,6 +81,7 @@ const SearchInput = styled.input`
   padding-left: 35px;
   color: white;
   margin-bottom: 2px;
+  box-sizing: border-box;
   &:focus {
     outline: none;
     border-bottom: solid 3px white;
@@ -93,7 +101,6 @@ interface IAddTimeZoneProps {
   addTimezone: (timezone: ITimezone) => void;
   bgColor: [number, number, number];
   close: (state?: boolean) => void;
-  timezones: ITimezone[];
   timeCursor: number;
   updateTime: (
     {
@@ -109,7 +116,9 @@ interface IAddTimeZoneProps {
 interface IAddTimeZoneState {
   searchValue: string;
   cursor: number;
-  searchResultsMap: { [searchValue: string]: string };
+  searchResultsMap: {
+    [searchValue: string]: ISearchResult[];
+  };
 }
 
 export default class AddTimeZone extends React.Component<
@@ -122,15 +131,6 @@ export default class AddTimeZone extends React.Component<
 
   public timezones: ITimezone[];
 
-  public constructor(props: IAddTimeZoneProps) {
-    super(props);
-
-    this.timezones = props.timezones.map(timezone => {
-      const { city, country } = timezone;
-      return { ...timezone, niceName: `${city}, ${country}` };
-    });
-  }
-
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       searchValue: event.target.value,
@@ -140,12 +140,10 @@ export default class AddTimeZone extends React.Component<
   public handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { searchResultsMap, searchValue } = this.state;
+    const searchResults = searchResultsMap[searchValue];
 
-    if (
-      searchResultsMap[searchValue] &&
-      searchResultsMap[searchValue].length > 0
-    ) {
-      this.props.addTimezone(searchResultsMap[this.state.cursor]);
+    if (searchResults && searchResults.length > 0) {
+      this.props.addTimezone(searchResults[this.state.cursor]);
     }
     this.props.close(false);
   };
@@ -191,20 +189,7 @@ export default class AddTimeZone extends React.Component<
     );
     const places = await response.json();
 
-    const addresses =
-      places instanceof Array
-        ? places.reduce((acc, place) => {
-            if (place.address && place.address.formattedAddress) {
-              return [...acc, place.address.formattedAddress];
-            } else if (place.name) {
-              return [...acc, place.name];
-            } else {
-              return acc;
-            }
-          }, [])
-        : [];
-
-    return addresses;
+    return places;
   };
 
   public handleKeyDown = (event: any) => {
@@ -215,10 +200,12 @@ export default class AddTimeZone extends React.Component<
         break;
       case "ArrowDown":
         event.preventDefault();
-        this.setState(({ cursor, searchResultsMap }) => {
-          // TODO: fix arrow down not working
+        this.setState(({ cursor, searchResultsMap, searchValue }) => {
+          const results = searchResultsMap[searchValue];
+          if (!results) return null;
+
           return {
-            cursor, // cursor >= searchResults.length - 1 ? cursor : cursor + 1,
+            cursor: cursor >= results.length - 1 ? cursor : cursor + 1,
           };
         });
         break;
@@ -277,6 +264,8 @@ export default class AddTimeZone extends React.Component<
 
   public render() {
     const { searchResultsMap, searchValue } = this.state;
+    const loadingResults =
+      searchValue.trim() !== "" && searchResultsMap[searchValue] === undefined;
     const searchResults = searchResultsMap[searchValue] || [];
 
     return (
@@ -287,7 +276,11 @@ export default class AddTimeZone extends React.Component<
         <SearchForm onSubmit={this.handleSubmit}>
           <Title>Search Places</Title>
           <SearchInputParent>
-            <Icon type={IconTypes.Search} style={searchIconStyle} />
+            {loadingResults ? (
+              <Icon type={IconTypes.LoadingSpinner} style={loadingIconStyle} />
+            ) : (
+              <Icon type={IconTypes.Search} style={searchIconStyle} />
+            )}
             <SearchInput
               type="text"
               onChange={this.handleChange}
@@ -298,14 +291,15 @@ export default class AddTimeZone extends React.Component<
           </SearchInputParent>
           {searchValue ? (
             <SearchResults>
-              {searchResults.map((timezone: string) => (
-                // <SearchResult
-                //   active={index === this.state.cursor}
-                //   timezone={timezone}
-                //   handleClick={this.handleResultClick(timezone)}
-                // />
-                <li>{timezone}</li>
-              ))}
+              {searchResults.map(
+                (searchResult: ISearchResult, index: number) => (
+                  <SearchResult
+                    active={this.state.cursor === index}
+                    searchResult={searchResult}
+                    handleClick={this.handleResultClick(searchResult)}
+                  />
+                )
+              )}
             </SearchResults>
           ) : null}
         </SearchForm>
