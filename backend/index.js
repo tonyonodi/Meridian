@@ -45,17 +45,6 @@ const getCoordsFromIP = async ip => {
 
 const getLocationFromReq = req => getCoordsFromIP(getIPFromReq(req));
 
-app.get("/timezone/:place", async (req, res) => {
-  const url = `${BING_API_BASE_URL}/TimeZone/?query=${
-    req.params.place
-  }&key=${BING_MAP_API_KEY}`;
-  const bingResponse = await fetch(url);
-  const json = await bingResponse.json();
-
-  res.json(json);
-  res.end();
-});
-
 app.get("/autosuggest/:string", async (req, res) => {
   const userCoords = await getLocationFromReq(req);
   const url = `${BING_API_BASE_URL}/Autosuggest?query=${
@@ -72,6 +61,7 @@ app.get("/autosuggest/:string", async (req, res) => {
   }
 
   const suggestions = json.resourceSets[0].resources[0].value;
+  console.log(suggestions);
 
   const suggestionsWithTimezones = (await Promise.all(
     suggestions
@@ -80,10 +70,10 @@ app.get("/autosuggest/:string", async (req, res) => {
       )
       .slice(0, 5)
       .map(async suggestion => {
-        const { formattedAddress } = suggestion.address;
+        const { formattedAddress, countryRegion } = suggestion.address;
 
         const url = `${BING_API_BASE_URL}/TimeZone/?query=${encodeURI(
-          formattedAddress
+          formattedAddress + (countryRegion ? ", " + countryRegion : "")
         )}&key=${BING_MAP_API_KEY}`;
 
         try {
@@ -108,6 +98,8 @@ app.get("/autosuggest/:string", async (req, res) => {
               timezone: timezone.ianaTimeZoneId,
               genericName: timezone.genericName,
               niceName,
+              fullSuggestion: suggestion,
+              fullTimezone: responseJson,
             };
           });
         } catch (e) {
@@ -120,6 +112,30 @@ app.get("/autosuggest/:string", async (req, res) => {
   const dedupedSuggestions = uniqBy(flattenedSuggestions, "niceName");
 
   res.json(dedupedSuggestions);
+  res.end();
+});
+
+app.get("/timezone/:place", async (req, res) => {
+  const url = `${BING_API_BASE_URL}/TimeZone/?query=${
+    req.params.place
+  }&key=${BING_MAP_API_KEY}`;
+  const bingResponse = await fetch(url);
+  const json = await bingResponse.json();
+
+  res.json(json);
+  res.end();
+});
+
+app.get("/my-timezone", async (req, res) => {
+  const location = await getLocationFromReq(req);
+  const url = `${BING_API_BASE_URL}/TimeZone/point=${encodeURI(
+    location.join(",")
+  )}?key=${BING_MAP_API_KEY}`;
+
+  const bingResponse = await fetch(url);
+  const json = await bingResponse.json();
+
+  res.send({ ...json, estimatedLocation: location });
   res.end();
 });
 

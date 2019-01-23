@@ -16,7 +16,7 @@ import {
 
 import AddTimezone from "./AddTimezone";
 import DraftWaypoint from "./DraftWaypoint";
-import ITimezone from "./ITimezone";
+import ITimezone, { isITimezone } from "./ITimezone";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./Timeline";
@@ -37,11 +37,13 @@ const defaultTimezones = [
     city: "London",
     country: "United Kingdom",
     timezone: "Europe/London",
+    niceName: "London"
   },
   {
     city: "Bangkok",
     country: "Thailand",
     timezone: "Asia/Bangkok",
+    niceName: "Bangkok",
   },
 ];
 
@@ -67,8 +69,11 @@ class App extends React.Component<{}, IAppState> {
     const timezonesString = window.localStorage.getItem(
       "__timezonesapp.timezones"
     );
-    const timezones =
-      typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
+    const timezonesObject =
+      timezonesString === "string" ? JSON.parse(timezonesString) : null;
+    const timezones = Array.isArray(timezonesObject)
+      ? timezonesObject.filter(timezone => isITimezone(timezone))
+      : null;
 
     const rangesString = window.localStorage.getItem("__timezonesapp.ranges");
     const ranges =
@@ -425,7 +430,7 @@ class App extends React.Component<{}, IAppState> {
           }}
         />
         <ContainerView innerRef={this.containerViewRef}>
-          {this.state.timezones.map((timezone, i) => {
+          {timezones.map((timezone, i) => {
             return (
               <TimeLine
                 key={timezone.timezone}

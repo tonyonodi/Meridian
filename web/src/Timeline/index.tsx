@@ -124,13 +124,40 @@ const TitleBar = styled.div`
 `;
 
 const Title = styled.h1`
-  transform: rotate(90deg);
+  transform: translate(0, -36px) rotate(90deg);
   transform-origin: left bottom 0;
   width: 100vh;
-  margin-left: ${TIMELINE_WIDTH - 7}px;
+  margin-left: ${TIMELINE_WIDTH - 14}px;
   font-size: 1.8em;
   text-transform: uppercase;
   z-index: 100;
+`;
+
+interface ITitleText {
+  bgColor: [number, number, number];
+}
+
+const TitleText = styled.span<ITitleText>`
+  display: inline-block;
+  max-width: 270px;
+  white-space: nowrap;
+  overflow-x: hidden;
+  position: relative;
+  padding-right: 20px;
+  &:after {
+    content: "";
+    display: inline-block;
+    height: 86%;
+    width: 20px;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    background-image: linear-gradient(
+      to right,
+      rgba(${({ bgColor }) => bgColor.join(", ")}, 0),
+      rgba(${({ bgColor }) => bgColor.join(", ")}, 1)
+    );
+  }
 `;
 
 const CloseButton = styled.button`
@@ -138,6 +165,7 @@ const CloseButton = styled.button`
   border: none;
   color: white;
   padding: 0;
+  margin-bottom: 4px;
   &:focus {
     outline: none;
   }
@@ -267,13 +295,13 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
         </React.Fragment>
         <TitleBar>
           <Title>
-            {titleText}
+            <TitleText bgColor={color}>{titleText}</TitleText>
             <CloseButton onClick={remove}>
               <Icon
                 style={{
-                  height: "27px",
-                  marginBottom: "-2px",
-                  marginLeft: "10px",
+                  height: 30,
+                  marginBottom: 2,
+                  marginLeft: 10,
                 }}
                 type={IconTypes.Times}
               />
