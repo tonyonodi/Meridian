@@ -37,7 +37,7 @@ const defaultTimezones = [
     city: "London",
     country: "United Kingdom",
     timezone: "Europe/London",
-    niceName: "London"
+    niceName: "London",
   },
   {
     city: "Bangkok",
@@ -70,7 +70,7 @@ class App extends React.Component<{}, IAppState> {
       "__timezonesapp.timezones"
     );
     const timezonesObject =
-      timezonesString === "string" ? JSON.parse(timezonesString) : null;
+      typeof timezonesString === "string" ? JSON.parse(timezonesString) : null;
     const timezones = Array.isArray(timezonesObject)
       ? timezonesObject.filter(timezone => isITimezone(timezone))
       : null;

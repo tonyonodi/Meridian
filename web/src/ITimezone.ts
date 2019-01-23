@@ -5,7 +5,7 @@ export default interface ITimezone {
 
 export function isITimezone(obj: any): obj is ITimezone {
   return (
-    (obj as ITimezone).niceName !== undefined &&
-    (obj as ITimezone).timezone !== undefined
+    typeof (obj as ITimezone).niceName === "string" &&
+    typeof (obj as ITimezone).timezone === "string"
   );
 }
