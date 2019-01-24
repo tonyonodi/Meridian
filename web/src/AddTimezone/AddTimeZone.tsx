@@ -2,6 +2,7 @@
 // tslint:disable:jsx-no-lambda
 import * as React from "react";
 import styled from "styled-components";
+import { debounce } from "lodash";
 import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
 import SearchResult from "./SearchResult";
@@ -131,6 +132,22 @@ export default class AddTimeZone extends React.Component<
 
   public timezones: ITimezone[];
 
+  public searchAndUpdateResults = debounce(async (searchValue: string) => {
+    const response = await fetch(
+      `https://meridian-backend.now.sh/autosuggest/${searchValue}`
+    );
+    const places = await response.json();
+
+    this.setState(previousState => {
+      return {
+        searchResultsMap: {
+          ...previousState.searchResultsMap,
+          [searchValue]: places,
+        },
+      };
+    });
+  }, 500);
+
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       searchValue: event.target.value,
@@ -171,26 +188,8 @@ export default class AddTimeZone extends React.Component<
       return;
     }
 
-    const currentSearchResults = await this.filterTimezones(searchValue);
-
-    this.setState(previousState => {
-      return {
-        searchResultsMap: {
-          ...previousState.searchResultsMap,
-          [searchValue]: currentSearchResults,
-        },
-      };
-    });
+    this.searchAndUpdateResults(searchValue);
   }
-
-  public filterTimezones = async (searchValue: string) => {
-    const response = await fetch(
-      `https://meridian-backend.now.sh/autosuggest/${searchValue}`
-    );
-    const places = await response.json();
-
-    return places;
-  };
 
   public handleKeyDown = (event: any) => {
     const { key } = event;
