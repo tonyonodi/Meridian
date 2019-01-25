@@ -199,7 +199,9 @@ export default class AddTimeZone extends React.Component<
 
   public componentDidMount() {
     setTimeout(() => {
-      this.searchInput.focus();
+      if (this.searchInput && this.searchInput.focus) {
+        this.searchInput.focus();
+      }
     }, 0);
     window.addEventListener("keydown", this.handleKeyDown);
   }
