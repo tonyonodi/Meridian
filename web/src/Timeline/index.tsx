@@ -6,8 +6,8 @@ import Day from "./Day";
 import WaypointCursor from "./WaypointCursor";
 import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
-import { PARENT_VIEW_WIDTH, TIMELINE_WIDTH } from "../config";
-import { isAndroidChrome, isFirefox } from "../lib/browserInfo";
+import { PARENT_VIEW_WIDTH } from "../config";
+import { isAndroidChrome, isFirefox, isChrome } from "../lib/browserInfo";
 import { IRange } from "../Ranges/IRange";
 
 const { DateTime } = luxon;
@@ -119,18 +119,31 @@ const Cursor = styled.input`
 const TitleBar = styled.div`
   position: sticky;
   right: 0;
-  top: 0;
+  top: -15px;
   z-index: 20;
 `;
 
+const TitleContainer = styled.div`
+  width: ${() => {
+    if (isChrome) {
+      return 34;
+    }
+    if (isFirefox) {
+      return 37;
+    }
+    return 36;
+  }}px;
+  position: absolute;
+  right: 0;
+`;
+
 const Title = styled.h1`
+  font-size: 1.8em;
+  z-index: 100;
   transform: translate(0, -36px) rotate(90deg);
   transform-origin: left bottom 0;
   width: 100vh;
-  margin-left: ${TIMELINE_WIDTH - 14}px;
-  font-size: 1.8em;
-  text-transform: uppercase;
-  z-index: 100;
+  display: flex;
 `;
 
 interface ITitleText {
@@ -144,6 +157,8 @@ const TitleText = styled.span<ITitleText>`
   overflow-x: hidden;
   position: relative;
   padding-right: 20px;
+  overflow: hidden;
+  text-transform: uppercase;
   &:after {
     content: "";
     display: inline-block;
@@ -294,19 +309,20 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
           ))}
         </React.Fragment>
         <TitleBar>
-          <Title>
-            <TitleText bgColor={color}>{titleText}</TitleText>
-            <CloseButton onClick={remove}>
-              <Icon
-                style={{
-                  height: 30,
-                  marginBottom: 2,
-                  marginLeft: 10,
-                }}
-                type={IconTypes.Times}
-              />
-            </CloseButton>
-          </Title>
+          <TitleContainer>
+            <Title>
+              <TitleText bgColor={color}>{titleText}</TitleText>
+              <CloseButton onClick={remove}>
+                <Icon
+                  style={{
+                    height: 30,
+                    marginBottom: 2,
+                  }}
+                  type={IconTypes.Times}
+                />
+              </CloseButton>
+            </Title>
+          </TitleContainer>
         </TitleBar>
         <Day
           color={color}

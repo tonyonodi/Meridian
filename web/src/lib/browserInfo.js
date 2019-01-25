@@ -7,6 +7,8 @@ const userAgentIncludes = (...testStrings) => {
   );
 };
 
+export const isChrome = userAgentIncludes("chrome");
+
 export const isAndroidChrome = userAgentIncludes("android", "chrome");
 
 export const isFirefox = userAgentIncludes("firefox");
