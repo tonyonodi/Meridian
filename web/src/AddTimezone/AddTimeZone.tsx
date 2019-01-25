@@ -116,13 +116,19 @@ interface IAddTimeZoneProps {
   ) => void;
 }
 
-type AutosuggestResponseError = "autosuggest-response-error";
+interface IAutosuggestResponseError {
+  kind: "error";
+  results: ISearchResult[];
+}
 
-type AutosuggestResponseSuccess = ISearchResult[];
+interface IAutosuggestResponseSuccess {
+  kind: "success";
+  results: ISearchResult[];
+}
 
 type AutosuggestResponse =
-  | AutosuggestResponseError
-  | AutosuggestResponseSuccess;
+  | IAutosuggestResponseError
+  | IAutosuggestResponseSuccess;
 
 interface IAddTimeZoneState {
   searchValue: string;
@@ -156,11 +162,18 @@ export default class AddTimeZone extends React.Component<
       places = await response.json();
     } catch (error) {
       console.error(error);
+      const offlineResults = this.filterTimezones(
+        this.props.timezones,
+        searchValue
+      );
       this.setState(previousState => {
         return {
           searchResultsMap: {
             ...previousState.searchResultsMap,
-            [searchValue]: "autosuggest-response-error",
+            [searchValue]: {
+              kind: "error",
+              results: offlineResults,
+            } as IAutosuggestResponseError,
           },
         };
       });
@@ -172,7 +185,10 @@ export default class AddTimeZone extends React.Component<
       return {
         searchResultsMap: {
           ...previousState.searchResultsMap,
-          [searchValue]: places,
+          [searchValue]: {
+            kind: "success",
+            results: places,
+          } as IAutosuggestResponseSuccess,
         },
       };
     });
@@ -187,7 +203,8 @@ export default class AddTimeZone extends React.Component<
   public handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { searchResultsMap, searchValue } = this.state;
-    const searchResults = searchResultsMap[searchValue];
+    const searchResults =
+      searchResultsMap[searchValue] && searchResultsMap[searchValue].results;
 
     if (searchResults && searchResults.length > 0) {
       this.props.addTimezone(searchResults[this.state.cursor]);
@@ -253,7 +270,7 @@ export default class AddTimeZone extends React.Component<
           if (!results) return null;
 
           return {
-            cursor: cursor >= results.length - 1 ? cursor : cursor + 1,
+            cursor: cursor >= results.results.length - 1 ? cursor : cursor + 1,
           };
         });
         break;
@@ -338,38 +355,20 @@ export default class AddTimeZone extends React.Component<
             />
           </SearchInputParent>
           {(() => {
-            console.log(searchResults);
             if (searchResults === undefined) {
               return null;
-            } else if (searchResults === "autosuggest-response-error") {
-              const results = this.filterTimezones(
-                this.props.timezones,
-                searchValue
-              );
+            }
 
-              return (
-                <React.Fragment>
+            return (
+              <React.Fragment>
+                {searchResults.kind === "error" ? (
                   <p>
                     Unable to retrieve timezones. Showing limited offline
                     results.
                   </p>
-                  <SearchResults>
-                    {results.map(
-                      (searchResult: ISearchResult, index: number) => (
-                        <SearchResult
-                          active={this.state.cursor === index}
-                          searchResult={searchResult}
-                          handleClick={this.handleResultClick(searchResult)}
-                        />
-                      )
-                    )}
-                  </SearchResults>
-                </React.Fragment>
-              );
-            } else {
-              return (
+                ) : null}
                 <SearchResults>
-                  {searchResults.map(
+                  {searchResults.results.map(
                     (searchResult: ISearchResult, index: number) => (
                       <SearchResult
                         active={this.state.cursor === index}
@@ -379,8 +378,8 @@ export default class AddTimeZone extends React.Component<
                     )
                   )}
                 </SearchResults>
-              );
-            }
+              </React.Fragment>
+            );
           })()}
         </SearchForm>
       </ParentView>
