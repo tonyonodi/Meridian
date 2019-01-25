@@ -261,7 +261,7 @@ export default class AddTimeZone extends React.Component<
     const { key } = event;
     switch (key) {
       case "Escape":
-        this.props.close();
+        this.props.close(false);
         break;
       case "ArrowDown":
         event.preventDefault();
