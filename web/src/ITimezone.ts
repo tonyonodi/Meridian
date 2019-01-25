@@ -1,4 +1,6 @@
 export default interface ITimezone {
+  city?: string;
+  country?: string;
   timezone: string;
   niceName: string;
 }

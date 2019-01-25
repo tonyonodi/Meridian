@@ -22,6 +22,9 @@ import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./Timeline";
 import Toolbar from "./Toolbar";
 import Year from "./Year";
+import _timezoneData from "./lib/timezoneData";
+
+const timezoneData: ITimezone[] = _timezoneData
 
 const { DateTime } = luxon;
 
@@ -456,6 +459,7 @@ class App extends React.Component<{}, IAppState> {
             toggle={this.toggleAddTimezone}
             timeCursor={this.state.timeCursor}
             updateTime={this.updateTime}
+            timezones={timezoneData}
           />
           {this.state.draftWaypoint && (
             <DraftWaypoint

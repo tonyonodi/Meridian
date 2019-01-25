@@ -56,6 +56,7 @@ interface IAddTimeZoneButtonProps {
   pageXOffset: number;
   show: boolean;
   timeCursor: number;
+  timezones: ITimezone[];
   toggle: (state?: boolean) => void;
   updateTime: (
     {
@@ -122,6 +123,7 @@ export default class AddTimeZoneButton extends React.Component<
                 bgColor={color}
                 close={toggle}
                 timeCursor={this.props.timeCursor}
+                timezones={this.props.timezones}
                 updateTime={this.props.updateTime}
               />
             </Modal>

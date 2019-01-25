@@ -3,6 +3,7 @@
 import * as React from "react";
 import styled from "styled-components";
 import { debounce } from "lodash";
+import * as fuzzysort from "fuzzysort";
 import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
 import SearchResult from "./SearchResult";
@@ -103,6 +104,7 @@ interface IAddTimeZoneProps {
   bgColor: [number, number, number];
   close: (state?: boolean) => void;
   timeCursor: number;
+  timezones: ITimezone[];
   updateTime: (
     {
       activateClockMode,
@@ -114,11 +116,19 @@ interface IAddTimeZoneProps {
   ) => void;
 }
 
+type AutosuggestResponseError = "autosuggest-response-error";
+
+type AutosuggestResponseSuccess = ISearchResult[];
+
+type AutosuggestResponse =
+  | AutosuggestResponseError
+  | AutosuggestResponseSuccess;
+
 interface IAddTimeZoneState {
   searchValue: string;
   cursor: number;
   searchResultsMap: {
-    [searchValue: string]: ISearchResult[];
+    [searchValue: string]: AutosuggestResponse;
   };
 }
 
@@ -133,10 +143,30 @@ export default class AddTimeZone extends React.Component<
   public timezones: ITimezone[];
 
   public searchAndUpdateResults = debounce(async (searchValue: string) => {
-    const response = await fetch(
-      `https://meridian-backend.now.sh/autosuggest/${searchValue}`
-    );
-    const places = await response.json();
+    const { searchResultsMap } = this.state;
+    if (searchResultsMap[searchValue]) {
+      return;
+    }
+
+    let places: ISearchResult[];
+    try {
+      const response = await fetch(
+        `https://meridian-backendd.now.sh/autosuggest/${searchValue}`
+      );
+      places = await response.json();
+    } catch (error) {
+      console.error(error);
+      this.setState(previousState => {
+        return {
+          searchResultsMap: {
+            ...previousState.searchResultsMap,
+            [searchValue]: "autosuggest-response-error",
+          },
+        };
+      });
+
+      return;
+    }
 
     this.setState(previousState => {
       return {
@@ -174,17 +204,34 @@ export default class AddTimeZone extends React.Component<
     window.addEventListener("keydown", this.handleKeyDown);
   }
 
+  public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
+    const fuzzysortResults = fuzzysort.go(searchValue, timezones, {
+      key: "niceName",
+      threshold: -100,
+    });
+
+    // Using reduce to convince type checker no results will be undefined
+    const timezoneResults = fuzzysortResults.reduce((acc, { target }) => {
+      const timezone = timezones.find(({ niceName }) => {
+        return niceName === target;
+      });
+      if (timezone) {
+        return [...acc, timezone];
+      } else {
+        return acc;
+      }
+    }, []);
+
+    return timezoneResults;
+  };
+
   public async componentDidUpdate(
     prevProps: IAddTimeZoneProps,
     prevState: IAddTimeZoneState
   ) {
-    const { searchResultsMap, searchValue } = this.state;
+    const { searchValue } = this.state;
 
-    if (
-      prevState.searchValue === searchValue ||
-      searchValue.trim() === "" ||
-      searchResultsMap[searchValue] !== undefined
-    ) {
+    if (prevState.searchValue === searchValue || searchValue.trim() === "") {
       return;
     }
 
@@ -265,7 +312,7 @@ export default class AddTimeZone extends React.Component<
     const { searchResultsMap, searchValue } = this.state;
     const loadingResults =
       searchValue.trim() !== "" && searchResultsMap[searchValue] === undefined;
-    const searchResults = searchResultsMap[searchValue] || [];
+    const searchResults = searchResultsMap[searchValue];
 
     return (
       <ParentView bgColor={this.props.bgColor}>
@@ -288,19 +335,51 @@ export default class AddTimeZone extends React.Component<
               onFocus={this.handleFocus}
             />
           </SearchInputParent>
-          {searchValue ? (
-            <SearchResults>
-              {searchResults.map(
-                (searchResult: ISearchResult, index: number) => (
-                  <SearchResult
-                    active={this.state.cursor === index}
-                    searchResult={searchResult}
-                    handleClick={this.handleResultClick(searchResult)}
-                  />
-                )
-              )}
-            </SearchResults>
-          ) : null}
+          {(() => {
+            console.log(searchResults);
+            if (searchResults === undefined) {
+              return null;
+            } else if (searchResults === "autosuggest-response-error") {
+              const results = this.filterTimezones(
+                this.props.timezones,
+                searchValue
+              );
+
+              return (
+                <React.Fragment>
+                  <p>
+                    Unable to retrieve timezones. Showing limited offline
+                    results.
+                  </p>
+                  <SearchResults>
+                    {results.map(
+                      (searchResult: ISearchResult, index: number) => (
+                        <SearchResult
+                          active={this.state.cursor === index}
+                          searchResult={searchResult}
+                          handleClick={this.handleResultClick(searchResult)}
+                        />
+                      )
+                    )}
+                  </SearchResults>
+                </React.Fragment>
+              );
+            } else {
+              return (
+                <SearchResults>
+                  {searchResults.map(
+                    (searchResult: ISearchResult, index: number) => (
+                      <SearchResult
+                        active={this.state.cursor === index}
+                        searchResult={searchResult}
+                        handleClick={this.handleResultClick(searchResult)}
+                      />
+                    )
+                  )}
+                </SearchResults>
+              );
+            }
+          })()}
         </SearchForm>
       </ParentView>
     );
