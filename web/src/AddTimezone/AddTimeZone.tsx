@@ -157,7 +157,7 @@ export default class AddTimeZone extends React.Component<
     let places: ISearchResult[];
     try {
       const response = await fetch(
-        `https://meridian-backendd.now.sh/autosuggest/${searchValue}`
+        `https://meridian-backend.now.sh/autosuggest/${searchValue}`
       );
       places = await response.json();
     } catch (error) {
