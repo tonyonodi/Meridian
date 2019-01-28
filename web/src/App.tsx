@@ -24,7 +24,7 @@ import Toolbar from "./Toolbar";
 import Year from "./Year";
 import _timezoneData from "./lib/timezoneData";
 
-const timezoneData: ITimezone[] = _timezoneData
+const timezoneData: ITimezone[] = _timezoneData;
 
 const { DateTime } = luxon;
 
@@ -433,6 +433,20 @@ class App extends React.Component<{}, IAppState> {
           }}
         />
         <ContainerView innerRef={this.containerViewRef}>
+          {this.state.draftWaypoint && (
+            <DraftWaypoint
+              addWaypoint={this.addWaypoint}
+              cancelWaypointDraft={this.cancelWaypointDraft}
+              appWidth={appWidth}
+              draftWaypoint={this.state.draftWaypoint}
+              timeCursor={this.state.timeCursor}
+              updateTime={this.updateTime}
+              waypointNumber={this.getDraftWaypointNumber(
+                this.state.draftWaypoint,
+                this.state.ranges
+              )}
+            />
+          )}
           {timezones.map((timezone, i) => {
             return (
               <TimeLine
@@ -461,20 +475,6 @@ class App extends React.Component<{}, IAppState> {
             updateTime={this.updateTime}
             timezones={timezoneData}
           />
-          {this.state.draftWaypoint && (
-            <DraftWaypoint
-              addWaypoint={this.addWaypoint}
-              cancelWaypointDraft={this.cancelWaypointDraft}
-              appWidth={appWidth}
-              draftWaypoint={this.state.draftWaypoint}
-              timeCursor={this.state.timeCursor}
-              updateTime={this.updateTime}
-              waypointNumber={this.getDraftWaypointNumber(
-                this.state.draftWaypoint,
-                this.state.ranges
-              )}
-            />
-          )}
         </ContainerView>
 
         <Ranges

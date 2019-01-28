@@ -1,45 +1,22 @@
 // tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
-import {
-  DEFAULT_UI_BUTTON_COLOR,
-  DRAFT_WAYPOINT_ELEMENT_MARGIN_LEFT,
-  DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
-  DRAFT_WAYPOINT_ELEMENT_WIDTH,
-} from "./config";
+import { DEFAULT_UI_BUTTON_COLOR } from "./config";
 
 const ContainerDiv = styled.div`
-  background: "red";
-  position: "relative";
-  width: ${DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH};
+  position: fixed;
+  z-index: 10000;
+  bottom: 0;
+  width: 100%;
 `;
 
 const ParentView = styled.div`
   position: sticky;
-  top: 50%;
-  transform: translateY(-50%);
-  width: ${DRAFT_WAYPOINT_ELEMENT_WIDTH}px;
   background: white;
   padding: 7px;
   border-radius: 5px;
   z-index: 30;
-  margin-left: ${DRAFT_WAYPOINT_ELEMENT_MARGIN_LEFT}px;
-  margin-right: 20px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.15);
-  &:after {
-    right: 100%;
-    top: 50%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
-    border-color: rgba(255, 255, 255, 0);
-    border-right-color: #ffffff;
-    border-width: 7px;
-    margin-top: -7px;
-  }
 `;
 
 const Header = styled.h3`
@@ -215,20 +192,18 @@ export default class DraftWaypointComponent extends React.Component<
   };
 
   public render() {
-    const { appWidth } = this.props;
-    const addWaypointText =
-      ["From here", "To here"][this.props.waypointNumber] || "...and here";
+    const isFirstWaypoint = this.props.waypointNumber === 0;
 
     return (
       <ContainerDiv>
-        <ParentView
-          style={{ left: appWidth - 100 }}
-          innerRef={this.parentElementRef}
-        >
-          <Header>Measure duration</Header>
+        <ParentView innerRef={this.parentElementRef}>
+          <Header>
+            Measure duration {isFirstWaypoint ? "from" : "to"} current time
+          </Header>
+          <p>Change current time by scrolling or tapping the time indicators in the middle of the screen and entering a time.</p>
           <ButtonContainer>
-            <Button onClick={this.handleSubmit}>{addWaypointText}</Button>
-            <Button onClick={this.handleCancel}>Cancel</Button>
+            <Button onClick={this.handleSubmit}>Place waypoint</Button>
+            <Button onClick={this.handleCancel}>Done</Button>
           </ButtonContainer>
           <form onSubmit={this.handleSubmit}>
             <WaypointNameInput
