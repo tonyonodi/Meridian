@@ -8,7 +8,7 @@
   },
   "installed_plugins": {
     "cordova-plugin-whitelist": {
-      "PACKAGE_NAME": "io.conchiglie.Meridian"
+      "PACKAGE_NAME": "co.conchiglie.meridian"
     }
   },
   "dependent_plugins": {},

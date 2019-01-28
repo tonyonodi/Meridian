@@ -119,7 +119,7 @@ const Cursor = styled.input`
 const TitleBar = styled.div`
   position: sticky;
   right: 0;
-  top: -15px;
+  top: -17px;
   z-index: 20;
 `;
 

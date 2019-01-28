@@ -52,7 +52,7 @@ ADDED from /Users/tony/projects/timezones/mobile/platforms/android/app/src/main/
 		ADDED from /Users/tony/projects/timezones/mobile/platforms/android/app/src/main/AndroidManifest.xml:5:18-52
 	android:icon
 		ADDED from /Users/tony/projects/timezones/mobile/platforms/android/app/src/main/AndroidManifest.xml:5:53-80
-activity#io.conchiglie.Meridian.MainActivity
+activity#co.conchiglie.meridian.MainActivity
 ADDED from /Users/tony/projects/timezones/mobile/platforms/android/app/src/main/AndroidManifest.xml:6:9-11:20
 	android:label
 		ADDED from /Users/tony/projects/timezones/mobile/platforms/android/app/src/main/AndroidManifest.xml:6:97-134

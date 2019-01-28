@@ -1,1 +1,1 @@
-[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":10000},"path":"app-debug.apk","properties":{"packageId":"io.conchiglie.Meridian","split":"","minSdkVersion":"19"}}]
+[{"outputType":{"type":"APK"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":10000},"path":"app-debug.apk","properties":{"packageId":"co.conchiglie.meridian","split":"","minSdkVersion":"19"}}]

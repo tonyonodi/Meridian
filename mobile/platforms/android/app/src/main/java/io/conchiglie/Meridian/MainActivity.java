@@ -17,7 +17,7 @@
        under the License.
  */
 
-package io.conchiglie.Meridian;
+package co.conchiglie.meridian;
 
 import android.os.Bundle;
 import org.apache.cordova.*;
