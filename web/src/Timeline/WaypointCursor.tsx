@@ -21,7 +21,7 @@ const ParentView = styled.div<IParentView>`
     content: "";
     top: -50px;
     background: linear-gradient(
-      rgba(255, 255, 255, 0),
+      rgba(${({ bgColor }) => bgColor.join(", ")}, 0),
       rgba(${({ bgColor }) => bgColor.join(", ")}, 1)
     );
     height: 50px;
@@ -33,7 +33,7 @@ const ParentView = styled.div<IParentView>`
     content: "";
     background: linear-gradient(
       rgba(${({ bgColor }) => bgColor.join(", ")}, 1),
-      rgba(255, 255, 255, 0)
+      rgba(${({ bgColor }) => bgColor.join(", ")}, 0)
     );
     height: 50px;
     width: 100%;
