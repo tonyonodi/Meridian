@@ -11,6 +11,7 @@
     "ordered-imports": false,
     "no-console": false,
     "object-literal-sort-keys": false,
-    "curly": false
+    "curly": false,
+    "jsx-no-lambda": false
   }
 }

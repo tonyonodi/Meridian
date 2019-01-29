@@ -35,6 +35,17 @@ const ContainerView = styled.div`
   height: calc(200vh * ${WINDOW_HEIGHT_IN_DAYS});
 `;
 
+const FooterContainer = styled.div`
+  border: solid 1px red;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
 const defaultTimezones = [
   {
     city: "London",
@@ -433,20 +444,6 @@ class App extends React.Component<{}, IAppState> {
           }}
         />
         <ContainerView innerRef={this.containerViewRef}>
-          {this.state.draftWaypoint && (
-            <DraftWaypoint
-              addWaypoint={this.addWaypoint}
-              cancelWaypointDraft={this.cancelWaypointDraft}
-              appWidth={appWidth}
-              draftWaypoint={this.state.draftWaypoint}
-              timeCursor={this.state.timeCursor}
-              updateTime={this.updateTime}
-              waypointNumber={this.getDraftWaypointNumber(
-                this.state.draftWaypoint,
-                this.state.ranges
-              )}
-            />
-          )}
           {timezones.map((timezone, i) => {
             return (
               <TimeLine
@@ -486,13 +483,29 @@ class App extends React.Component<{}, IAppState> {
           deleteRange={this.deleteRange}
           cancelWaypointDraft={this.cancelWaypointDraft}
         />
-        <Toolbar
-          clockPosition={this.state.clockPosition}
-          timeCursor={this.state.timeCursor}
-          updateTime={this.updateTime}
-          addWaypointDraft={this.addWaypointDraft}
-        />
-        <Year timeCursor={timeCursor} />
+        <FooterContainer>
+          <Toolbar
+            clockPosition={this.state.clockPosition}
+            timeCursor={this.state.timeCursor}
+            updateTime={this.updateTime}
+            addWaypointDraft={this.addWaypointDraft}
+          />
+          <Year timeCursor={timeCursor} />
+          {this.state.draftWaypoint && (
+            <DraftWaypoint
+              addWaypoint={this.addWaypoint}
+              cancelWaypointDraft={this.cancelWaypointDraft}
+              appWidth={appWidth}
+              draftWaypoint={this.state.draftWaypoint}
+              timeCursor={this.state.timeCursor}
+              updateTime={this.updateTime}
+              waypointNumber={this.getDraftWaypointNumber(
+                this.state.draftWaypoint,
+                this.state.ranges
+              )}
+            />
+          )}
+        </FooterContainer>
       </div>
     );
   }

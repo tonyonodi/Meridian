@@ -6,13 +6,11 @@ const { DateTime } = luxon;
 
 const ParentView = styled.div`
   color: white;
-  position: fixed;
-  bottom: 5px;
-  right: 5px;
   font-size: 2.1rem;
   line-height: 1.8rem;
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.8);
   z-index: 10;
+  margin-bottom: 7px;
 `;
 
 const Month = styled.span``;

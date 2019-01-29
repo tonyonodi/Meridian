@@ -4,10 +4,10 @@ import styled from "styled-components";
 import { DEFAULT_UI_BUTTON_COLOR } from "./config";
 
 const ContainerDiv = styled.div`
-  position: fixed;
   z-index: 10000;
   bottom: 0;
-  width: 100%;
+  right: 0;
+  width: 100vw;
 `;
 
 const ParentView = styled.div`
@@ -200,11 +200,10 @@ export default class DraftWaypointComponent extends React.Component<
           <Header>
             Measure duration {isFirstWaypoint ? "from" : "to"} current time
           </Header>
-          <p>Change current time by scrolling or tapping the time indicators in the middle of the screen and entering a time.</p>
-          <ButtonContainer>
-            <Button onClick={this.handleSubmit}>Place waypoint</Button>
-            <Button onClick={this.handleCancel}>Done</Button>
-          </ButtonContainer>
+          <p>
+            Change current time by scrolling or tapping the time indicators in
+            the middle of the screen and entering a time.
+          </p>
           <form onSubmit={this.handleSubmit}>
             <WaypointNameInput
               innerRef={this.waypointNameInputRef}
@@ -216,6 +215,10 @@ export default class DraftWaypointComponent extends React.Component<
               onBlur={this.handleBlur}
             />
           </form>
+          <ButtonContainer>
+            <Button onClick={this.handleSubmit}>Place waypoint</Button>
+            <Button onClick={this.handleCancel}>Done</Button>
+          </ButtonContainer>
         </ParentView>
       </ContainerDiv>
     );

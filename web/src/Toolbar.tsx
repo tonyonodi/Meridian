@@ -7,7 +7,6 @@ import styled from "styled-components";
 import Icon, { IconTypes } from "./Icon";
 
 const ParentView = styled.div`
-  position: fixed;
   box-sizing: border-box;
   right: 0;
   bottom: 40px;
@@ -24,6 +23,9 @@ const Button = styled.button`
   width: 100%;
   color: white;
   margin-top: 20px;
+  &:first-child {
+    margin-top: 0;
+  }
   &:focus {
     outline: 0;
   }
