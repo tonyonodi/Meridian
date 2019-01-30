@@ -5,6 +5,7 @@ import Modal from "../Modal";
 import Icon, { IconTypes } from "src/Icon";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
+import { MAIN_BACKGROUND_COLOR } from "src/config";
 
 const { DateTime } = luxon;
 
@@ -128,6 +129,16 @@ const Button = styled.button`
 
 const iconStyle = { width: 15, marginRight: 20 };
 
+const JumpToDate = styled.button`
+  background: rgb(${MAIN_BACKGROUND_COLOR.join(",")});
+  color: white;
+  border: none;
+  padding: 5px;
+  width: 240px;
+  border-radius: 5px;
+  margin-left: 20px;
+`;
+
 interface IMenuProps {
   active: boolean;
   timeCursor: number;
@@ -218,7 +229,7 @@ export default ({
             </MenuItem>
           </MenuList>
           <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} />
-          <button onClick={handleJumpToDate}>Jump to date</button>
+          <JumpToDate onClick={handleJumpToDate}>Jump to Date</JumpToDate>
         </MenuView>
       </ModalMask>
     </Modal>
