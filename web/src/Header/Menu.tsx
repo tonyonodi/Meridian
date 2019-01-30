@@ -137,6 +137,12 @@ const JumpToDate = styled.button`
   width: 240px;
   border-radius: 5px;
   margin-left: 20px;
+  font-weight: bold;
+  font-size: 0.8rem;
+  &:focus {
+    outline: none;
+    box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 interface IMenuProps {
