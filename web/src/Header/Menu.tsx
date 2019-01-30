@@ -138,7 +138,7 @@ const JumpToDate = styled.button`
   border: none;
   padding: 5px;
   width: 240px;
-  border-radius: 5px;
+  border-radius: 10px;
   margin-left: 20px;
   font-weight: bold;
   font-size: 0.8rem;
