@@ -22,7 +22,6 @@ import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeCursor from "./TimeCursor";
 import TimeLine from "./Timeline";
-import Toolbar from "./Toolbar";
 import _timezoneData from "./lib/timezoneData";
 
 const timezoneData: ITimezone[] = _timezoneData;
@@ -474,15 +473,6 @@ class App extends React.Component<{}, IAppState> {
               />
             );
           })}
-          <AddTimezone
-            addTimezone={this.addTimezone}
-            color={PALETTE[timezones.length % PALETTE.length]}
-            show={this.state.showAddTimezone}
-            toggle={this.toggleAddTimezone}
-            timeCursor={this.state.timeCursor}
-            updateTime={this.updateTime}
-            timezones={timezoneData}
-          />
         </ContainerView>
 
         <Ranges
@@ -494,13 +484,16 @@ class App extends React.Component<{}, IAppState> {
           deleteRange={this.deleteRange}
           cancelWaypointDraft={this.cancelWaypointDraft}
         />
-        <FooterContainer>
-          <Toolbar
-            clockPosition={this.state.clockPosition}
+        <AddTimezone
+            addTimezone={this.addTimezone}
+            color={PALETTE[timezones.length % PALETTE.length]}
+            show={this.state.showAddTimezone}
+            toggle={this.toggleAddTimezone}
             timeCursor={this.state.timeCursor}
             updateTime={this.updateTime}
-            addWaypointDraft={this.addWaypointDraft}
+            timezones={timezoneData}
           />
+        <FooterContainer>
           {this.state.draftWaypoint && (
             <DraftWaypoint
               addWaypoint={this.addWaypoint}
