@@ -26,6 +26,12 @@ const ParentView = styled.div`
 const MenuButton = styled.button`
   background: none;
   border: none;
+  &:focus {
+    outline: none;
+  }
+  &:focus svg {
+    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.3));
+  }
 `;
 
 const MonthAndYear = styled.h1`
