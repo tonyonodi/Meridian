@@ -4,7 +4,7 @@ import Modal from "../Modal";
 import Icon, { IconTypes } from "src/Icon";
 
 const MENU_WIDTH = 240;
-const ANIMATION_TIME = 0.5;
+const ANIMATION_TIME = 0.25;
 // const EASING = "ease-in-out";
 
 const maskFadeIn = keyframes`
@@ -51,8 +51,8 @@ const ModalMask = styled.div<IModalMask>`
   transform: translateX(-100vw);
   ${({ active }) =>
     active
-      ? `animation: ${maskFadeIn} 0.5s forwards`
-      : `animation: ${maskFadeOut} 0.5s forwards`}
+      ? `animation: ${maskFadeIn} ${ANIMATION_TIME}s forwards`
+      : `animation: ${maskFadeOut} ${ANIMATION_TIME}s forwards`}
 `;
 
 interface IMenuView {
@@ -102,14 +102,24 @@ const Logo = styled.img`
 const MenuList = styled.ul`
   list-style: none;
   padding-left: 0;
-  margin: 20px;
+  margin: 20px 0;
 `;
 
-const MenuItem = styled.li`
+const MenuItem = styled.li``;
+
+const Button = styled.button`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 20px 0;
+  background: none;
+  border: none;
+  padding: 20px;
+  width: 100%;
+  text-align: left;
+  &:focus {
+    outline: none;
+    background: #e8e8e8;
+  }
 `;
 
 const iconStyle = { width: 20, marginRight: 20 };
@@ -117,9 +127,33 @@ const iconStyle = { width: 20, marginRight: 20 };
 interface IMenuProps {
   active: boolean;
   closeModal: () => void;
+  updateTime: (
+    { activateClockMode, time }: { activateClockMode: boolean; time: number }
+  ) => void;
+  addWaypointDraft: (rangeId: string) => void;
+  toggleAddTimezone: (state?: boolean) => void;
 }
 
-export default ({ active, closeModal }: IMenuProps) => {
+export default ({ active, closeModal, updateTime, addWaypointDraft, toggleAddTimezone }: IMenuProps) => {
+  const activateClockMode = () => {
+    const currentTime = new Date().getTime();
+    updateTime({
+      activateClockMode: true,
+      time: currentTime,
+    });
+    closeModal();
+  };
+
+  const handleAddDuration = () => {
+    addWaypointDraft(Math.random() + "");
+    closeModal();
+  }
+
+  const handleAddTimezone = () => {
+    toggleAddTimezone(true);
+    closeModal();
+  }
+
   return (
     <Modal>
       <ModalMask active={active} onClick={() => closeModal()}>
@@ -132,14 +166,20 @@ export default ({ active, closeModal }: IMenuProps) => {
           </MenuHeader>
           <MenuList>
             <MenuItem>
-              <Icon type={IconTypes.Plus} style={iconStyle} /> Add Timezone
+              <Button onClick={handleAddTimezone}>
+                <Icon type={IconTypes.Plus} style={iconStyle} /> Add Timezone
+              </Button>
             </MenuItem>
             <MenuItem>
-              <Icon type={IconTypes.Clock} style={iconStyle} /> Clock Mode
+              <Button onClick={activateClockMode}>
+                <Icon type={IconTypes.Clock} style={iconStyle} /> Clock Mode
+              </Button>
             </MenuItem>
             <MenuItem>
-              <Icon type={IconTypes.Aeroplane} style={iconStyle} />
-              Measure Duration
+              <Button onClick={handleAddDuration}>
+                <Icon type={IconTypes.Aeroplane} style={iconStyle} />
+                Measure Duration
+              </Button>
             </MenuItem>
           </MenuList>
         </MenuView>

@@ -43,9 +43,19 @@ const MonthAndYear = styled.h1`
 
 interface IHeaderProps {
   timeCursor: number;
+  updateTime: (
+    { activateClockMode, time }: { activateClockMode: boolean; time: number }
+  ) => void;
+  addWaypointDraft: (rangeId: string) => void;
+  toggleAddTimezone: (state?: boolean) => void;
 }
 
-export default ({ timeCursor }: IHeaderProps) => {
+export default ({
+  timeCursor,
+  updateTime,
+  addWaypointDraft,
+  toggleAddTimezone,
+}: IHeaderProps) => {
   const [menuActive, setMenuActive] = useState(false);
 
   const dateTime = DateTime.fromMillis(timeCursor);
@@ -68,7 +78,13 @@ export default ({ timeCursor }: IHeaderProps) => {
           {month} {year}
         </MonthAndYear>
       </ParentView>
-      <Menu active={menuActive} closeModal={() => setMenuActive(false)} />
+      <Menu
+        active={menuActive}
+        closeModal={() => setMenuActive(false)}
+        updateTime={updateTime}
+        addWaypointDraft={addWaypointDraft}
+        toggleAddTimezone={toggleAddTimezone}
+      />
     </React.Fragment>
   );
 };

@@ -445,7 +445,12 @@ class App extends React.Component<{}, IAppState> {
             zIndex: 10000,
           }}
         />
-        <Header timeCursor={this.state.timeCursor} />
+        <Header
+          timeCursor={this.state.timeCursor}
+          updateTime={this.updateTime}
+          addWaypointDraft={this.addWaypointDraft}
+          toggleAddTimezone={this.toggleAddTimezone}
+        />
         <TimeCursor
           timezones={timezones}
           timeCursor={timeCursor}
