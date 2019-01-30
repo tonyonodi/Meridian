@@ -121,6 +121,8 @@ const Button = styled.button`
   padding: 20px;
   width: 100%;
   text-align: left;
+  font-size: 0.8rem;
+  font-family: "Montserrat", sans-serif;
   &:focus {
     outline: none;
     background: #e8e8e8;
@@ -217,14 +219,14 @@ export default ({
           </MenuHeader>
           <MenuList>
             <MenuItem>
-              <Button onClick={handleAddTimezone}>
-                <Icon type={IconTypes.Plus} style={iconStyle} /> Add Timezone
-              </Button>
-            </MenuItem>
-            <MenuItem>
               <Button onClick={activateClockMode}>
                 <Icon type={IconTypes.Clock} style={iconStyle} /> Reset time
                 (Clock Mode)
+              </Button>
+            </MenuItem>
+            <MenuItem>
+              <Button onClick={handleAddTimezone}>
+                <Icon type={IconTypes.Plus} style={iconStyle} /> Add Timezone
               </Button>
             </MenuItem>
             <MenuItem>
