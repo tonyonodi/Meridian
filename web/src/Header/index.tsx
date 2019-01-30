@@ -80,6 +80,7 @@ export default ({
       </ParentView>
       <Menu
         active={menuActive}
+        timeCursor={timeCursor}
         closeModal={() => setMenuActive(false)}
         updateTime={updateTime}
         addWaypointDraft={addWaypointDraft}

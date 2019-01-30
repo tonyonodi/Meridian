@@ -1,9 +1,14 @@
 import * as React from "react";
 import styled, { keyframes } from "styled-components";
+import * as luxon from "luxon";
 import Modal from "../Modal";
 import Icon, { IconTypes } from "src/Icon";
+import DayPicker from "react-day-picker";
+import "react-day-picker/lib/style.css";
 
-const MENU_WIDTH = 240;
+const { DateTime } = luxon;
+
+const MENU_WIDTH = 285;
 const ANIMATION_TIME = 0.25;
 // const EASING = "ease-in-out";
 
@@ -81,7 +86,6 @@ const MenuHeader = styled.div`
   padding: 20px;
   background: rgba(25, 100, 126, 1);
   box-sizing: border-box;
-  height: 100px;
   display: flex;
   align-items: flex-end;
   margin-bottom: 40px;
@@ -122,10 +126,11 @@ const Button = styled.button`
   }
 `;
 
-const iconStyle = { width: 20, marginRight: 20 };
+const iconStyle = { width: 15, marginRight: 20 };
 
 interface IMenuProps {
   active: boolean;
+  timeCursor: number;
   closeModal: () => void;
   updateTime: (
     { activateClockMode, time }: { activateClockMode: boolean; time: number }
@@ -134,7 +139,16 @@ interface IMenuProps {
   toggleAddTimezone: (state?: boolean) => void;
 }
 
-export default ({ active, closeModal, updateTime, addWaypointDraft, toggleAddTimezone }: IMenuProps) => {
+export default ({
+  active,
+  closeModal,
+  updateTime,
+  addWaypointDraft,
+  toggleAddTimezone,
+  timeCursor,
+}: IMenuProps) => {
+  const [selectedDate, setSelectedDate] = React.useState(new Date(timeCursor));
+
   const activateClockMode = () => {
     const currentTime = new Date().getTime();
     updateTime({
@@ -147,12 +161,32 @@ export default ({ active, closeModal, updateTime, addWaypointDraft, toggleAddTim
   const handleAddDuration = () => {
     addWaypointDraft(Math.random() + "");
     closeModal();
-  }
+  };
 
   const handleAddTimezone = () => {
     toggleAddTimezone(true);
     closeModal();
-  }
+  };
+
+  const handleDayClick = (day: any) => {
+    setSelectedDate(day);
+  };
+
+  const handleJumpToDate = () => {
+    const day = selectedDate.getDate();
+    const month = selectedDate.getMonth();
+    const year = selectedDate.getFullYear();
+
+    const newDate = DateTime.fromMillis(timeCursor)
+      .set({ day, month: month + 1, year })
+      .toMillis();
+
+    updateTime({
+      activateClockMode: false,
+      time: newDate,
+    });
+    closeModal();
+  };
 
   return (
     <Modal>
@@ -172,7 +206,8 @@ export default ({ active, closeModal, updateTime, addWaypointDraft, toggleAddTim
             </MenuItem>
             <MenuItem>
               <Button onClick={activateClockMode}>
-                <Icon type={IconTypes.Clock} style={iconStyle} /> Clock Mode
+                <Icon type={IconTypes.Clock} style={iconStyle} /> Reset time
+                (Clock Mode)
               </Button>
             </MenuItem>
             <MenuItem>
@@ -182,6 +217,8 @@ export default ({ active, closeModal, updateTime, addWaypointDraft, toggleAddTim
               </Button>
             </MenuItem>
           </MenuList>
+          <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} />
+          <button onClick={handleJumpToDate}>Jump to date</button>
         </MenuView>
       </ModalMask>
     </Modal>

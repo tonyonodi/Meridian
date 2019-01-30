@@ -58,7 +58,7 @@ const CursorContainer = styled.div<ICursorContainer>`
 `;
 
 const Cursor = styled.input`
-  font-family: inherit;
+  font-family: sans-serif;
   color: inherit;
   background: none;
   border: none;
