@@ -7,6 +7,7 @@ import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import { MAIN_BACKGROUND_COLOR } from "src/config";
 
+const { useState } = React;
 const { DateTime } = luxon;
 
 const MENU_WIDTH = 285;
@@ -158,6 +159,27 @@ interface IMenuProps {
   toggleAddTimezone: (state?: boolean) => void;
 }
 
+interface ICalendar {
+  timeCursor: number;
+  handleJumpToDate: (selectedDate: Date) => void;
+}
+const Calendar = ({ timeCursor, handleJumpToDate }: ICalendar) => {
+  const [selectedDate, setSelectedDate] = useState(new Date(timeCursor));
+
+  const handleDayClick = (day: any) => {
+    setSelectedDate(day);
+  };
+
+  return (
+    <React.Fragment>
+      <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} />
+      <JumpToDate onClick={() => handleJumpToDate(selectedDate)}>
+        Jump to Date
+      </JumpToDate>
+    </React.Fragment>
+  );
+};
+
 export default ({
   active,
   closeModal,
@@ -166,8 +188,6 @@ export default ({
   toggleAddTimezone,
   timeCursor,
 }: IMenuProps) => {
-  const [selectedDate, setSelectedDate] = React.useState(new Date(timeCursor));
-
   const activateClockMode = () => {
     const currentTime = new Date().getTime();
     updateTime({
@@ -187,11 +207,7 @@ export default ({
     closeModal();
   };
 
-  const handleDayClick = (day: any) => {
-    setSelectedDate(day);
-  };
-
-  const handleJumpToDate = () => {
+  const handleJumpToDate = (selectedDate: Date) => {
     const day = selectedDate.getDate();
     const month = selectedDate.getMonth();
     const year = selectedDate.getFullYear();
@@ -236,8 +252,13 @@ export default ({
               </Button>
             </MenuItem>
           </MenuList>
-          <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} />
-          <JumpToDate onClick={handleJumpToDate}>Jump to Date</JumpToDate>
+          {/* Remount calendar whenever menu activated to update the date. */}
+          {active && (
+            <Calendar
+              timeCursor={timeCursor}
+              handleJumpToDate={handleJumpToDate}
+            />
+          )}
         </MenuView>
       </ModalMask>
     </Modal>
