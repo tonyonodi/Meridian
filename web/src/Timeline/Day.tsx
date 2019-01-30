@@ -6,6 +6,7 @@ import {
   TIMELINE_WIDTH,
   VIEWPORT_HEIGHT_IN_HOURS,
   WINDOW_HEIGHT_IN_MS,
+  HEADER_HEIGHT,
 } from "../config";
 
 const DAY_HEIGHT = (100 * 24) / VIEWPORT_HEIGHT_IN_HOURS;
@@ -21,7 +22,7 @@ interface IHeader {
 }
 const Header = styled.div<IHeader>`
   position: sticky;
-  top: -1px;
+  top: ${HEADER_HEIGHT}px;
   background: rgb(${({ color }) => color});
   text-align: center;
   font-weight: bold;

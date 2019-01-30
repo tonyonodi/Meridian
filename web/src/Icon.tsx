@@ -8,6 +8,8 @@ export enum IconTypes {
   Aeroplane,
   Search,
   LoadingSpinner,
+  Hamburger,
+  Plus,
 }
 
 export default ({ type, style }: { type: IconTypes; style?: any }) => {
@@ -26,6 +28,10 @@ export default ({ type, style }: { type: IconTypes; style?: any }) => {
       return search(style);
     case IconTypes.LoadingSpinner:
       return loadingSpinner(style);
+    case IconTypes.Hamburger:
+      return hamburger(style);
+    case IconTypes.Plus:
+      return plus(style);
     default:
       return null;
   }
@@ -140,28 +146,72 @@ const search = (style: object) => (
 );
 
 const loadingSpinner = (style: object) => {
-  return <svg
-    width="38"
-    height="38"
-    viewBox="0 0 38 38"
-    style={style}
-    xmlns="http://www.w3.org/2000/svg"
-    stroke="#fff"
-  >
-    <g fill="none" fillRule="evenodd">
-      <g transform="translate(1 1)" strokeWidth="2">
-        <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-        <path d="M36 18c0-9.94-8.06-18-18-18">
-          <animateTransform
-            attributeName="transform"
-            type="rotate"
-            from="0 18 18"
-            to="360 18 18"
-            dur="1s"
-            repeatCount="indefinite"
-          />
-        </path>
+  return (
+    <svg
+      width="38"
+      height="38"
+      viewBox="0 0 38 38"
+      style={style}
+      xmlns="http://www.w3.org/2000/svg"
+      stroke="#fff"
+    >
+      <g fill="none" fillRule="evenodd">
+        <g transform="translate(1 1)" strokeWidth="2">
+          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+          <path d="M36 18c0-9.94-8.06-18-18-18">
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 18 18"
+              to="360 18 18"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
       </g>
-    </g>
-  </svg>;
+    </svg>
+  );
+};
+
+const hamburger = (style: object) => {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="bars"
+      className="svg-inline--fa fa-bars fa-w-14"
+      role="img"
+      style={style}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 448 512"
+    >
+      <path
+        fill="currentColor"
+        d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+      />
+    </svg>
+  );
+};
+
+const plus = (style: object) => {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="plus"
+      className="svg-inline--fa fa-plus fa-w-14"
+      role="img"
+      style={style}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 448 512"
+    >
+      <path
+        fill="currentColor"
+        d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+      />
+    </svg>
+  );
 };

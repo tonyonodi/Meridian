@@ -6,8 +6,8 @@ import Day from "./Day";
 import WaypointCursor from "./WaypointCursor";
 import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
-import { PARENT_VIEW_WIDTH } from "../config";
-import { isAndroidChrome, isFirefox, isChrome } from "../lib/browserInfo";
+import { PARENT_VIEW_WIDTH, HEADER_HEIGHT } from "../config";
+import { isFirefox, isChrome } from "../lib/browserInfo";
 import { IRange } from "../Ranges/IRange";
 
 const { DateTime } = luxon;
@@ -24,7 +24,6 @@ const ParentView = styled.div<IParentView>`
   width: ${PARENT_VIEW_WIDTH}px;
   position: relative;
   z-index: ${({ zIndex }) => zIndex};
-
   user-select: none;
   &:after {
     content: "";
@@ -37,83 +36,6 @@ const ParentView = styled.div<IParentView>`
     z-index: -1;
     box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
   }
-`;
-
-interface ICursorContainer {
-  color: string;
-}
-
-const CursorContainer = styled.div<ICursorContainer>`
-  position: sticky;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  transform: translateY(-50%);
-  background: rgb(${({ color }) => color});
-  z-index: 2;
-  &:before {
-    content: "";
-    left: 0;
-    top: -50px;
-    height: 50px;
-    width: 100%;
-    display: block;
-    position: absolute;
-    background: linear-gradient(
-      rgba(${({ color }) => color}, 0),
-      rgba(${({ color }) => color}, 1)
-    );
-  }
-  &:after {
-    content: "";
-    left: 0;
-    bottom: -50px;
-    height: 50px;
-    width: 100%;
-    display: block;
-    position: absolute;
-    background: linear-gradient(
-      rgba(${({ color }) => color}, 1),
-      rgba(${({ color }) => color}, 0)
-    );
-  }
-`;
-
-const Cursor = styled.input`
-  font-family: inherit;
-  color: inherit;
-  background: none;
-  border: none;
-  font-size: 1.8rem;
-  overflow: visible;
-  width: ${PARENT_VIEW_WIDTH}px;
-  text-align: center;
-  margin: 0;
-  width: ${isAndroidChrome ? "105%" : "100%"};
-  margin-left: ${isAndroidChrome ? "8%" : "0"};
-  ${isFirefox ? "clip-path: inset(0 17px 0 0);" : ""}
-  ${isFirefox ? "padding-left: 5px;" : ""}
-  &:focus {
-    outline: none;
-  }
-  &::-webkit-clear-button {
-    display: none;
-  }
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  &::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  &::-webkit-search-cancel-button {
-    -webkit-appearance: none;
-  }
-  &::-webkit-search-results-button {
-    -webkit-appearance: none;
-  }
-  -webkit-appearance: none;
 `;
 
 const TitleBar = styled.div`
@@ -135,6 +57,7 @@ const TitleContainer = styled.div`
   }}px;
   position: absolute;
   right: 0;
+  top: ${HEADER_HEIGHT}px;
 `;
 
 const Title = styled.h1`
@@ -280,7 +203,6 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
       zIndex,
     } = this.props;
     const titleText = timezone.niceName.split(/,|\//)[0];
-    const colorString = color.join(", ");
 
     const startOfYesterday = getStartOfDay(timeCursor, -1, timezone.timezone);
     const startOfToday = getStartOfDay(timeCursor, 0, timezone.timezone);
@@ -291,82 +213,74 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
     }, []);
 
     return (
-      <ParentView
-        bgColor={color}
-        pageXOffset={pageXOffset}
-        index={index}
-        zIndex={zIndex}
-      >
-        <React.Fragment>
-          {waypoints.map(waypoint => (
-            <WaypointCursor
-              color={color}
-              key={waypoint.id}
-              t_0={t_0}
-              timezone={timezone}
-              {...waypoint}
-            />
-          ))}
-        </React.Fragment>
-        <TitleBar>
-          <TitleContainer>
-            <Title>
-              <TitleText bgColor={color}>{titleText}</TitleText>
-              <CloseButton onClick={remove}>
-                <Icon
-                  style={{
-                    height: 30,
-                    marginBottom: 2,
-                  }}
-                  type={IconTypes.Times}
-                />
-              </CloseButton>
-            </Title>
-          </TitleContainer>
-        </TitleBar>
-        <Day
-          color={color}
-          time={timeCursor}
-          t_0={t_0}
-          midnight={startOfYesterday.toMillis()}
-          date={startOfYesterday.toFormat("dd")}
-          day={startOfYesterday.toFormat("ccc")}
-        />
-        <Day
-          color={color}
-          time={timeCursor}
-          t_0={t_0}
-          midnight={startOfToday.toMillis()}
-          date={startOfToday.toFormat("dd")}
-          day={startOfToday.toFormat("ccc")}
-        />
-        <Day
-          color={color}
-          time={timeCursor}
-          t_0={t_0}
-          midnight={startOfTomorrow.toMillis()}
-          date={startOfTomorrow.toFormat("dd")}
-          day={startOfTomorrow.toFormat("ccc")}
-        />
-        <ChangeTimeTarget
-          changeType={TimeChange.Decrement}
-          onClick={this.handleClick(TimeChange.Decrement)}
-        />
-        <ChangeTimeTarget
-          changeType={TimeChange.Increment}
-          onClick={this.handleClick(TimeChange.Increment)}
-        />
-        <CursorContainer color={colorString}>
-          <Cursor
-            type="time"
-            value={DateTime.fromMillis(timeCursor, {
-              zone: timezone.timezone,
-            }).toFormat("HH:mm")}
-            onChange={this.handleChange}
-            required={true}
+      <React.Fragment>
+        <ParentView
+          bgColor={color}
+          pageXOffset={pageXOffset}
+          index={index}
+          zIndex={zIndex}
+        >
+          <React.Fragment>
+            {waypoints.map(waypoint => (
+              <WaypointCursor
+                color={color}
+                key={waypoint.id}
+                t_0={t_0}
+                timezone={timezone}
+                {...waypoint}
+              />
+            ))}
+          </React.Fragment>
+          <TitleBar>
+            <TitleContainer>
+              <Title>
+                <TitleText bgColor={color}>{titleText}</TitleText>
+                <CloseButton onClick={remove}>
+                  <Icon
+                    style={{
+                      height: 30,
+                      marginBottom: 2,
+                    }}
+                    type={IconTypes.Times}
+                  />
+                </CloseButton>
+              </Title>
+            </TitleContainer>
+          </TitleBar>
+          <Day
+            color={color}
+            time={timeCursor}
+            t_0={t_0}
+            midnight={startOfYesterday.toMillis()}
+            date={startOfYesterday.toFormat("dd")}
+            day={startOfYesterday.toFormat("ccc")}
           />
-        </CursorContainer>
-      </ParentView>
+          <Day
+            color={color}
+            time={timeCursor}
+            t_0={t_0}
+            midnight={startOfToday.toMillis()}
+            date={startOfToday.toFormat("dd")}
+            day={startOfToday.toFormat("ccc")}
+          />
+          <Day
+            color={color}
+            time={timeCursor}
+            t_0={t_0}
+            midnight={startOfTomorrow.toMillis()}
+            date={startOfTomorrow.toFormat("dd")}
+            day={startOfTomorrow.toFormat("ccc")}
+          />
+          <ChangeTimeTarget
+            changeType={TimeChange.Decrement}
+            onClick={this.handleClick(TimeChange.Decrement)}
+          />
+          <ChangeTimeTarget
+            changeType={TimeChange.Increment}
+            onClick={this.handleClick(TimeChange.Increment)}
+          />
+        </ParentView>
+      </React.Fragment>
     );
   }
 }

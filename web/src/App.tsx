@@ -16,12 +16,13 @@ import {
 
 import AddTimezone from "./AddTimezone";
 import DraftWaypoint from "./DraftWaypoint";
+import Header from "./Header";
 import ITimezone, { isITimezone } from "./ITimezone";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
+import TimeCursor from "./TimeCursor";
 import TimeLine from "./Timeline";
 import Toolbar from "./Toolbar";
-import Year from "./Year";
 import _timezoneData from "./lib/timezoneData";
 
 const timezoneData: ITimezone[] = _timezoneData;
@@ -44,6 +45,7 @@ const FooterContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+  box-sizing: border-box;
 `;
 
 const defaultTimezones = [
@@ -443,6 +445,12 @@ class App extends React.Component<{}, IAppState> {
             zIndex: 10000,
           }}
         />
+        <Header timeCursor={this.state.timeCursor} />
+        <TimeCursor
+          timezones={timezones}
+          timeCursor={timeCursor}
+          updateTime={this.updateTime}
+        />
         <ContainerView innerRef={this.containerViewRef}>
           {timezones.map((timezone, i) => {
             return (
@@ -490,7 +498,6 @@ class App extends React.Component<{}, IAppState> {
             updateTime={this.updateTime}
             addWaypointDraft={this.addWaypointDraft}
           />
-          <Year timeCursor={timeCursor} />
           {this.state.draftWaypoint && (
             <DraftWaypoint
               addWaypoint={this.addWaypoint}
