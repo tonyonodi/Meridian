@@ -477,8 +477,6 @@ class App extends React.Component<{}, IAppState> {
           <AddTimezone
             addTimezone={this.addTimezone}
             color={PALETTE[timezones.length % PALETTE.length]}
-            index={this.state.timezones.length}
-            pageXOffset={pageXOffset}
             show={this.state.showAddTimezone}
             toggle={this.toggleAddTimezone}
             timeCursor={this.state.timeCursor}
