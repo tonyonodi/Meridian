@@ -67,6 +67,8 @@ interface IMenuView {
 }
 
 const MenuView = styled.div<IMenuView>`
+  display: flex;
+  flex-direction: column;
   transform: translateX(
     ${({ active }) => {
       return active ? 0 : -MENU_WIDTH;
@@ -75,7 +77,6 @@ const MenuView = styled.div<IMenuView>`
   box-sizing: border-box;
   background: white;
   height: 100vh;
-  display: inline-block;
   width: ${MENU_WIDTH}px;
   transition: transform ${ANIMATION_TIME}s;
   color: rgb(${DARK_TEXT.join(",")});
@@ -90,7 +91,7 @@ const MenuHeader = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: flex-end;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 `;
 
 const LogoContainer = styled.div`
@@ -145,6 +146,19 @@ const JumpToDate = styled.button`
   &:focus {
     outline: none;
     box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const Footer = styled.div`
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+  font-size: 0.9rem;
+  a {
+    color: inherit;
   }
 `;
 
@@ -259,6 +273,14 @@ export default ({
               handleJumpToDate={handleJumpToDate}
             />
           )}
+          <Footer>
+            <span>
+              Made by{" "}
+              <a href="https://twitter.com/tonyonodi" target="_blank">
+                Tony Onodi
+              </a>
+            </span>
+          </Footer>
         </MenuView>
       </ModalMask>
     </Modal>
