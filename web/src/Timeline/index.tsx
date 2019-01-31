@@ -3,11 +3,10 @@ import * as luxon from "luxon";
 import * as React from "react";
 import styled from "styled-components";
 import Day from "./Day";
+import Title from "./Title";
 import WaypointCursor from "./WaypointCursor";
-import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
-import { PARENT_VIEW_WIDTH, HEADER_HEIGHT } from "../config";
-import { isFirefox, isChrome } from "../lib/browserInfo";
+import { PARENT_VIEW_WIDTH } from "../config";
 import { IRange } from "../Ranges/IRange";
 
 const { DateTime } = luxon;
@@ -35,80 +34,6 @@ const ParentView = styled.div<IParentView>`
     top: 0;
     z-index: -1;
     box-shadow: 2px 0 2px 2px rgba(0, 0, 0, 0.1);
-  }
-`;
-
-const TitleBar = styled.div`
-  position: sticky;
-  right: 0;
-  top: -17px;
-  z-index: 20;
-`;
-
-const TitleContainer = styled.div`
-  width: ${() => {
-    if (isChrome) {
-      return 34;
-    }
-    if (isFirefox) {
-      return 37;
-    }
-    return 36;
-  }}px;
-  position: absolute;
-  right: 0;
-  top: ${HEADER_HEIGHT}px;
-`;
-
-const Title = styled.h1`
-  font-size: 1.8em;
-  z-index: 100;
-  transform: translate(0, -36px) rotate(90deg);
-  transform-origin: left bottom 0;
-  width: 100vh;
-  display: flex;
-`;
-
-interface ITitleText {
-  bgColor: [number, number, number];
-}
-
-const TitleText = styled.span<ITitleText>`
-  display: inline-block;
-  max-width: 270px;
-  white-space: nowrap;
-  overflow-x: hidden;
-  position: relative;
-  padding-right: 20px;
-  overflow: hidden;
-  text-transform: uppercase;
-  &:after {
-    content: "";
-    display: inline-block;
-    height: 86%;
-    width: 20px;
-    position: absolute;
-    right: 0;
-    top: 5px;
-    background-image: linear-gradient(
-      to right,
-      rgba(${({ bgColor }) => bgColor.join(", ")}, 0),
-      rgba(${({ bgColor }) => bgColor.join(", ")}, 1)
-    );
-  }
-`;
-
-const CloseButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  padding: 0;
-  margin-bottom: 4px;
-  &:focus {
-    outline: none;
-  }
-  &:focus svg {
-    filter: drop-shadow(2px 2px 0px rgba(0, 0, 0, 0.3));
   }
 `;
 
@@ -156,6 +81,8 @@ interface ITimeLineProps {
   remove: () => void;
   zIndex: number;
 }
+
+
 
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -231,22 +158,11 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
               />
             ))}
           </React.Fragment>
-          <TitleBar>
-            <TitleContainer>
-              <Title>
-                <TitleText bgColor={color}>{titleText}</TitleText>
-                <CloseButton onClick={remove}>
-                  <Icon
-                    style={{
-                      height: 30,
-                      marginBottom: 2,
-                    }}
-                    type={IconTypes.Times}
-                  />
-                </CloseButton>
-              </Title>
-            </TitleContainer>
-          </TitleBar>
+          <Title
+            color={color}
+            titleText={titleText}
+            remove={remove}
+           />
           <Day
             color={color}
             time={timeCursor}

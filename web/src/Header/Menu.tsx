@@ -136,9 +136,9 @@ const JumpToDate = styled.button`
   background: rgb(${MAIN_BACKGROUND_COLOR.join(",")});
   color: white;
   border: none;
-  padding: 5px;
+  padding: 10px;
   width: 240px;
-  border-radius: 10px;
+  border-radius: 5px;
   margin-left: 20px;
   font-weight: bold;
   font-size: 0.8rem;
