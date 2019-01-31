@@ -10,7 +10,7 @@ const ContainerDiv = styled.div`
   bottom: 0;
   right: 0;
   left: 0;
-  z-index: 10000;
+  z-index: 999;
   width: 100vw;
   padding: 10px;
 `;
