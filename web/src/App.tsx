@@ -19,7 +19,6 @@ import Header from "./Header";
 import ITimezone, { isITimezone } from "./ITimezone";
 import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
-import TimeCursor from "./TimeCursor";
 import TimeLine from "./Timeline";
 import _timezoneData from "./lib/timezoneData";
 
@@ -426,11 +425,6 @@ class App extends React.Component<{}, IAppState> {
           updateTime={this.updateTime}
           addWaypointDraft={this.addWaypointDraft}
           toggleAddTimezone={this.toggleAddTimezone}
-        />
-        <TimeCursor
-          timezones={timezones}
-          timeCursor={timeCursor}
-          updateTime={this.updateTime}
         />
         <ContainerView innerRef={this.containerViewRef}>
           {timezones.map((timezone, i) => {

@@ -8,6 +8,7 @@ import WaypointCursor from "./WaypointCursor";
 import ITimezone from "../ITimezone";
 import { PARENT_VIEW_WIDTH } from "../config";
 import { IRange } from "../Ranges/IRange";
+import CurrentTimeCursor from "./CurrentTimeCursor";
 
 const { DateTime } = luxon;
 
@@ -127,6 +128,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
       index,
       ranges,
       remove,
+      updateTime,
       zIndex,
     } = this.props;
     const titleText = timezone.niceName.split(/,|\//)[0];
@@ -141,6 +143,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
 
     return (
       <React.Fragment>
+        <CurrentTimeCursor timezone={timezone} timeCursor={timeCursor} index={index} updateTime={updateTime} />
         <ParentView
           bgColor={color}
           pageXOffset={pageXOffset}
