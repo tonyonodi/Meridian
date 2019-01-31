@@ -4,7 +4,7 @@ import * as React from "react";
 import styled from "styled-components";
 
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
-import { DARK_TEXT, DURATION_LINE_COLOR } from "src/config";
+import { DARK_TEXT, DURATION_LINE_COLOR, WAYPOINT_RADIUS } from "src/config";
 
 const { Duration } = Luxon;
 
@@ -18,7 +18,7 @@ const DurationText = styled.div`
   & > div {
     position: sticky;
     top: 30px;
-    padding-left: 11px;
+    padding-left: 19px;
     padding-bottom: 20px;
     padding-top: ${DURATION_TEXT_PADDING_TOP}px;
   }
@@ -26,8 +26,16 @@ const DurationText = styled.div`
 
 const RangeTimelineView = styled.div`
   position: absolute;
-  width: 5px;
-  background: rgb(${DURATION_LINE_COLOR.join(",")});
+  display: flex;
+  justify-content: center;
+  width: ${WAYPOINT_RADIUS}px;
+  &:after {
+    content: "";
+    display: block;
+    height: 100%;
+    width: 4px;
+    background: rgb(${DURATION_LINE_COLOR.join(",")});
+  }
 `;
 
 interface IRangeTimeline {
@@ -48,7 +56,7 @@ export default ({ appWidth, from, to, t_0 }: IRangeTimeline) => {
   const topOffset = fromFractionalPosition * document.body.clientHeight;
   const deltaFraction = toFractionalPosition - fromFractionalPosition;
   const height = deltaFraction * document.body.clientHeight;
-  const left = appWidth + 16;
+  const left = appWidth + 10;
 
   const deltaMs = to - from;
   const duration = Duration.fromMillis(deltaMs)

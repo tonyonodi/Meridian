@@ -5,7 +5,12 @@ import styled from "styled-components";
 import Icon, { IconTypes } from "src/Icon";
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
 import Menu from "./WaypointMenu";
-import { DARK_TEXT, DURATION_LINE_COLOR, BACKGROUND_WHITE } from "src/config";
+import {
+  DARK_TEXT,
+  DURATION_LINE_COLOR,
+  BACKGROUND_WHITE,
+  WAYPOINT_RADIUS,
+} from "src/config";
 
 const { useState } = React;
 
@@ -28,8 +33,8 @@ const MenuButton = styled.button`
 `;
 
 const Marker = styled.div`
-  width: 18px;
-  height: 18px;
+  width: ${WAYPOINT_RADIUS}px;
+  height: ${WAYPOINT_RADIUS}px;
   border-radius: 100%;
   background: rgb(${BACKGROUND_WHITE.join(",")});
   display: inline-block;

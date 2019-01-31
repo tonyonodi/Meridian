@@ -42,3 +42,5 @@ export const DURATION_LINE_COLOR = [216, 53, 53];
 export const HEADER_HEIGHT = 50;
 
 export const BACKGROUND_WHITE = [238, 238, 239];
+
+export const WAYPOINT_RADIUS = 18;
