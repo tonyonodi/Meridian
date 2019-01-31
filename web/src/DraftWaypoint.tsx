@@ -224,7 +224,7 @@ export default class DraftWaypointComponent extends React.Component<
           </form>
           <ButtonContainer>
             <Button onClick={this.handleSubmit}>Place waypoint</Button>
-            <Button onClick={this.handleCancel}>Done</Button>
+            <Button onClick={this.handleCancel}>Cancel</Button>
           </ButtonContainer>
         </ParentView>
       </ContainerDiv>
