@@ -5,7 +5,7 @@ import Modal from "../Modal";
 import Icon, { IconTypes } from "src/Icon";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
-import { MAIN_BACKGROUND_COLOR } from "src/config";
+import { MAIN_BACKGROUND_COLOR, DARK_TEXT } from "src/config";
 
 const { useState } = React;
 const { DateTime } = luxon;
@@ -78,7 +78,7 @@ const MenuView = styled.div<IMenuView>`
   display: inline-block;
   width: ${MENU_WIDTH}px;
   transition: transform ${ANIMATION_TIME}s;
-  color: rgb(7, 26, 33);
+  color: rgb(${DARK_TEXT.join(",")});
 `;
 
 const MenuHeader = styled.div`

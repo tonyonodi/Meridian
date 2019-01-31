@@ -5,7 +5,6 @@ import * as React from "react";
 import styled from "styled-components";
 
 import {
-  ADD_TIMEZONE_FORM_WIDTH,
   DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
   PALETTE,
   PARENT_VIEW_WIDTH,
@@ -34,18 +33,6 @@ const ContainerView = styled.div`
   flex-direction: row;
   height: calc(200vh * ${WINDOW_HEIGHT_IN_DAYS});
   font-family: sans-serif;
-`;
-
-const FooterContainer = styled.div`
-  border: solid 1px red;
-  position: fixed;
-  bottom: 0;
-  right: 0;
-  z-index: 1000;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  box-sizing: border-box;
 `;
 
 const defaultTimezones = [
@@ -158,9 +145,6 @@ class App extends React.Component<{}, IAppState> {
         });
 
         return { ranges: newRanges };
-      },
-      () => {
-        this.updateTime({ time: this.state.timeCursor + 60 * 60 * 1000 });
       }
     );
   };
@@ -417,16 +401,8 @@ class App extends React.Component<{}, IAppState> {
   };
 
   public render() {
-    const {
-      pageXOffset,
-      timeCursor,
-      t_0,
-      timezones,
-      showAddTimezone,
-    } = this.state;
-    const appWidth =
-      timezones.length * PARENT_VIEW_WIDTH +
-      (showAddTimezone ? ADD_TIMEZONE_FORM_WIDTH : PARENT_VIEW_WIDTH);
+    const { pageXOffset, timeCursor, t_0, timezones } = this.state;
+    const appWidth = timezones.length * PARENT_VIEW_WIDTH;
     return (
       <div
         className="App"
@@ -486,30 +462,28 @@ class App extends React.Component<{}, IAppState> {
           cancelWaypointDraft={this.cancelWaypointDraft}
         />
         <AddTimezone
-            addTimezone={this.addTimezone}
-            color={PALETTE[timezones.length % PALETTE.length]}
-            show={this.state.showAddTimezone}
-            toggle={this.toggleAddTimezone}
+          addTimezone={this.addTimezone}
+          color={PALETTE[timezones.length % PALETTE.length]}
+          show={this.state.showAddTimezone}
+          toggle={this.toggleAddTimezone}
+          timeCursor={this.state.timeCursor}
+          updateTime={this.updateTime}
+          timezones={timezoneData}
+        />
+        {this.state.draftWaypoint && (
+          <DraftWaypoint
+            addWaypoint={this.addWaypoint}
+            cancelWaypointDraft={this.cancelWaypointDraft}
+            appWidth={appWidth}
+            draftWaypoint={this.state.draftWaypoint}
             timeCursor={this.state.timeCursor}
             updateTime={this.updateTime}
-            timezones={timezoneData}
+            waypointNumber={this.getDraftWaypointNumber(
+              this.state.draftWaypoint,
+              this.state.ranges
+            )}
           />
-        <FooterContainer>
-          {this.state.draftWaypoint && (
-            <DraftWaypoint
-              addWaypoint={this.addWaypoint}
-              cancelWaypointDraft={this.cancelWaypointDraft}
-              appWidth={appWidth}
-              draftWaypoint={this.state.draftWaypoint}
-              timeCursor={this.state.timeCursor}
-              updateTime={this.updateTime}
-              waypointNumber={this.getDraftWaypointNumber(
-                this.state.draftWaypoint,
-                this.state.ranges
-              )}
-            />
-          )}
-        </FooterContainer>
+        )}
       </div>
     );
   }

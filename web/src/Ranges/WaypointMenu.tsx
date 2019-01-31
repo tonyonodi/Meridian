@@ -12,11 +12,12 @@ const MenuView = styled.div`
   margin-top: 4px;
   border-radius: 5px;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.15);
+  font-size: 0.9rem;
 `;
 
 const MenuItem = styled.div`
   cursor: default;
-  width: 140px;
+  width: 150px;
   margin-top: 2px;
   padding: 5px 10px;
   &:hover {

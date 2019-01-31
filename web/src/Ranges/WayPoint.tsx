@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Icon, { IconTypes } from "src/Icon";
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
 import Menu from "./WaypointMenu";
+import { DARK_TEXT, DURATION_LINE_COLOR, BACKGROUND_WHITE } from "src/config";
 
 const { useState } = React;
 
@@ -27,12 +28,12 @@ const MenuButton = styled.button`
 `;
 
 const Marker = styled.div`
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   border-radius: 100%;
-  background: white;
+  background: rgb(${BACKGROUND_WHITE.join(",")});
   display: inline-block;
-  border: solid 5px black;
+  border: solid 3px rgb(${DURATION_LINE_COLOR.join(",")});
   box-sizing: border-box;
   margin-right: 4px;
 `;
@@ -50,7 +51,7 @@ const ParentView = styled.div`
 const WaypointView = styled.div`
   display: flex;
   align-items: center;
-  color: white;
+  color: rgb(${DARK_TEXT.join(",")});
   font-weight: bold;
 `;
 
@@ -102,7 +103,7 @@ export default ({
         <MenuButton onClick={() => toggleMenuOpen(currentVal => !currentVal)}>
           <Icon
             type={IconTypes.HorizontalEllipsis}
-            style={{ color: "white", width: 15 }}
+            style={{ color: `rgb(${DARK_TEXT})`, width: 15 }}
           />
         </MenuButton>
       </WaypointView>

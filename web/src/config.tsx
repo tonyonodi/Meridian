@@ -14,8 +14,6 @@ export const TIMELINE_WIDTH = 75;
 
 export const PARENT_VIEW_WIDTH = TIMELINE_WIDTH + LOCATION_NAME_WIDTH;
 
-export const ADD_TIMEZONE_FORM_WIDTH = 350;
-
 export const DEFAULT_UI_BUTTON_COLOR = "#0a4254";
 
 export const PALETTE: Array<[number, number, number]> = [
@@ -37,4 +35,10 @@ export const DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH =
 
 export const MAIN_BACKGROUND_COLOR = [25, 100, 126];
 
+export const DARK_TEXT = [7, 26, 33];
+
+export const DURATION_LINE_COLOR = [216, 53, 53];
+
 export const HEADER_HEIGHT = 50;
+
+export const BACKGROUND_WHITE = [238, 238, 239];

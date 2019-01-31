@@ -4,28 +4,30 @@ import * as React from "react";
 import styled from "styled-components";
 
 import getFractionalPositionFromTime from "../lib/getFractionalPositionFromTime";
+import { DARK_TEXT, DURATION_LINE_COLOR } from "src/config";
 
 const { Duration } = Luxon;
+
+const DURATION_TEXT_PADDING_TOP = 25;
 
 const DurationText = styled.div`
   position: absolute;
   font-weight: lighter;
-  color: white;
+  color: rgb(${DARK_TEXT.join(",")});
   white-space: nowrap;
-  padding-top: 7px;
   & > div {
     position: sticky;
     top: 30px;
     padding-left: 11px;
-    padding-top: 5px;
     padding-bottom: 20px;
+    padding-top: ${DURATION_TEXT_PADDING_TOP}px;
   }
 `;
 
 const RangeTimelineView = styled.div`
   position: absolute;
-  width: 7px;
-  background: white;
+  width: 5px;
+  background: rgb(${DURATION_LINE_COLOR.join(",")});
 `;
 
 interface IRangeTimeline {
@@ -62,7 +64,13 @@ export default ({ appWidth, from, to, t_0 }: IRangeTimeline) => {
   return (
     <React.Fragment>
       <RangeTimelineView style={{ top: topOffset, height, left }} />
-      <DurationText style={{ top: topOffset, height, left }}>
+      <DurationText
+        style={{
+          top: topOffset - DURATION_TEXT_PADDING_TOP + 10,
+          height: height + DURATION_TEXT_PADDING_TOP,
+          left,
+        }}
+      >
         <div>{durationString}</div>
       </DurationText>
     </React.Fragment>

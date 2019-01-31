@@ -4,10 +4,15 @@ import styled from "styled-components";
 import { DEFAULT_UI_BUTTON_COLOR } from "./config";
 
 const ContainerDiv = styled.div`
-  z-index: 10000;
+  position: fixed;
+  display: flex;
+  justify-content: center;
   bottom: 0;
   right: 0;
+  left: 0;
+  z-index: 10000;
   width: 100vw;
+  padding: 10px;
 `;
 
 const ParentView = styled.div`
@@ -17,6 +22,8 @@ const ParentView = styled.div`
   border-radius: 5px;
   z-index: 30;
   box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 860px;
 `;
 
 const Header = styled.h3`
