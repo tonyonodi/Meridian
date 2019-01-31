@@ -83,8 +83,6 @@ interface ITimeLineProps {
   zIndex: number;
 }
 
-
-
 export default class TimeLine extends React.Component<ITimeLineProps> {
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const timeRegex = /^(\d\d):(\d\d)$/;
@@ -143,7 +141,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
 
     return (
       <React.Fragment>
-        <CurrentTimeCursor timezone={timezone} timeCursor={timeCursor} index={index} updateTime={updateTime} />
+        
         <ParentView
           bgColor={color}
           pageXOffset={pageXOffset}
@@ -161,11 +159,7 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
               />
             ))}
           </React.Fragment>
-          <Title
-            color={color}
-            titleText={titleText}
-            remove={remove}
-           />
+          <Title color={color} titleText={titleText} remove={remove} />
           <Day
             color={color}
             time={timeCursor}
@@ -198,6 +192,12 @@ export default class TimeLine extends React.Component<ITimeLineProps> {
             changeType={TimeChange.Increment}
             onClick={this.handleClick(TimeChange.Increment)}
           />
+          <CurrentTimeCursor
+          timezone={timezone}
+          timeCursor={timeCursor}
+          index={index}
+          updateTime={updateTime}
+        />
         </ParentView>
       </React.Fragment>
     );

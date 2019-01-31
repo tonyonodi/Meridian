@@ -7,28 +7,17 @@ import { PARENT_VIEW_WIDTH, PALETTE } from "../config";
 
 const { DateTime } = luxon;
 
-const ParentView = styled.div`
-  position: absolute;
-  height: 40px;
-  z-index: 900;
-  position: sticky;
-  top: 50%;
-  display: flex;
-  transform: translateY(-50%);
-`;
-
 interface ICursorContainer {
-  index: number;
   color: string;
 }
 
 const CursorContainer = styled.div<ICursorContainer>`
-  color: white;
   position: sticky;
   top: 50%;
-  width: ${PARENT_VIEW_WIDTH}px;
+  width: 100%;
+  transform: translateY(-50%);
   background: rgb(${({ color }) => color});
-  z-index: 1100;
+  z-index: 2;
   height: 40px;
   &:before {
     content: "";
@@ -59,7 +48,7 @@ const CursorContainer = styled.div<ICursorContainer>`
 `;
 
 const Cursor = styled.input`
-  font-family: sans-serif;
+  font-family: inherit;
   color: inherit;
   background: none;
   border: none;
@@ -144,15 +133,13 @@ export default ({ timezone, index, timeCursor, updateTime }: IProps) => {
   const color = PALETTE[index % PALETTE.length].join(",");
 
   return (
-    <ParentView>
-      <CursorContainer key={index} color={color} index={index}>
-        <Cursor
-          type="time"
-          value={value}
-          required={true}
-          onChange={handleChange({ timezone, timeCursor, updateTime })}
-        />
-      </CursorContainer>
-    </ParentView>
+    <CursorContainer color={color}>
+      <Cursor
+        type="time"
+        value={value}
+        required={true}
+        onChange={handleChange({ timezone, timeCursor, updateTime })}
+      />
+    </CursorContainer>
   );
 };
