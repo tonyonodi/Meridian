@@ -8,6 +8,7 @@ import Icon, { IconTypes } from "../Icon";
 import ITimezone from "../ITimezone";
 import SearchResult from "./SearchResult";
 import ISearchResult from "./ISearchResult";
+import { MERIDIAN_API_URL } from "../config";
 
 interface IParentView {
   bgColor: [number, number, number];
@@ -157,7 +158,7 @@ export default class AddTimeZone extends React.Component<
     let places: ISearchResult[];
     try {
       const response = await fetch(
-        `https://meridian-backend.now.sh/autosuggest/${searchValue}`
+        `${MERIDIAN_API_URL}/autosuggest/${searchValue}`
       );
       places = await response.json();
     } catch (error) {

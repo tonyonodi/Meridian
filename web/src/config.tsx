@@ -1,3 +1,5 @@
+export const MERIDIAN_API_URL = "https://api.meridianapp.co";
+
 export const VIEWPORT_HEIGHT_IN_HOURS = 12;
 
 export const VIEWPORT_HEIGHT_IN_MS = VIEWPORT_HEIGHT_IN_HOURS * 3600 * 1000;
