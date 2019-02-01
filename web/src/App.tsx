@@ -39,16 +39,35 @@ const defaultTimezones = [
   {
     city: "London",
     country: "United Kingdom",
+    niceName: "London, United Kingdom",
     timezone: "Europe/London",
-    niceName: "London",
   },
   {
-    city: "Bangkok",
-    country: "Thailand",
-    timezone: "Asia/Bangkok",
-    niceName: "Bangkok",
+    city: "New York",
+    country: "United States of America",
+    niceName: "New York, United States of America",
+    timezone: "America/New_York",
+  },
+  {
+    city: "Tokyo",
+    country: "Japan",
+    niceName: "Tokyo, Japan",
+    timezone: "Asia/Tokyo",
   },
 ];
+
+const userTimezoneName = luxon.Settings.defaultZoneName;
+const defaultTimezoneNames = defaultTimezones.map(tz => tz.timezone);
+const userTimezone = timezoneData.find(tz => {
+  if (defaultTimezoneNames.includes(tz.timezone)) {
+    return false;
+  }
+  return tz.timezone === userTimezoneName;
+});
+
+const initialTimezones = userTimezone
+  ? [userTimezone, ...defaultTimezones]
+  : defaultTimezones;
 
 interface IAppState {
   clockPosition: number | null;
@@ -91,7 +110,7 @@ class App extends React.Component<{}, IAppState> {
       showAddTimezone: false,
       t_0: new Date().getTime(),
       timeCursor: new Date().getTime(),
-      timezones: timezones || defaultTimezones,
+      timezones: timezones || initialTimezones,
     };
   }
 
