@@ -21,6 +21,7 @@ import Ranges from "./Ranges";
 import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./Timeline";
 import _timezoneData from "./lib/timezoneData";
+import ClockModeButton from "./ClockModeButton";
 
 const timezoneData: ITimezone[] = _timezoneData;
 
@@ -113,39 +114,37 @@ class App extends React.Component<{}, IAppState> {
     rangeId: string;
     rangeText: string;
   }) => {
-    this.setState(
-      ({ ranges, timeCursor }) => {
-        const rangeIndex = ranges.findIndex(range => range.id === rangeId);
+    this.setState(({ ranges, timeCursor }) => {
+      const rangeIndex = ranges.findIndex(range => range.id === rangeId);
 
-        if (rangeIndex < 0) {
-          const newRange = {
-            id: rangeId,
-            waypoints: [
-              { text: rangeText, time: timeCursor, id: Math.random() + "" },
-            ],
-          };
-          return {
-            ranges: [...ranges, newRange],
-          };
+      if (rangeIndex < 0) {
+        const newRange = {
+          id: rangeId,
+          waypoints: [
+            { text: rangeText, time: timeCursor, id: Math.random() + "" },
+          ],
+        };
+        return {
+          ranges: [...ranges, newRange],
+        };
+      }
+
+      const newRanges = ranges.map(range => {
+        if (range.id !== rangeId) {
+          return range;
         }
 
-        const newRanges = ranges.map(range => {
-          if (range.id !== rangeId) {
-            return range;
-          }
+        return {
+          ...range,
+          waypoints: [
+            ...range.waypoints,
+            { text: rangeText, time: timeCursor, id: Math.random() + "" },
+          ],
+        };
+      });
 
-          return {
-            ...range,
-            waypoints: [
-              ...range.waypoints,
-              { text: rangeText, time: timeCursor, id: Math.random() + "" },
-            ],
-          };
-        });
-
-        return { ranges: newRanges };
-      }
-    );
+      return { ranges: newRanges };
+    });
   };
 
   public deleteWaypoint = ({
@@ -409,16 +408,9 @@ class App extends React.Component<{}, IAppState> {
           minWidth: appWidth + DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
         }}
       >
-        <div
-          id="console"
-          style={{
-            background: "red",
-            color: "white",
-            left: 0,
-            position: "fixed",
-            top: 0,
-            zIndex: 10000,
-          }}
+        <ClockModeButton
+          updateTime={this.updateTime}
+          clockModeActive={this.state.clockPosition === null}
         />
         <Header
           timeCursor={this.state.timeCursor}
