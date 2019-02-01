@@ -185,7 +185,11 @@ const Calendar = ({ timeCursor, handleJumpToDate }: ICalendar) => {
 
   return (
     <React.Fragment>
-      <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} showOutsideDays={true} />
+      <DayPicker
+        onDayClick={handleDayClick}
+        selectedDays={selectedDate}
+        showOutsideDays={true}
+      />
       <JumpToDate onClick={() => handleJumpToDate(selectedDate)}>
         Jump to Date
       </JumpToDate>

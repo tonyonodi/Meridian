@@ -59,8 +59,11 @@ const Cursor = styled.input`
   margin: 0;
   width: ${isAndroidChrome ? "105%" : "100%"};
   margin-left: ${isAndroidChrome ? "8%" : "0"};
-  ${isFirefox ? "clip-path: inset(0 17px 0 0);" : ""}
-  ${isFirefox ? "padding-left: 5px;" : ""}
+  ${isFirefox
+    ? `clip-path: inset(0 15px 0 0);
+       padding-left: 13px;
+       font-size: 1.45rem;`
+    : ``}
   &:focus {
     outline: none;
   }
