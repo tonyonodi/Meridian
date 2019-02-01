@@ -51,7 +51,7 @@ interface IModalMask {
 const ModalMask = styled.div<IModalMask>`
   position: fixed;
   top: 0;
-  height: 100vh;
+  height: 100%;
   width: 100vw;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.75);
@@ -76,7 +76,7 @@ const MenuView = styled.div<IMenuView>`
   );
   box-sizing: border-box;
   background: white;
-  height: 100vh;
+  height: 100%;
   width: ${MENU_WIDTH}px;
   transition: transform ${ANIMATION_TIME}s;
   color: rgb(${DARK_TEXT.join(",")});
@@ -91,7 +91,6 @@ const MenuHeader = styled.div`
   box-sizing: border-box;
   display: flex;
   align-items: flex-end;
-  margin-bottom: 20px;
 `;
 
 const LogoContainer = styled.div`
@@ -109,7 +108,7 @@ const Logo = styled.img`
 const MenuList = styled.ul`
   list-style: none;
   padding-left: 0;
-  margin: 20px 0;
+  margin: 10px 0;
 `;
 
 const MenuItem = styled.li``;
@@ -155,7 +154,7 @@ const Footer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding-bottom: 10px;
+  padding-bottom: 25px;
   font-size: 0.9rem;
   a {
     color: inherit;
@@ -186,7 +185,7 @@ const Calendar = ({ timeCursor, handleJumpToDate }: ICalendar) => {
 
   return (
     <React.Fragment>
-      <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} />
+      <DayPicker onDayClick={handleDayClick} selectedDays={selectedDate} showOutsideDays={true} />
       <JumpToDate onClick={() => handleJumpToDate(selectedDate)}>
         Jump to Date
       </JumpToDate>
@@ -202,6 +201,12 @@ export default ({
   toggleAddTimezone,
   timeCursor,
 }: IMenuProps) => {
+  if (active) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "visible";
+  }
+
   const activateClockMode = () => {
     const currentTime = new Date().getTime();
     updateTime({
