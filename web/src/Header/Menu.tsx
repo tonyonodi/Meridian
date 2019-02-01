@@ -5,7 +5,7 @@ import Modal from "../Modal";
 import Icon, { IconTypes } from "src/Icon";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
-import { MAIN_BACKGROUND_COLOR, DARK_TEXT } from "src/config";
+import { MAIN_BACKGROUND_COLOR, DARK_TEXT, MERIDIAN_API_URL } from "src/config";
 
 const { useState } = React;
 const { DateTime } = luxon;
@@ -67,8 +67,6 @@ interface IMenuView {
 }
 
 const MenuView = styled.div<IMenuView>`
-  display: flex;
-  flex-direction: column;
   transform: translateX(
     ${({ active }) => {
       return active ? 0 : -MENU_WIDTH;
@@ -80,6 +78,14 @@ const MenuView = styled.div<IMenuView>`
   width: ${MENU_WIDTH}px;
   transition: transform ${ANIMATION_TIME}s;
   color: rgb(${DARK_TEXT.join(",")});
+  overflow-y: auto;
+`;
+
+const MenuViewInner = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 750px;
 `;
 
 const MenuHeader = styled.div`
@@ -124,6 +130,25 @@ const Button = styled.button`
   text-align: left;
   font-size: 0.8rem;
   font-family: "Montserrat", sans-serif;
+  &:focus {
+    outline: none;
+    background: #e8e8e8;
+  }
+`;
+
+const ButtonLink = styled.a`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 20px;
+  width: 100%;
+  text-align: left;
+  font-size: 0.8rem;
+  font-family: "Montserrat", sans-serif;
+  color: inherit;
+    text-decoration: none;
   &:focus {
     outline: none;
     background: #e8e8e8;
@@ -250,46 +275,60 @@ export default ({
     <Modal>
       <ModalMask active={active} onClick={() => closeModal()}>
         <MenuView onClick={e => e.stopPropagation()} active={active}>
-          <MenuHeader>
-            <LogoContainer>
-              <Logo src="/meridian_logo.svg" alt="Meridian logo" />
-              Meridian
-            </LogoContainer>
-          </MenuHeader>
-          <MenuList>
-            <MenuItem>
-              <Button onClick={activateClockMode}>
-                <Icon type={IconTypes.Clock} style={iconStyle} /> Reset time
-                (Clock Mode)
-              </Button>
-            </MenuItem>
-            <MenuItem>
-              <Button onClick={handleAddTimezone}>
-                <Icon type={IconTypes.Plus} style={iconStyle} /> Add Timezone
-              </Button>
-            </MenuItem>
-            <MenuItem>
-              <Button onClick={handleAddDuration}>
-                <Icon type={IconTypes.Aeroplane} style={iconStyle} />
-                Measure Duration
-              </Button>
-            </MenuItem>
-          </MenuList>
-          {/* Remount calendar whenever menu activated to update the date. */}
-          {active && (
-            <Calendar
-              timeCursor={timeCursor}
-              handleJumpToDate={handleJumpToDate}
-            />
-          )}
-          <Footer>
-            <span>
-              Made by{" "}
-              <a href="https://twitter.com/tonyonodi" target="_blank">
-                Tony Onodi
-              </a>
-            </span>
-          </Footer>
+          <MenuViewInner>
+            <MenuHeader>
+              <LogoContainer>
+                <Logo src="/meridian_logo.svg" alt="Meridian logo" />
+                Meridian
+              </LogoContainer>
+            </MenuHeader>
+            <MenuList>
+              <MenuItem>
+                <Button onClick={activateClockMode}>
+                  <Icon type={IconTypes.Clock} style={iconStyle} /> Reset time
+                  (clock mode)
+                </Button>
+              </MenuItem>
+              <MenuItem>
+                <Button onClick={handleAddTimezone}>
+                  <Icon type={IconTypes.Plus} style={iconStyle} /> Add timezone
+                </Button>
+              </MenuItem>
+              <MenuItem>
+                <Button onClick={handleAddDuration}>
+                  <Icon type={IconTypes.Aeroplane} style={iconStyle} />
+                  Measure duration
+                </Button>
+              </MenuItem>
+              <MenuItem>
+                <ButtonLink href={`${MERIDIAN_API_URL}/ios-app`} target="_blank">
+                  <Icon type={IconTypes.AppStore} style={iconStyle} />
+                  Get the iOS app
+                </ButtonLink>
+              </MenuItem>
+              <MenuItem>
+                <ButtonLink href={`${MERIDIAN_API_URL}/android-app`} target="_blank">
+                  <Icon type={IconTypes.GooglePlay} style={iconStyle} />
+                  Get the Android app
+                </ButtonLink>
+              </MenuItem>
+            </MenuList>
+            {/* Remount calendar whenever menu activated to update the date. */}
+            {active && (
+              <Calendar
+                timeCursor={timeCursor}
+                handleJumpToDate={handleJumpToDate}
+              />
+            )}
+            <Footer>
+              <span>
+                Made by{" "}
+                <a href="https://twitter.com/tonyonodi" target="_blank">
+                  Tony Onodi
+                </a>
+              </span>
+            </Footer>
+          </MenuViewInner>
         </MenuView>
       </ModalMask>
     </Modal>

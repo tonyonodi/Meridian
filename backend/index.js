@@ -139,6 +139,14 @@ app.get("/my-timezone", async (req, res) => {
   res.end();
 });
 
+app.get("/android-app", (req, res) => {
+  res.redirect("https://play.google.com/store/apps");
+});
+
+app.get("/ios-app", (req, res) => {
+  res.redirect("https://itunes.apple.com/gb/genre/ios/id36?mt=8");
+});
+
 app.listen(port, err => {
   if (err) throw err;
   console.log(`> Ready On Server http://localhost:${port}`);
