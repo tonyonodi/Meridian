@@ -22,6 +22,7 @@ import { IRange, IRangeWaypoint } from "./Ranges/IRange";
 import TimeLine from "./Timeline";
 import _timezoneData from "./lib/timezoneData";
 import ClockModeButton from "./ClockModeButton";
+import AppAdd from "./AppAdd";
 
 const timezoneData: ITimezone[] = _timezoneData;
 
@@ -437,6 +438,7 @@ class App extends React.Component<{}, IAppState> {
           addWaypointDraft={this.addWaypointDraft}
           toggleAddTimezone={this.toggleAddTimezone}
         />
+        <AppAdd />
         <ContainerView innerRef={this.containerViewRef}>
           {timezones.map((timezone, i) => {
             return (

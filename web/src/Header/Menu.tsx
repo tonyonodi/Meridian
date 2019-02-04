@@ -148,7 +148,7 @@ const ButtonLink = styled.a`
   font-size: 0.8rem;
   font-family: "Montserrat", sans-serif;
   color: inherit;
-    text-decoration: none;
+  text-decoration: none;
   &:focus {
     outline: none;
     background: #e8e8e8;
@@ -190,9 +190,13 @@ interface IMenuProps {
   active: boolean;
   timeCursor: number;
   closeModal: () => void;
-  updateTime: (
-    { activateClockMode, time }: { activateClockMode: boolean; time: number }
-  ) => void;
+  updateTime: ({
+    activateClockMode,
+    time,
+  }: {
+    activateClockMode: boolean;
+    time: number;
+  }) => void;
   addWaypointDraft: (rangeId: string) => void;
   toggleAddTimezone: (state?: boolean) => void;
 }
@@ -301,13 +305,19 @@ export default ({
                 </Button>
               </MenuItem>
               <MenuItem>
-                <ButtonLink href={`${MERIDIAN_API_URL}/ios-app`} target="_blank">
+                <ButtonLink
+                  href={`${MERIDIAN_API_URL}/ios-app`}
+                  target="_blank"
+                >
                   <Icon type={IconTypes.AppStore} style={iconStyle} />
                   Get the iOS app
                 </ButtonLink>
               </MenuItem>
               <MenuItem>
-                <ButtonLink href={`${MERIDIAN_API_URL}/android-app`} target="_blank">
+                <ButtonLink
+                  href={`${MERIDIAN_API_URL}/android-app`}
+                  target="_blank"
+                >
                   <Icon type={IconTypes.GooglePlay} style={iconStyle} />
                   Get the Android app
                 </ButtonLink>
