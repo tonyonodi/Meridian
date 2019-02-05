@@ -1,4 +1,3 @@
-// tslint:disable:no-console
 import * as React from "react";
 import styled from "styled-components";
 import { DEFAULT_UI_BUTTON_COLOR } from "./config";
@@ -67,22 +66,24 @@ const Button = styled.button`
 `;
 
 interface IDraftWaypointComponent {
-  addWaypoint: (
-    { rangeId, rangeText }: { rangeId: string; rangeText: string }
-  ) => void;
+  addWaypoint: ({
+    rangeId,
+    rangeText,
+  }: {
+    rangeId: string;
+    rangeText: string;
+  }) => void;
   cancelWaypointDraft: () => void;
   appWidth: number;
   draftWaypoint: { rangeId: string };
   timeCursor: number;
-  updateTime: (
-    {
-      activateClockMode,
-      time,
-    }: {
-      activateClockMode?: boolean;
-      time: number;
-    }
-  ) => void;
+  updateTime: ({
+    activateClockMode,
+    time,
+  }: {
+    activateClockMode?: boolean;
+    time: number;
+  }) => void;
   waypointNumber: number;
 }
 
@@ -199,23 +200,19 @@ export default class DraftWaypointComponent extends React.Component<
   };
 
   public render() {
-    const isFirstWaypoint = this.props.waypointNumber === 0;
-
     return (
       <ContainerDiv>
         <ParentView innerRef={this.parentElementRef}>
-          <Header>
-            Measure duration {isFirstWaypoint ? "from" : "to"} current time
-          </Header>
+          <Header>Measure the time elapsed between two or more events</Header>
           <p>
-            Change current time by scrolling or tapping the time indicators in
-            the middle of the screen and entering a time.
+            Change current time by scrolling, or tapping the current time in a
+            timezone and entering a new time.
           </p>
           <form onSubmit={this.handleSubmit}>
             <WaypointNameInput
               innerRef={this.waypointNameInputRef}
               type="text"
-              placeholder="Waypoint name (optional)"
+              placeholder="Optional event name (e.g. leave JFK)"
               value={this.state.draftName}
               onChange={this.handleChange}
               onFocus={this.handleFocus}
@@ -223,7 +220,9 @@ export default class DraftWaypointComponent extends React.Component<
             />
           </form>
           <ButtonContainer>
-            <Button onClick={this.handleSubmit}>Place waypoint</Button>
+            <Button onClick={this.handleSubmit}>
+              Add event at current time
+            </Button>
             <Button onClick={this.handleCancel}>Cancel</Button>
           </ButtonContainer>
         </ParentView>

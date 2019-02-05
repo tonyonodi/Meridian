@@ -155,6 +155,13 @@ const ButtonLink = styled.a`
   }
 `;
 
+const SubText = styled.div`
+  position: absolute;
+  margin-top: 17px;
+  margin-left: 35px;
+  font-size: 0.65rem;
+`;
+
 const iconStyle = { width: 15, marginRight: 20 };
 
 const JumpToDate = styled.button`
@@ -301,7 +308,8 @@ export default ({
               <MenuItem>
                 <Button onClick={handleAddDuration}>
                   <Icon type={IconTypes.Aeroplane} style={iconStyle} />
-                  Measure duration
+                  Measure a duration
+                  <SubText>(time between two or more events)</SubText>
                 </Button>
               </MenuItem>
               <MenuItem>
