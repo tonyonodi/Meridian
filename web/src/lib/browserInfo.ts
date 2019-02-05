@@ -1,7 +1,6 @@
-// tslint:disable:no-console
 const lowerCaseUserAgentString = navigator.userAgent.toLocaleLowerCase();
 
-const userAgentIncludes = (...testStrings) => {
+const userAgentIncludes = (...testStrings: string[]) => {
   return testStrings.every(
     testString => lowerCaseUserAgentString.indexOf(testString) > -1
   );

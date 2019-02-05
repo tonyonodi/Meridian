@@ -4,36 +4,13 @@ import App from "./App";
 import "./index.css";
 import registerServiceWorker from "./registerServiceWorker";
 
-// import mobileConsoleLog from "./lib/mobileConsoleLog";
-
-// disable pinch to zoom
-// document.addEventListener(
-//   "touchmove",
-//   (event: any) => {
-//     mobileConsoleLog("touchmove");
-//     if (event.scale !== 1) {
-//       mobileConsoleLog("preventing");
-//       event.preventDefault();
-//     } else {
-//       mobileConsoleLog("not preventing");
-//     }
-//   },
-//   { passive: false }
-// );
-
-// disable double tap zoom
-// let lastTouchEnd = 0;
-// document.addEventListener(
-//   "touchend",
-//   (event: any) => {
-//     const now = new Date().getTime();
-//     if (now - lastTouchEnd <= 300) {
-//       event.preventDefault();
-//     }
-//     lastTouchEnd = now;
-//   },
-//   false
-// );
+if (window.cordova && window.cordova.platformId === "android") {
+  const onDeviceReady = () => {
+    const win = window as any;
+    if (win.StatusBar) win.StatusBar.backgroundColorByHexString("#0b313e");
+  };
+  document.addEventListener("deviceready", onDeviceReady, false);
+}
 
 ReactDOM.render(<App />, document.getElementById("root") as HTMLElement);
 registerServiceWorker();

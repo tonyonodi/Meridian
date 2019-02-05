@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "co.conchiglie.meridian"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "co.conchiglie.meridian"
     }
   },
   "dependent_plugins": {}
