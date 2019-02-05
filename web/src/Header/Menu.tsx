@@ -282,7 +282,7 @@ export default ({
           <MenuViewInner>
             <MenuHeader>
               <LogoContainer>
-                <Logo src="/meridian_logo.svg" alt="Meridian logo" />
+                <Logo src="./meridian_logo.svg" alt="Meridian logo" />
                 Meridian
               </LogoContainer>
             </MenuHeader>

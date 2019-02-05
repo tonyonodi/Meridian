@@ -12,13 +12,14 @@
         Tony Onodi
     </author>
     <content src="index.html" />
-    <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
+    <access origin="https://*.meridianapp.co" />
+    <allow-intent href="*://*.meridianapp.co/*" />
     <allow-intent href="market:*" />
+    <icon density="ldpi" src="res/icon/android/icon-32-ldpi.png" />
+    <icon density="mdpi" src="res/icon/android/icon-mdpi-48.png" />
+    <icon density="hdpi" src="res/icon/android/icon-xxhdpi-144.png" />
+    <icon density="xhdpi" src="res/icon/android/icon-hdpi-72.png" />
+    <icon density="xxhdpi" src="res/icon/android/icon-xhdpi-96.png" />
+    <icon density="xxxhdpi" src="res/icon/android/icon-xxxhdpi-192.png" />
     <preference name="loglevel" value="DEBUG" />
 </widget>
