@@ -140,7 +140,9 @@ app.get("/my-timezone", async (req, res) => {
 });
 
 app.get("/android-app", (req, res) => {
-  res.redirect("https://play.google.com/store/apps");
+  res.redirect(
+    "https://play.google.com/store/apps/details?id=co.conchiglie.meridian"
+  );
 });
 
 app.get("/ios-app", (req, res) => {
