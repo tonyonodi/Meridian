@@ -1,0 +1,11 @@
+{
+  "name": "meridian",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:tonyonodi/timezones.git",
+  "author": "Tony Onodi <tonyonodi@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+  	"build-android": "cd web && yarn build && cd ../mobile && yarn build-android"
+  }
+}

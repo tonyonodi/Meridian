@@ -1,11 +1,14 @@
 {
     "name": "meridian",
     "displayName": "Meridian",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "A timezone app.",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build-android": "cordova build android --release && yarn sign-android &&  yarn zip-android",
+        "sign-android": "cd platforms/android/app/build/outputs/apk/release/ && jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore android.keystore app-release-unsigned.apk android-app-key",
+        "zip-android": "cd platforms/android/app/build/outputs/apk/release/ && zipalign -f -v 4 app-release-unsigned.apk app-release.apk"
     },
     "author": "Apache Cordova Team",
     "license": "Apache-2.0",
