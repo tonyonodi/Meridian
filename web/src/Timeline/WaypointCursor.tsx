@@ -16,7 +16,10 @@ const ParentView = styled.div<IParentView>`
   background: rgb(${({ bgColor }) => bgColor.join(", ")});
   width: 100%;
   text-align: center;
+  padding-right: 10px;
   z-index: 1;
+  font-weight: 700;
+  font-size: 1.2rem;
   &:before {
     content: "";
     top: -50px;

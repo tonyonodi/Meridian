@@ -49,6 +49,7 @@ const Day = styled.div`
   text-transform: uppercase;
   font-weight: bold;
   margin-top: -2px;
+  font-size: 1.05rem
 `;
 
 const Markers = styled.ul`
