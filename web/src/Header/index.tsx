@@ -38,7 +38,7 @@ const MonthAndYear = styled.h1`
   margin: 0;
   color: white;
   font-size: 1.5rem;
-  font-weight: 200;
+  font-weight: 400;
 `;
 
 interface IHeaderProps {

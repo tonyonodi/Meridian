@@ -6,14 +6,13 @@ import Icon, { IconTypes } from "src/Icon";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import { MAIN_BACKGROUND_COLOR, DARK_TEXT, MERIDIAN_API_URL } from "src/config";
-import { isCordova } from "src/lib/browserInfo";
+import { isCordova, isSafari } from "src/lib/browserInfo";
 
 const { useState } = React;
 const { DateTime } = luxon;
 
 const MENU_WIDTH = 285;
 const ANIMATION_TIME = 0.25;
-// const EASING = "ease-in-out";
 
 const maskFadeIn = keyframes`
   0% {
@@ -105,11 +104,13 @@ const LogoContainer = styled.div`
   flex-direction: row;
   align-items: center;
   color: white;
+  font-weight: 600;
+  letter-spacing: 3px;
 `;
 
 const Logo = styled.img`
   width: 30px;
-  margin-right: 10px;
+  margin-right: 20px;
 `;
 
 const MenuList = styled.ul`
@@ -130,7 +131,7 @@ const Button = styled.button`
   width: 100%;
   text-align: left;
   font-size: 0.8rem;
-  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
   &:focus {
     outline: none;
     background: #e8e8e8;
@@ -147,7 +148,7 @@ const ButtonLink = styled.a`
   width: 100%;
   text-align: left;
   font-size: 0.8rem;
-  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
   color: inherit;
   text-decoration: none;
   &:focus {
@@ -158,8 +159,8 @@ const ButtonLink = styled.a`
 
 const SubText = styled.div`
   position: absolute;
-  margin-top: 17px;
-  margin-left: 35px;
+  margin-top: ${isSafari ? 3: 17}px;
+  margin-left: ${isSafari ? 0: 35}px;
   font-size: 0.65rem;
 `;
 

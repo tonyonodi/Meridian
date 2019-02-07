@@ -12,7 +12,7 @@ const DURATION_TEXT_PADDING_TOP = 25;
 
 const DurationText = styled.div`
   position: absolute;
-  font-weight: lighter;
+  font-weight: 300;
   color: rgb(${DARK_TEXT.join(",")});
   white-space: nowrap;
   & > div {
