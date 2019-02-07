@@ -12,7 +12,7 @@ import {
   WAYPOINT_RADIUS,
 } from "src/config";
 
-const { useState } = React;
+const { useState, useRef } = React;
 
 const MenuButton = styled.button`
   background: none;
@@ -67,15 +67,13 @@ interface IWaypointComponent {
   t_0: number;
   text: string;
   time: number;
-  deleteWaypoint: (
-    {
-      rangeId,
-      waypointId,
-    }: {
-      rangeId: string;
-      waypointId: string;
-    }
-  ) => void;
+  deleteWaypoint: ({
+    rangeId,
+    waypointId,
+  }: {
+    rangeId: string;
+    waypointId: string;
+  }) => void;
   deleteRange: (rangeId: string) => void;
   addWaypointDraft: (rangeId: string) => void;
 }
@@ -92,6 +90,7 @@ export default ({
   addWaypointDraft,
 }: IWaypointComponent) => {
   const [menuOpen, toggleMenuOpen] = useState(false);
+  const menuToggleRef = useRef(null);
 
   const fractionalPosition = getFractionalPositionFromTime({
     t_0,
@@ -99,13 +98,16 @@ export default ({
   });
 
   const topOffset = fractionalPosition * document.body.clientHeight;
-  const left = `${appWidth + 10}px`;
+  const left = appWidth + 10;
   return (
     <ParentView style={{ top: topOffset, left }}>
       <WaypointView>
         <Marker />
         <MarkerText>{text}</MarkerText>
-        <MenuButton onClick={() => toggleMenuOpen(currentVal => !currentVal)}>
+        <MenuButton
+          innerRef={menuToggleRef}
+          onClick={() => toggleMenuOpen(currentVal => !currentVal)}
+        >
           <Icon
             type={IconTypes.HorizontalEllipsis}
             style={{ color: `rgb(${DARK_TEXT})`, width: 15 }}
@@ -120,6 +122,7 @@ export default ({
           deleteRange={deleteRange}
           addWaypointDraft={addWaypointDraft}
           closeMenu={() => toggleMenuOpen(() => false)}
+          menuToggleRef={menuToggleRef}
         />
       )}
     </ParentView>
