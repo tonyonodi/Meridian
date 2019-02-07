@@ -6,6 +6,7 @@ import Icon, { IconTypes } from "src/Icon";
 import DayPicker from "react-day-picker";
 import "react-day-picker/lib/style.css";
 import { MAIN_BACKGROUND_COLOR, DARK_TEXT, MERIDIAN_API_URL } from "src/config";
+import { isCordova } from "src/lib/browserInfo";
 
 const { useState } = React;
 const { DateTime } = luxon;
@@ -302,7 +303,7 @@ export default ({
               </MenuItem>
               <MenuItem>
                 <Button onClick={handleAddTimezone}>
-                  <Icon type={IconTypes.Plus} style={iconStyle} /> Add timezone
+                  <Icon type={IconTypes.Plus} style={iconStyle} /> Add time zone
                 </Button>
               </MenuItem>
               <MenuItem>
@@ -312,24 +313,17 @@ export default ({
                   <SubText>(time between two or more events)</SubText>
                 </Button>
               </MenuItem>
-              <MenuItem>
-                <ButtonLink
-                  href={`${MERIDIAN_API_URL}/ios-app`}
-                  target="_blank"
-                >
-                  <Icon type={IconTypes.AppStore} style={iconStyle} />
-                  Get the iOS app
-                </ButtonLink>
-              </MenuItem>
-              <MenuItem>
-                <ButtonLink
-                  href={`${MERIDIAN_API_URL}/android-app`}
-                  target="_blank"
-                >
-                  <Icon type={IconTypes.GooglePlay} style={iconStyle} />
-                  Get the Android app
-                </ButtonLink>
-              </MenuItem>
+              {!isCordova && (
+                <MenuItem>
+                  <ButtonLink
+                    href={`${MERIDIAN_API_URL}/android-app`}
+                    target="_blank"
+                  >
+                    <Icon type={IconTypes.GooglePlay} style={iconStyle} />
+                    Get the Android app
+                  </ButtonLink>
+                </MenuItem>
+              )}
             </MenuList>
             {/* Remount calendar whenever menu activated to update the date. */}
             {active && (

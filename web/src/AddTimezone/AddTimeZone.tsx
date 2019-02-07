@@ -364,7 +364,7 @@ export default class AddTimeZone extends React.Component<
               <React.Fragment>
                 {searchResults.kind === "error" ? (
                   <p>
-                    Unable to retrieve timezones. Showing limited offline
+                    Unable to retrieve time zones. Showing limited offline
                     results.
                   </p>
                 ) : null}

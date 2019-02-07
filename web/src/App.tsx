@@ -23,7 +23,7 @@ import TimeLine from "./Timeline";
 import _timezoneData from "./lib/timezoneData";
 import ClockModeButton from "./ClockModeButton";
 import AppAd from "./AppAd";
-import { isiOS, isAndroid, isCordova } from "./lib/browserInfo";
+import { isAndroid, isCordova } from "./lib/browserInfo";
 
 const timezoneData: ITimezone[] = _timezoneData;
 
@@ -422,7 +422,7 @@ class App extends React.Component<{}, IAppState> {
   public render() {
     const { pageXOffset, timeCursor, t_0, timezones } = this.state;
     const appWidth = timezones.length * PARENT_VIEW_WIDTH;
-    const showAppAd = !isCordova && (isiOS || isAndroid);
+    const showAppAd = !isCordova && isAndroid;
 
     return (
       <div
