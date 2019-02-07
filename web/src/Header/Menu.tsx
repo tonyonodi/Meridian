@@ -105,7 +105,7 @@ const LogoContainer = styled.div`
   align-items: center;
   color: white;
   font-weight: 600;
-  letter-spacing: 3px;
+  letter-spacing: ${isSafari ? 0 : 3}px;
 `;
 
 const Logo = styled.img`
@@ -159,8 +159,8 @@ const ButtonLink = styled.a`
 
 const SubText = styled.div`
   position: absolute;
-  margin-top: ${isSafari ? 3: 17}px;
-  margin-left: ${isSafari ? 0: 35}px;
+  margin-top: ${isSafari ? 3 : 17}px;
+  margin-left: ${isSafari ? 0 : 35}px;
   font-size: 0.65rem;
 `;
 
