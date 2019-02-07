@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/tony/.nvm/versions/node/v8.11.2/bin/node /usr/local/Cellar/yarn/1.5.1/libexec/bin/yarn.js remove date-fns
+  /Users/tony/.nvm/versions/node/v8.11.2/bin/node /usr/local/Cellar/yarn/1.5.1/libexec/bin/yarn.js remove moment
 
 PATH: 
   /Users/tony/.rvm/gems/ruby-2.2.1/bin:/Users/tony/.rvm/gems/ruby-2.2.1@global/bin:/Users/tony/.rvm/rubies/ruby-2.2.1/bin:/usr/local/heroku/bin:/Users/tony/.nvm/versions/node/v8.11.2/bin:/Users/tony/.cargo/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/tony/.cargo/bin:/opt/X11/bin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Users/tony/.local/bin:/Users/tony/.cabal/bin:/Applications/ghc-7.10.2.app/Contents/bin:/usr/local/bin:/usr/local/sbin:/Users/tony/.rbenv/shims:/Users/tony/.rbenv/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/Users/tony/.rvm/bin:/Applications/Postgres.app/Contents/Versions/9.3/bin:/Users/tony/Library/Android/sdk/emulator:/Users/tony/Library/Android/sdk/tools:/Users/tony/Library/Android/sdk/tools/bin:/Users/tony/Library/Android/sdk/build-tools/28.0.3
