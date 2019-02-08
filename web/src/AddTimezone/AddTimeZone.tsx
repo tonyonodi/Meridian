@@ -105,16 +105,15 @@ interface IAddTimeZoneProps {
   bgColor: [number, number, number];
   close: (state?: boolean) => void;
   timeCursor: number;
+  clockMode: boolean;
   timezones: ITimezone[];
-  updateTime: (
-    {
-      activateClockMode,
-      time,
-    }: {
-      activateClockMode?: boolean;
-      time: number;
-    }
-  ) => void;
+  updateTime: ({
+    activateClockMode,
+    time,
+  }: {
+    activateClockMode?: boolean;
+    time: number;
+  }) => void;
 }
 
 interface IAutosuggestResponseError {
@@ -143,6 +142,9 @@ export default class AddTimeZone extends React.Component<
   IAddTimeZoneProps,
   IAddTimeZoneState
 > {
+  public storedTimeCursor: number;
+  public storedClockModeActive: boolean;
+
   public searchInput: any;
 
   public state = { searchValue: "", cursor: 0, searchResultsMap: {} };
@@ -195,6 +197,31 @@ export default class AddTimeZone extends React.Component<
     });
   }, 500);
 
+  constructor(props: IAddTimeZoneProps) {
+    super(props);
+
+    this.storedTimeCursor = props.timeCursor;
+    this.storedClockModeActive = props.clockMode;
+  }
+
+  public componentDidMount() {
+    setTimeout(() => {
+      if (this.searchInput && this.searchInput.focus) {
+        this.searchInput.focus();
+      }
+    }, 0);
+    window.addEventListener("keydown", this.handleKeyDown);
+  }
+
+  public componentWillUnmount() {
+    setTimeout(() => {
+      this.props.updateTime({
+        time: this.storedTimeCursor,
+        activateClockMode: this.storedClockModeActive,
+      });
+    }, 250);
+  }
+
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({
       searchValue: event.target.value,
@@ -214,15 +241,6 @@ export default class AddTimeZone extends React.Component<
   };
 
   public searchInputRef = (el: any) => (this.searchInput = el);
-
-  public componentDidMount() {
-    setTimeout(() => {
-      if (this.searchInput && this.searchInput.focus) {
-        this.searchInput.focus();
-      }
-    }, 0);
-    window.addEventListener("keydown", this.handleKeyDown);
-  }
 
   public filterTimezones = (timezones: ITimezone[], searchValue: string) => {
     const fuzzysortResults = fuzzysort.go(searchValue, timezones, {
@@ -292,37 +310,6 @@ export default class AddTimeZone extends React.Component<
     this.props.close();
   };
 
-  public handleFocus = () => {
-    const timeCursorOnFocus = this.props.timeCursor;
-    let scrollCount = 0;
-    let prevPageYOffset = window.pageYOffset;
-
-    const scrollListener = () => {
-      // ignore horizontal scrolling
-      if (window.pageYOffset === prevPageYOffset) {
-        return;
-      }
-      prevPageYOffset = window.pageYOffset;
-
-      scrollCount++;
-      if (scrollCount < 10) {
-        this.props.updateTime({ time: timeCursorOnFocus });
-      } else {
-        window.removeEventListener("scroll", scrollListener);
-      }
-    };
-
-    const resizeListener = () => {
-      window.addEventListener("scroll", scrollListener);
-    };
-    window.addEventListener("resize", resizeListener);
-
-    window.setTimeout(() => {
-      window.removeEventListener("resize", resizeListener);
-      window.removeEventListener("scroll", scrollListener);
-    }, 2000);
-  };
-
   public closeModal = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
     this.props.close();
@@ -352,7 +339,6 @@ export default class AddTimeZone extends React.Component<
               onChange={this.handleChange}
               value={this.state.searchValue}
               innerRef={this.searchInputRef}
-              onFocus={this.handleFocus}
             />
           </SearchInputParent>
           {(() => {

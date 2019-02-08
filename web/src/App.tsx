@@ -476,6 +476,7 @@ class App extends React.Component<{}, IAppState> {
           show={this.state.showAddTimezone}
           toggle={this.toggleAddTimezone}
           timeCursor={this.state.timeCursor}
+          clockMode={Boolean(this.state.clockPosition)}
           updateTime={this.updateTime}
           timezones={timezoneData}
         />
