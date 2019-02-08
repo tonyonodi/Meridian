@@ -242,8 +242,8 @@ export default class AddTimeZone extends React.Component<
 
     if (searchResults && searchResults.length > 0) {
       this.props.addTimezone(searchResults[this.state.cursor]);
+      this.props.close(false);
     }
-    this.props.close(false);
   };
 
   public searchInputRef = (el: any) => (this.searchInput = el);
