@@ -4,7 +4,6 @@ import styled from "styled-components";
 import ITimezone from "../ITimezone";
 import { isFirefox, isAndroidChrome } from "../lib/browserInfo";
 import { PARENT_VIEW_WIDTH, PALETTE } from "../config";
-import log from "../lib/console";
 
 const { DateTime } = luxon;
 
