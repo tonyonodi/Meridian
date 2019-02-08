@@ -48,8 +48,6 @@ const CursorContainer = styled.div<ICursorContainer>`
   }
 `;
 
-log(isFirefox);
-
 const Cursor = styled.input`
   font-family: inherit;
   color: inherit;
