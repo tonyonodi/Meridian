@@ -4,6 +4,7 @@ import styled from "styled-components";
 import ITimezone from "../ITimezone";
 import { isFirefox, isAndroidChrome } from "../lib/browserInfo";
 import { PARENT_VIEW_WIDTH, PALETTE } from "../config";
+import log from "../lib/console";
 
 const { DateTime } = luxon;
 
@@ -47,6 +48,8 @@ const CursorContainer = styled.div<ICursorContainer>`
   }
 `;
 
+log(isFirefox);
+
 const Cursor = styled.input`
   font-family: inherit;
   color: inherit;
@@ -57,8 +60,8 @@ const Cursor = styled.input`
   width: ${PARENT_VIEW_WIDTH}px;
   text-align: center;
   margin: 0;
-  width: ${isAndroidChrome ? "105%" : "100%"};
-  margin-left: ${isAndroidChrome ? "8%" : "0"};
+  width: ${isAndroidChrome ? "110%" : "100%"};
+  margin-left: ${isAndroidChrome ? "8px" : "0"};
   ${isFirefox
     ? `clip-path: inset(0 15px 0 0);
        padding-left: 13px;
@@ -91,17 +94,25 @@ interface IProps {
   timezone: ITimezone;
   index: number;
   timeCursor: number;
-  updateTime: (
-    { activateClockMode, time }: { activateClockMode?: boolean; time: number }
-  ) => void;
+  updateTime: ({
+    activateClockMode,
+    time,
+  }: {
+    activateClockMode?: boolean;
+    time: number;
+  }) => void;
 }
 
 interface IHandleChange {
   timezone: ITimezone;
   timeCursor: number;
-  updateTime: (
-    { activateClockMode, time }: { activateClockMode?: boolean; time: number }
-  ) => void;
+  updateTime: ({
+    activateClockMode,
+    time,
+  }: {
+    activateClockMode?: boolean;
+    time: number;
+  }) => void;
 }
 
 const handleChange = ({ timezone, timeCursor, updateTime }: IHandleChange) => (
