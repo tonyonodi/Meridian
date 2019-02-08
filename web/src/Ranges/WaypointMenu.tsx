@@ -91,10 +91,9 @@ export default ({
     HTMLButtonElement
   >).current.getBoundingClientRect();
 
-  const documentRoot = (document.documentElement as HTMLElement);
   const menuViewStyle = {
-    top: documentRoot.scrollTop + menuElementBoundingRect.top + 15,
-    left: documentRoot.scrollLeft + menuElementBoundingRect.right,
+    top: window.scrollY + menuElementBoundingRect.top + 15,
+    left: window.scrollX + menuElementBoundingRect.right,
   };
 
   return (
