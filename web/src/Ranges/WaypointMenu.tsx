@@ -90,7 +90,6 @@ export default ({
   const menuElementBoundingRect = (menuToggleRef as React.MutableRefObject<
     HTMLButtonElement
   >).current.getBoundingClientRect();
-  console.log(menuElementBoundingRect)
 
   const documentRoot = (document.documentElement as HTMLElement);
   const menuViewStyle = {

@@ -32,7 +32,7 @@ const MenuButton = styled.button`
   }
 `;
 
-const Marker = styled.div`
+export const Marker = styled.div`
   width: ${WAYPOINT_RADIUS}px;
   height: ${WAYPOINT_RADIUS}px;
   border-radius: 100%;

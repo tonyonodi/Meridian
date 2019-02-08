@@ -14,7 +14,7 @@ import {
 } from "./config";
 
 import AddTimezone from "./AddTimezone";
-import DraftWaypoint from "./DraftWaypoint";
+import DraftEvent from "./DraftEvent";
 import Header from "./Header";
 import ITimezone, { isITimezone } from "./ITimezone";
 import Ranges from "./Ranges";
@@ -24,6 +24,18 @@ import _timezoneData from "./lib/timezoneData";
 import ClockModeButton from "./ClockModeButton";
 import AppAd from "./AppAd";
 import { isAndroid, isCordova } from "./lib/browserInfo";
+
+export const AppWidthContext = React.createContext(0);
+
+export type updateTimeType = ({
+  activateClockMode,
+  time,
+}: {
+  activateClockMode?: boolean;
+  time: number;
+}) => void;
+
+export const UpdateTimeContext = React.createContext<updateTimeType | null>(null);
 
 const timezoneData: ITimezone[] = _timezoneData;
 
@@ -130,19 +142,19 @@ class App extends React.Component<{}, IAppState> {
   public addWaypoint = ({
     rangeId,
     rangeText,
+    time,
   }: {
     rangeId: string;
     rangeText: string;
+    time: number;
   }) => {
-    this.setState(({ ranges, timeCursor }) => {
+    this.setState(({ ranges }) => {
       const rangeIndex = ranges.findIndex(range => range.id === rangeId);
 
       if (rangeIndex < 0) {
         const newRange = {
           id: rangeId,
-          waypoints: [
-            { text: rangeText, time: timeCursor, id: Math.random() + "" },
-          ],
+          waypoints: [{ text: rangeText, time, id: Math.random() + "" }],
         };
         return {
           ranges: [...ranges, newRange],
@@ -158,7 +170,7 @@ class App extends React.Component<{}, IAppState> {
           ...range,
           waypoints: [
             ...range.waypoints,
-            { text: rangeText, time: timeCursor, id: Math.random() + "" },
+            { text: rangeText, time, id: Math.random() + "" },
           ],
         };
       });
@@ -430,70 +442,73 @@ class App extends React.Component<{}, IAppState> {
           minWidth: appWidth + DRAFT_WAYPOINT_ELEMENT_TOTAL_WIDTH,
         }}
       >
-        <ClockModeButton
-          updateTime={this.updateTime}
-          clockModeActive={this.state.clockPosition === null}
-        />
-        <Header
-          timeCursor={this.state.timeCursor}
-          updateTime={this.updateTime}
-          addWaypointDraft={this.addWaypointDraft}
-          toggleAddTimezone={this.toggleAddTimezone}
-        />
-        {showAppAd && <AppAd />}
-        <ContainerView innerRef={this.containerViewRef}>
-          {timezones.map((timezone, i) => {
-            return (
-              <TimeLine
-                key={timezone.timezone}
-                timeCursor={timeCursor}
-                t_0={t_0}
-                timezone={timezone}
-                updateTime={this.updateTime}
-                color={PALETTE[i % PALETTE.length]}
-                index={i}
-                zIndex={timezones.length - i}
-                remove={this.removeTimeline(timezone.timezone)}
-                pageXOffset={pageXOffset}
-                ranges={this.state.ranges}
-              />
-            );
-          })}
-        </ContainerView>
+        <AppWidthContext.Provider value={appWidth}>
+          <UpdateTimeContext.Provider value={this.updateTime}>
+            <ClockModeButton
+              updateTime={this.updateTime}
+              clockModeActive={this.state.clockPosition === null}
+            />
+            <Header
+              timeCursor={this.state.timeCursor}
+              updateTime={this.updateTime}
+              addWaypointDraft={this.addWaypointDraft}
+              toggleAddTimezone={this.toggleAddTimezone}
+            />
+            {showAppAd && <AppAd />}
+            <ContainerView innerRef={this.containerViewRef}>
+              {timezones.map((timezone, i) => {
+                return (
+                  <TimeLine
+                    key={timezone.timezone}
+                    timeCursor={timeCursor}
+                    t_0={t_0}
+                    timezone={timezone}
+                    updateTime={this.updateTime}
+                    color={PALETTE[i % PALETTE.length]}
+                    index={i}
+                    zIndex={timezones.length - i}
+                    remove={this.removeTimeline(timezone.timezone)}
+                    pageXOffset={pageXOffset}
+                    ranges={this.state.ranges}
+                  />
+                );
+              })}
+            </ContainerView>
 
-        <Ranges
-          appWidth={appWidth}
-          ranges={this.state.ranges}
-          t_0={this.state.t_0}
-          addWaypointDraft={this.addWaypointDraft}
-          deleteWaypoint={this.deleteWaypoint}
-          deleteRange={this.deleteRange}
-          cancelWaypointDraft={this.cancelWaypointDraft}
-        />
-        <AddTimezone
-          addTimezone={this.addTimezone}
-          color={PALETTE[timezones.length % PALETTE.length]}
-          show={this.state.showAddTimezone}
-          toggle={this.toggleAddTimezone}
-          timeCursor={this.state.timeCursor}
-          clockMode={Boolean(this.state.clockPosition)}
-          updateTime={this.updateTime}
-          timezones={timezoneData}
-        />
-        {this.state.draftWaypoint && (
-          <DraftWaypoint
-            addWaypoint={this.addWaypoint}
-            cancelWaypointDraft={this.cancelWaypointDraft}
-            appWidth={appWidth}
-            draftWaypoint={this.state.draftWaypoint}
-            timeCursor={this.state.timeCursor}
-            updateTime={this.updateTime}
-            waypointNumber={this.getDraftWaypointNumber(
-              this.state.draftWaypoint,
-              this.state.ranges
+            <Ranges
+              appWidth={appWidth}
+              ranges={this.state.ranges}
+              t_0={this.state.t_0}
+              addWaypointDraft={this.addWaypointDraft}
+              deleteWaypoint={this.deleteWaypoint}
+              deleteRange={this.deleteRange}
+              cancelWaypointDraft={this.cancelWaypointDraft}
+            />
+            <AddTimezone
+              addTimezone={this.addTimezone}
+              color={PALETTE[timezones.length % PALETTE.length]}
+              show={this.state.showAddTimezone}
+              toggle={this.toggleAddTimezone}
+              timeCursor={this.state.timeCursor}
+              clockMode={Boolean(this.state.clockPosition)}
+              updateTime={this.updateTime}
+              timezones={timezoneData}
+            />
+            {this.state.draftWaypoint && (
+              <DraftEvent
+                addWaypoint={this.addWaypoint}
+                cancelWaypointDraft={this.cancelWaypointDraft}
+                draftWaypoint={this.state.draftWaypoint}
+                timeCursor={this.state.timeCursor}
+                updateTime={this.updateTime}
+                waypointNumber={this.getDraftWaypointNumber(
+                  this.state.draftWaypoint,
+                  this.state.ranges
+                )}
+              />
             )}
-          />
-        )}
+          </UpdateTimeContext.Provider>
+        </AppWidthContext.Provider>
       </div>
     );
   }
