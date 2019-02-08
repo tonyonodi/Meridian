@@ -24,14 +24,8 @@ import _timezoneData from "./lib/timezoneData";
 import ClockModeButton from "./ClockModeButton";
 import AppAd from "./AppAd";
 import { isAndroid, isCordova } from "./lib/browserInfo";
-import log from "./lib/console";
 
-addEventListener("resize", () => {
-  log("resizing");
-});
-addEventListener("scroll", () => {
-  log("scrolling");
-});
+
 
 export const AppWidthContext = React.createContext(0);
 

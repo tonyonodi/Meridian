@@ -79,7 +79,6 @@ export default ({
 
   const handleResize = () => {
     if (updateTime) {
-      console.log("resize", initialTime);
       updateTime({ time: initialTime });
     }
   };
