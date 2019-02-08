@@ -92,6 +92,11 @@ export default ({
     initialTime = time;
 
     addEventListener("resize", handleResize);
+    return () => {
+      setTimeout(() => {
+        removeEventListener("resize", handleResize);
+      }, 3000);
+    };
   }, [inputElement]);
 
   const [inputValue, updateInputValue] = useState(initialName);
