@@ -163,10 +163,6 @@ export default class DraftWaypointComponent extends React.Component<
                 editingName: false,
               });
 
-              setTimeout(() => {
-                this.props.updateTime({ time: time + 3600 * 1000 });
-              }, 250);
-
               this.props.addWaypoint({
                 rangeId: this.props.draftWaypoint.rangeId,
                 rangeText: draftName,

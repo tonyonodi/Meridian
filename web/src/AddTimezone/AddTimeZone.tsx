@@ -204,6 +204,13 @@ export default class AddTimeZone extends React.Component<
     this.storedClockModeActive = props.clockMode;
   }
 
+  public handleResize = () => {
+    this.props.updateTime({
+      time: this.storedTimeCursor,
+      activateClockMode: this.storedClockModeActive,
+    });
+  };
+
   public componentDidMount() {
     setTimeout(() => {
       if (this.searchInput && this.searchInput.focus) {
@@ -211,15 +218,14 @@ export default class AddTimeZone extends React.Component<
       }
     }, 0);
     window.addEventListener("keydown", this.handleKeyDown);
+    window.addEventListener("resize", this.handleResize);
   }
 
   public componentWillUnmount() {
     setTimeout(() => {
-      this.props.updateTime({
-        time: this.storedTimeCursor,
-        activateClockMode: this.storedClockModeActive,
-      });
-    }, 250);
+      window.removeEventListener("resize", this.handleResize);
+      window.removeEventListener("keydown", this.handleKeyDown);
+    }, 3000);
   }
 
   public handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

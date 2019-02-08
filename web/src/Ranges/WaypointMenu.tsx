@@ -108,7 +108,7 @@ export default ({
             })
           }
         >
-          Delete Waypoint
+          Delete Event
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -116,7 +116,7 @@ export default ({
             closeMenu();
           }}
         >
-          Add Waypoint
+          Add Event
         </MenuItem>
         <MenuItem onClick={() => deleteRange(rangeId)}>
           Delete Duration

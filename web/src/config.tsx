@@ -46,3 +46,5 @@ export const HEADER_HEIGHT = 50;
 export const BACKGROUND_WHITE = [238, 238, 239];
 
 export const WAYPOINT_RADIUS = 18;
+
+export const RESET_PAGE_DELAY = 3000;

@@ -24,6 +24,14 @@ import _timezoneData from "./lib/timezoneData";
 import ClockModeButton from "./ClockModeButton";
 import AppAd from "./AppAd";
 import { isAndroid, isCordova } from "./lib/browserInfo";
+import log from "./lib/console";
+
+addEventListener("resize", () => {
+  log("resizing");
+});
+addEventListener("scroll", () => {
+  log("scrolling");
+});
 
 export const AppWidthContext = React.createContext(0);
 
@@ -35,7 +43,9 @@ export type updateTimeType = ({
   time: number;
 }) => void;
 
-export const UpdateTimeContext = React.createContext<updateTimeType | null>(null);
+export const UpdateTimeContext = React.createContext<updateTimeType | null>(
+  null
+);
 
 const timezoneData: ITimezone[] = _timezoneData;
 

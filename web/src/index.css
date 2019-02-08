@@ -167,6 +167,15 @@ body {
   background: #eeeeef;
 }
 
+#console {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  color: white;
+  z-index: 10000;
+  background: red;
+}
+
 input {
   border-radius: 0;
 }

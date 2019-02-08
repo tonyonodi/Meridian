@@ -77,6 +77,13 @@ export default ({
 
   const updateTime = useContext<updateTimeType | null>(UpdateTimeContext);
 
+  const handleResize = () => {
+    if (updateTime) {
+      console.log("resize", initialTime);
+      updateTime({ time: initialTime });
+    }
+  };
+
   useEffect(() => {
     if (inputElement.current !== null) {
       (inputElement as React.MutableRefObject<
@@ -84,6 +91,8 @@ export default ({
       >).current.focus();
     }
     initialTime = time;
+
+    addEventListener("resize", handleResize);
   }, [inputElement]);
 
   const [inputValue, updateInputValue] = useState(initialName);
@@ -94,16 +103,15 @@ export default ({
 
   const handleCloseClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     close();
-    if (updateTime) {
-      setTimeout(() => {
-        updateTime({ time: initialTime });
-      }, 250);
-    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     updateDraftName(inputValue, initialTime);
+    initialTime = initialTime + 3600 * 1000;
+    if (updateTime) {
+      updateTime({ time: initialTime });
+    }
   };
 
   return (
@@ -111,7 +119,7 @@ export default ({
       <CloseButton onClick={handleCloseClick}>
         <Icon type={IconTypes.Times} style={{ width: 30 }} />
       </CloseButton>
-      <Title>Event name</Title>
+      <Title>Event name (optional)</Title>
       <Form onSubmit={handleSubmit}>
         <TextInput
           type="text"
