@@ -25,8 +25,6 @@ import ClockModeButton from "./ClockModeButton";
 import AppAd from "./AppAd";
 import { isAndroid, isCordova } from "./lib/browserInfo";
 
-
-
 export const AppWidthContext = React.createContext(0);
 
 export type updateTimeType = ({
@@ -238,8 +236,6 @@ class App extends React.Component<{}, IAppState> {
   }
 
   public componentDidMount() {
-    window.scrollTo(0, document.body.clientHeight / 2 - window.innerHeight / 2);
-
     window.addEventListener("keypress", (event: any) => {
       if (document.activeElement !== window.document.body) {
         return;
@@ -348,7 +344,9 @@ class App extends React.Component<{}, IAppState> {
       }
     }, 100);
 
-    this.updateTime({ activateClockMode: true, time: this.state.timeCursor });
+    setTimeout(() => {
+      this.updateTime({ activateClockMode: true, time: this.state.timeCursor });
+    }, 500);
   }
 
   public componentDidUpdate(prevprops: {}, prevState: IAppState) {
