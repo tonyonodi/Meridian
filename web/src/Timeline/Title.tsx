@@ -64,7 +64,7 @@ const Title = styled.h1<ITitle>`
   }
 `;
 
-const titleTextMaxWidth = 230;
+const titleTextMaxWidth = 200;
 
 const TitleText = styled.span`
   display: inline-block;
