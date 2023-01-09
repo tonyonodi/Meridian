@@ -5,7 +5,7 @@
   "dependencies": {
     "fuzzysort": "^1.1.4",
     "lodash": "^4.17.10",
-    "luxon": "^1.3.3",
+    "luxon": "^2.5.2",
     "react": "^16.7.0-alpha",
     "react-day-picker": "^7.2.4",
     "react-dom": "^16.7.0-alpha",
